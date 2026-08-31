@@ -1,0 +1,21 @@
+# RYVT — a static site: two self-contained HTML files, no build step.
+[build]
+  publish = "."
+  command = ""
+
+# Pretty URLs for the store's page names.
+[[redirects]]
+  from = "/shop"
+  to = "/store.html?view=shop"
+  status = 200
+
+[[redirects]]
+  from = "/store"
+  to = "/store.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

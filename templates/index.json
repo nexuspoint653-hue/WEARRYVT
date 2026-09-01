@@ -306,14 +306,14 @@
         "body_size": 0,
         "focal": "center center",
         "show_stats": true,
-        "tint_color": "#0B0B0C",
         "tint_opacity": 30,
-        "shade_color": "#0B0B0C",
         "shade_opacity": 35,
         "shade_height": 240,
-        "fade_color": "#000000",
         "fade_opacity": 92,
-        "fade_height": 620
+        "fade_height": 620,
+        "tint_rgb": "11,11,12",
+        "shade_rgb": "11,11,12",
+        "fade_rgb": "0,0,0"
       },
       "blocks": {
         "stats_b1": {

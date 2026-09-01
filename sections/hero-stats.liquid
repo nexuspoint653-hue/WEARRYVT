@@ -1,9 +1,21 @@
 {% render 'section-style', s: section %}
 {%- if section.settings.visible -%}
+{%- liquid
+  assign tint_a  = section.settings.tint_opacity  | divided_by: 100.0
+  assign fade_a  = section.settings.fade_opacity  | divided_by: 100.0
+  assign shade_a = section.settings.shade_opacity | divided_by: 100.0
+-%}
 <style>
   #shopify-section-{{ section.id }} .hero-stack{position:relative;isolation:isolate}
   #shopify-section-{{ section.id }} .hero-stack > .plate{position:absolute;inset:0;z-index:0;pointer-events:none;
-    {%- if section.settings.image != blank %}background-image:url({{ section.settings.image | image_url: width: 2400 }});background-size:cover;background-position:{{ section.settings.focal }};{% endif -%}
+    background-image:
+      linear-gradient(to bottom,rgba({{ section.settings.shade_rgb }},{{ shade_a }}) 0%,rgba({{ section.settings.shade_rgb }},0) {{ section.settings.shade_height }}px),
+      linear-gradient(to bottom,rgba({{ section.settings.fade_rgb }},0) calc(100% - {{ section.settings.fade_height }}px),rgba({{ section.settings.fade_rgb }},{{ fade_a }}) 100%),
+      linear-gradient(rgba({{ section.settings.tint_rgb }},{{ tint_a }}),rgba({{ section.settings.tint_rgb }},{{ tint_a }}))
+      {%- if section.settings.image != blank %},url({{ section.settings.image | image_url: width: 2400 }}){% endif -%};
+    background-size:auto,auto,auto{% if section.settings.image != blank %},cover{% endif %};
+    background-position:center,center,center{% if section.settings.image != blank %},{{ section.settings.focal }}{% endif %};
+    background-repeat:no-repeat;
   }
   #shopify-section-{{ section.id }} .hero{background:transparent;position:relative;z-index:1}
   #shopify-section-{{ section.id }} .hero .plate{display:none}
@@ -14,12 +26,6 @@
 </style>
 <div class="hero-stack">
   <span class="plate{% if section.settings.image == blank %} ph {{ section.settings.plate_style }}{% endif %}"></span>
-  {%- comment -%} The hero filter. Three stacked layers: an even tint for
-  legibility, a shade under the header, and a fade that deepens to black at the
-  bottom of the cards. Plain hex plus opacity, so nothing here can fail. {%- endcomment -%}
-  <span class="hero-filter" aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:{{ section.settings.tint_color }};opacity:{{ section.settings.tint_opacity }}%"></span>
-  <span class="hero-filter" aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(to bottom,{{ section.settings.shade_color }} 0%,transparent {{ section.settings.shade_height }}px);opacity:{{ section.settings.shade_opacity }}%"></span>
-  <span class="hero-filter" aria-hidden="true" style="position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(to bottom,transparent calc(100% - {{ section.settings.fade_height }}px),{{ section.settings.fade_color }} 100%);opacity:{{ section.settings.fade_opacity }}%"></span>
 <section class="hero">
   <div class="wrap hero-in">
     {%- if section.settings.eyebrow != blank -%}<div class="lab">{{ section.settings.eyebrow }}</div>{%- endif -%}
@@ -172,10 +178,10 @@
       "content": "Three layers over the photo. The tint is even across the whole hero; the shade sits under the header; the fade deepens toward the bottom of the cards."
     },
     {
-      "type": "color",
-      "id": "tint_color",
-      "label": "Tint colour",
-      "default": "#0B0B0C"
+      "type": "text",
+      "id": "tint_rgb",
+      "label": "Tint colour (r,g,b)",
+      "default": "11,11,12"
     },
     {
       "type": "range",
@@ -189,10 +195,10 @@
       "info": "An even wash over the whole photo. This is what makes the hero copy readable."
     },
     {
-      "type": "color",
-      "id": "shade_color",
-      "label": "Top shade colour",
-      "default": "#0B0B0C"
+      "type": "text",
+      "id": "shade_rgb",
+      "label": "Top shade colour (r,g,b)",
+      "default": "11,11,12"
     },
     {
       "type": "range",
@@ -216,10 +222,10 @@
       "default": 240
     },
     {
-      "type": "color",
-      "id": "fade_color",
-      "label": "Bottom fade colour",
-      "default": "#000000"
+      "type": "text",
+      "id": "fade_rgb",
+      "label": "Bottom fade colour (r,g,b)",
+      "default": "0,0,0"
     },
     {
       "type": "range",

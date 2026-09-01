@@ -1,0 +1,113 @@
+/* ==========================================================
+   RYVT - mobile refinements
+   Everything here is inside a max-width query, so the desktop
+   design is untouched. Loaded after ryvt-store.css.
+   Targets: 44px minimum touch targets, no ragged wrapping,
+   readable label sizes, honest vertical rhythm.
+   ========================================================== */
+@media (max-width: 749px){
+
+  /* ---------- the strip back to the film ---------- */
+  .to-film{padding:14px 16px;font-size:11px;line-height:1.3;gap:8px}
+  .to-film span{display:block;width:100%;text-align:center;margin-top:2px}
+
+  /* ---------- header ---------- */
+  .hd-in{padding-block:10px}
+  .hd-r{gap:2px}
+  .hd-r .ic{width:44px;height:44px}
+  .logo{display:inline-flex;align-items:center;min-height:44px}
+  .logo img{height:24px}
+
+  /* ---------- hero ---------- */
+  .hero-in{padding-block:72px 76px}
+  .hero .cta-row{display:grid;grid-template-columns:1fr;gap:10px}
+  .hero .cta-row .btn{width:100%;justify-content:center;min-height:52px}
+
+  /* ---------- stat band ---------- */
+  .stat{padding:22px 16px}
+  .stat-n{font-size:30px}
+  .stat-s{font-size:13px;line-height:1.5}
+
+  /* ---------- section headers ---------- */
+  .sec-h{flex-direction:column;align-items:flex-start;gap:14px}
+  .sec-h .more{min-height:44px;display:inline-flex;align-items:center}
+
+  /* ---------- shop toolbar ---------- */
+  .filt-btn{min-height:44px}
+  .filt-panel h4,.doc-nav h4{font-size:11px}
+  .filt-panel button{min-height:40px}
+
+  /* ==========================================================
+     FOOTER - the part that needed the most work
+     ========================================================== */
+  .hud-ft-in{gap:26px;padding-block:34px 26px}
+
+  /* now playing: a compact row rather than a floating pill */
+  .hud-ft-l{display:flex;flex-direction:column;align-items:center;gap:18px}
+  .np{width:100%;max-width:320px;padding:10px 14px;border-radius:14px}
+  .np-t b{font-size:10.5px}
+  .ft-lockup{display:inline-flex;align-items:center;min-height:44px}
+  .ft-lockup img{height:26px}
+
+  /* newsletter: a real field and a real button */
+  .ft-sub{width:100%}
+  .ft-sub label{display:block;font-size:11px;letter-spacing:.16em;margin-bottom:10px}
+  .ft-sub-row{display:grid;grid-template-columns:1fr;gap:10px;border:0}
+  .ft-sub-row input{
+    width:100%;min-height:52px;padding:0 16px;border-radius:12px;
+    border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.04);
+    color:#fff;font-size:16px} /* 16px stops iOS zooming on focus */
+  .ft-sub-row input::placeholder{color:rgba(255,255,255,.45)}
+  .ft-sub-row button{
+    width:100%;min-height:52px;border-radius:12px;border:0;
+    background:#fff;color:var(--ink);font-size:12px;letter-spacing:.18em;
+    text-transform:uppercase;font-weight:600}
+
+  /* the two promo cards: full width, comfortable height */
+  .hud-ft-r{display:grid;grid-template-columns:1fr;gap:12px}
+  .buy,.ship{min-height:64px;border-radius:14px}
+
+  .clock{justify-content:center;padding-block:4px}
+
+  /* ---------- footer navigation: the main fix ----------
+     Was a ragged wrapped row of 18px links. Now a two-column
+     list of 48px rows with hairlines, so every item is an
+     obvious, reachable target. */
+  .hud-ft-btm{display:block;padding-block:8px 18px}
+  .hud-ft-btm nav{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:0;margin-bottom:18px;
+    border-top:1px solid rgba(255,255,255,.12)}
+  .hud-ft-btm nav a{
+    display:flex;align-items:center;min-height:48px;
+    padding:0 2px;font-size:14px;line-height:1.25;
+    border-bottom:1px solid rgba(255,255,255,.12)}
+  .hud-ft-btm nav a:nth-child(odd){padding-right:12px}
+  .hud-ft-btm nav a:nth-child(even){padding-left:12px;border-left:1px solid rgba(255,255,255,.12)}
+  /* an odd number of links leaves a dangling cell - let the last one span */
+  .hud-ft-btm nav a:last-child:nth-child(odd){grid-column:1 / -1;padding-right:0}
+  .hud-ft-btm > span{
+    display:block;text-align:center;font-size:12px;line-height:1.6;
+    color:rgba(255,255,255,.55)}
+
+  /* ---------- legal row ---------- */
+  .ft-legal{
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    padding-block:16px calc(20px + env(safe-area-inset-bottom))}
+  .ft-legal span{font-size:12px;text-align:center}
+  .ft-legal nav{
+    display:flex;flex-wrap:wrap;justify-content:center;
+    gap:0 18px;width:100%}
+  .ft-legal nav a,.ft-legal nav button{
+    display:inline-flex;align-items:center;min-height:44px;font-size:13px}
+
+  /* ---------- cart drawer ---------- */
+  .cart{width:100%;max-width:none}
+  .cart-x,.cart-line .cart-x{min-width:44px;min-height:44px}
+
+  /* ---------- legal / FAQ documents ---------- */
+  .doc{grid-template-columns:1fr}
+  .doc-nav{position:static;margin-bottom:22px}
+  .doc-nav ol li a{display:flex;align-items:center;min-height:44px}
+  .doc-body section h2{font-size:20px;line-height:1.3}
+}

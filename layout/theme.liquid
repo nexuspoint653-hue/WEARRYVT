@@ -19,6 +19,7 @@
     {{ 'ryvt-landing.css' | asset_url | stylesheet_tag }}
   {%- else -%}
     {{ 'ryvt-store.css' | asset_url | stylesheet_tag }}
+    {{ 'ryvt-mobile.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
 
   {% render 'brand-vars' %}

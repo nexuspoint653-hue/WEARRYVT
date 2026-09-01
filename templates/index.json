@@ -9,90 +9,6 @@
  */
 {
   "sections": {
-    "hero": {
-      "type": "home-hero",
-      "settings": {
-        "eyebrow": "Metro Detroit \u00b7 Est. 2024",
-        "heading": "Detroit,\nOn Your Back.",
-        "body": "Heavyweight cotton cut for people who actually move. Made in small runs, finished by hand, and named for the streets it came from.",
-        "image": "shopify://shop_images/ryvt-shoot-hero.jpg",
-        "plate_style": "dark",
-        "btn1_label": "Shop the drop",
-        "btn1_link": "",
-        "btn2_label": "One tee, four ways",
-        "btn2_link": "",
-        "visible": true,
-        "pad_override": false,
-        "pad_top": 80,
-        "pad_bottom": 80,
-        "max_width": 0,
-        "align": "default",
-        "bg_color": "",
-        "text_color": "",
-        "heading_size": 0,
-        "body_size": 0,
-        "bleed": true,
-        "bleed_height": 245
-      }
-    },
-    "stats": {
-      "type": "home-stats",
-      "blocks": {
-        "stats_b1": {
-          "type": "stat",
-          "settings": {
-            "figure": "8.2 oz",
-            "label": "The cloth",
-            "note": "Heavyweight cotton, garment-dyed, washed before it is cut."
-          }
-        },
-        "stats_b2": {
-          "type": "stat",
-          "settings": {
-            "figure": "48h",
-            "label": "Dispatch",
-            "note": "Orders leave Metro Detroit inside two days."
-          }
-        },
-        "stats_b3": {
-          "type": "stat",
-          "settings": {
-            "figure": "8",
-            "label": "Styles in the run",
-            "note": "Restocked rather than replaced when they sell out."
-          }
-        },
-        "stats_b4": {
-          "type": "stat",
-          "settings": {
-            "figure": "30 days",
-            "label": "To change your mind",
-            "note": "Unworn, tags on, shipping covered both ways."
-          }
-        }
-      },
-      "block_order": [
-        "stats_b1",
-        "stats_b2",
-        "stats_b3",
-        "stats_b4"
-      ],
-      "settings": {
-        "visible": true,
-        "pad_override": false,
-        "pad_top": 80,
-        "pad_bottom": 80,
-        "max_width": 0,
-        "align": "default",
-        "bg_color": "",
-        "text_color": "",
-        "heading_size": 0,
-        "body_size": 0,
-        "show_through": true,
-        "scrim": 55,
-        "scrim_rgb": "11,11,12"
-      }
-    },
     "marquee": {
       "type": "home-marquee",
       "blocks": {
@@ -365,11 +281,78 @@
         "heading_size": 0,
         "body_size": 0
       }
+    },
+    "hero_stats": {
+      "type": "hero-stats",
+      "settings": {
+        "eyebrow": "Metro Detroit \u00b7 Est. 2024",
+        "heading": "Detroit,\nOn Your Back.",
+        "body": "Heavyweight cotton cut for people who actually move. Made in small runs, finished by hand, and named for the streets it came from.",
+        "image": "shopify://shop_images/ryvt-shoot-hero.jpg",
+        "plate_style": "dark",
+        "btn1_label": "Shop the drop",
+        "btn1_link": "",
+        "btn2_label": "One tee, four ways",
+        "btn2_link": "",
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0,
+        "focal": "center center",
+        "show_stats": true,
+        "scrim": 55,
+        "scrim_rgb": "11,11,12"
+      },
+      "blocks": {
+        "stats_b1": {
+          "type": "stat",
+          "settings": {
+            "figure": "8.2 oz",
+            "label": "The cloth",
+            "note": "Heavyweight cotton, garment-dyed, washed before it is cut."
+          }
+        },
+        "stats_b2": {
+          "type": "stat",
+          "settings": {
+            "figure": "48h",
+            "label": "Dispatch",
+            "note": "Orders leave Metro Detroit inside two days."
+          }
+        },
+        "stats_b3": {
+          "type": "stat",
+          "settings": {
+            "figure": "8",
+            "label": "Styles in the run",
+            "note": "Restocked rather than replaced when they sell out."
+          }
+        },
+        "stats_b4": {
+          "type": "stat",
+          "settings": {
+            "figure": "30 days",
+            "label": "To change your mind",
+            "note": "Unworn, tags on, shipping covered both ways."
+          }
+        }
+      },
+      "block_order": [
+        "stats_b1",
+        "stats_b2",
+        "stats_b3",
+        "stats_b4"
+      ]
     }
   },
   "order": [
-    "hero",
-    "stats",
+    "hero_stats",
     "marquee",
     "categories",
     "rail",

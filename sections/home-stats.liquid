@@ -1,5 +1,15 @@
 {% render 'section-style', s: section %}
 {%- if section.settings.visible -%}
+{%- if section.settings.show_through -%}
+<style>
+  #shopify-section-{{ section.id }}{position:relative;z-index:1}
+  #shopify-section-{{ section.id }} .stats{background:transparent;position:relative}
+  #shopify-section-{{ section.id }} .stats::before{content:'';position:absolute;inset:0;
+    background:rgba({{ section.settings.scrim_rgb }},{{ section.settings.scrim | divided_by: 100.0 }});
+    pointer-events:none;z-index:0}
+  #shopify-section-{{ section.id }} .stats-in{position:relative;z-index:1}
+</style>
+{%- endif -%}
 <section class="stats">
   <div class="stats-in">
     {%- for block in section.blocks -%}
@@ -17,6 +27,33 @@
 {
   "name": "Stat band",
   "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_through",
+      "label": "Let the hero image show through",
+      "default": false,
+      "info": "Turn on the hero's image bleed as well."
+    },
+    {
+      "type": "range",
+      "id": "scrim",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Darken behind the text",
+      "default": 55
+    },
+    {
+      "type": "text",
+      "id": "scrim_rgb",
+      "label": "Darkening colour (r,g,b)",
+      "default": "11,11,12"
+    },
     {
       "type": "header",
       "content": "Layout"

@@ -12,7 +12,7 @@
     "hero": {
       "type": "home-hero",
       "settings": {
-        "eyebrow": "Metro Detroit · Est. 2024",
+        "eyebrow": "Metro Detroit \u00b7 Est. 2024",
         "heading": "Detroit,\nOn Your Back.",
         "body": "Heavyweight cotton cut for people who actually move. Made in small runs, finished by hand, and named for the streets it came from.",
         "image": "shopify://shop_images/ryvt-shoot-hero.jpg",
@@ -30,7 +30,9 @@
         "bg_color": "",
         "text_color": "",
         "heading_size": 0,
-        "body_size": 0
+        "body_size": 0,
+        "bleed": true,
+        "bleed_height": 245
       }
     },
     "stats": {
@@ -85,7 +87,10 @@
         "bg_color": "",
         "text_color": "",
         "heading_size": 0,
-        "body_size": 0
+        "body_size": 0,
+        "show_through": true,
+        "scrim": 55,
+        "scrim_rgb": "11,11,12"
       }
     },
     "marquee": {
@@ -292,7 +297,7 @@
         "teaser_b4"
       ],
       "settings": {
-        "eyebrow": "Existing section — kept as built",
+        "eyebrow": "Existing section \u2014 kept as built",
         "heading": "The Renaissance Tee. One Tee, Four Ways.",
         "body": "Your scroll storytelling block is untouched by this redesign. It keeps its own layout, copy and scroll behaviour; the new header and footer simply sit around it.",
         "stamp": "Not modified",
@@ -312,7 +317,7 @@
       "type": "home-editorial-split",
       "settings": {
         "image": "shopify://shop_images/the-foundry-wash-heavyweight-tee-black-04.jpg",
-        "caption": "Foundry wash — process",
+        "caption": "Foundry wash \u2014 process",
         "tone": "dark",
         "eyebrow": "The Foundry Wash",
         "heading": "Washed twice, so it never shrinks on you.",

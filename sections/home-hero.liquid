@@ -1,5 +1,13 @@
 {% render 'section-style', s: section %}
 {%- if section.settings.visible -%}
+{%- if section.settings.bleed -%}
+<style>
+  #shopify-section-{{ section.id }}{position:relative;z-index:0}
+  #shopify-section-{{ section.id }} .hero{overflow:visible}
+  #shopify-section-{{ section.id }} .hero .plate{bottom:-{{ section.settings.bleed_height }}px;pointer-events:none}
+  #shopify-section-{{ section.id }} .hero-in{position:relative;z-index:1}
+</style>
+{%- endif -%}
 <section class="hero">
   {%- if section.settings.image != blank -%}
   <span class="plate" style="background-image:url({{ section.settings.image | image_url: width: 2400 }});background-size:cover;background-position:center"></span>
@@ -100,6 +108,27 @@
       "type": "url",
       "id": "btn2_link",
       "label": "Secondary link"
+    },
+    {
+      "type": "header",
+      "content": "Image bleed"
+    },
+    {
+      "type": "checkbox",
+      "id": "bleed",
+      "label": "Continue the image into the section below",
+      "default": false,
+      "info": "The band underneath needs 'Let the hero image show through' switched on."
+    },
+    {
+      "type": "range",
+      "id": "bleed_height",
+      "min": 0,
+      "max": 600,
+      "step": 5,
+      "unit": "px",
+      "label": "How far it bleeds",
+      "default": 245
     },
     {
       "type": "header",

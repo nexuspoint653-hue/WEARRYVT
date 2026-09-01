@@ -1,0 +1,22 @@
+{%- comment -%}
+  Per-section presentation. Every section renders this once, first thing.
+  Nothing is emitted unless the merchant has actually overridden something,
+  so a section left alone renders byte-for-byte as it was designed.
+  Usage: {% render 'section-style', s: section %}
+{%- endcomment -%}
+{%- assign st = s.settings -%}
+{%- capture css -%}
+{%- if st.pad_override -%}padding-top:{{ st.pad_top }}px;padding-bottom:{{ st.pad_bottom }}px;{%- endif -%}
+{%- capture v -%}{{ st.bg_color }}{%- endcapture -%}{%- if v != blank -%}background:{{ v }};{%- endif -%}
+{%- capture v -%}{{ st.text_color }}{%- endcapture -%}{%- if v != blank -%}color:{{ v }};{%- endif -%}
+{%- endcapture -%}
+{%- capture extra -%}
+{%- if st.visible == false -%}#shopify-section-{{ s.id }}{display:none!important}{%- endif -%}
+{%- assign _heading_size = st.heading_size | plus: 0 -%}{%- if _heading_size > 0 -%}#shopify-section-{{ s.id }} h1,#shopify-section-{{ s.id }} h2,#shopify-section-{{ s.id }} h3{font-size:{{ _heading_size }}px;line-height:1.05}{%- endif -%}
+{%- assign _body_size = st.body_size | plus: 0 -%}{%- if _body_size > 0 -%}#shopify-section-{{ s.id }} p{font-size:{{ _body_size }}px}{%- endif -%}
+{%- assign _max_width = st.max_width | plus: 0 -%}{%- if _max_width > 0 -%}#shopify-section-{{ s.id }} .wrap{max-width:{{ _max_width }}px}{%- endif -%}
+{%- capture v -%}{{ st.align }}{%- endcapture -%}{%- if v != blank and v != 'default' -%}#shopify-section-{{ s.id }}{text-align:{{ v }}}{%- endif -%}
+{%- endcapture -%}
+{%- if css != blank or extra != blank -%}
+<style>{% if css != blank %}#shopify-section-{{ s.id }}{ {{ css }} }{% endif %}{{ extra }}</style>
+{%- endif -%}

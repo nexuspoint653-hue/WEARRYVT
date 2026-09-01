@@ -1,0 +1,194 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<div class="marq" aria-hidden="true">
+  <div class="marq-in">
+    {%- for i in (1..2) -%}
+      {%- for block in section.blocks -%}
+        <span{% if block.settings.dim %} class="dim"{% endif %} {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Marquee",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "word",
+      "name": "Phrase",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Phrase",
+          "default": "Built in Metro Detroit"
+        },
+        {
+          "type": "checkbox",
+          "id": "dim",
+          "label": "Dimmed",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Marquee",
+      "blocks": [
+        {
+          "type": "word",
+          "settings": {
+            "text": "Built in Metro Detroit",
+            "dim": false
+          }
+        },
+        {
+          "type": "word",
+          "settings": {
+            "text": "8.2 oz heavyweight cotton",
+            "dim": true
+          }
+        },
+        {
+          "type": "word",
+          "settings": {
+            "text": "Small runs, restocked",
+            "dim": false
+          }
+        },
+        {
+          "type": "word",
+          "settings": {
+            "text": "Ships in 48 hours",
+            "dim": true
+          }
+        },
+        {
+          "type": "word",
+          "settings": {
+            "text": "Free over $125",
+            "dim": false
+          }
+        },
+        {
+          "type": "word",
+          "settings": {
+            "text": "One block, eight styles",
+            "dim": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

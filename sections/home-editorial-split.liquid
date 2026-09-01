@@ -1,0 +1,203 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<section class="split">
+  {%- if section.settings.image != blank -%}
+  <span class="ph" style="background-image:url({{ section.settings.image | image_url: width: 1600 }});background-size:cover;background-position:center"><em>{{ section.settings.caption }}</em></span>
+  {%- else -%}
+  <span class="ph {{ section.settings.tone }}"><em>{{ section.settings.caption }}</em></span>
+  {%- endif -%}
+  <div class="txt">
+    {%- if section.settings.eyebrow != blank -%}<div class="lab" style="color:rgba(255,255,255,.72)">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    {%- if section.settings.heading != blank -%}<h3 style="margin-top:12px">{{ section.settings.heading }}</h3>{%- endif -%}
+    {%- if section.settings.body != blank -%}<p>{{ section.settings.body }}</p>{%- endif -%}
+    {%- if section.settings.btn_label != blank -%}
+    <div class="cta-row"><a class="btn btn-solid" href="{{ section.settings.btn_link | default: routes.all_products_collection_url }}">{{ section.settings.btn_label }}</a></div>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Editorial split",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Image caption",
+      "default": "Foundry wash \u2014 process"
+    },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Placeholder tone",
+      "default": "dark",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The Foundry Wash"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Washed twice, so it never shrinks on you."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body",
+      "default": "Garment-dyed then washed again before it is cut. What you pull out of the dryer in month six is the same tee you opened in week one."
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button label",
+      "default": "Shop the wash"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial split"
+    }
+  ]
+}
+{% endschema %}

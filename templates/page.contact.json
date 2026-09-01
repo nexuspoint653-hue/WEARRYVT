@@ -1,0 +1,74 @@
+{
+  "sections": {
+    "doc": {
+      "type": "legal-doc",
+      "settings": {
+        "eyebrow": "Help",
+        "heading": "Contact",
+        "intro": "One inbox, answered by the people who pack the parcels, usually inside one business day.",
+        "nav_title": "On this page",
+        "anchor_prefix": "contact",
+        "meta1": "Mon to Fri <b>9 to 5</b> Eastern",
+        "meta2": "Metro Detroit, Michigan",
+        "meta3": ""
+      },
+      "blocks": {
+        "doc_b1": {
+          "type": "clause",
+          "settings": {
+            "title": "Order questions",
+            "body": "<p>hello@wearryvt.com, with your order number in the subject line. That reaches the workshop directly and is the fastest way to change, cancel or chase anything.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b2": {
+          "type": "clause",
+          "settings": {
+            "title": "Returns and faults",
+            "body": "<p>Start a return for a label. For a fault, email hello@wearryvt.com with the order number and a photograph; you do not need to start a return first.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b3": {
+          "type": "clause",
+          "settings": {
+            "title": "Wholesale and press",
+            "body": "<p>wholesale@wearryvt.com for stockist enquiries, press@wearryvt.com for lookbooks and samples. Both are read by a person, not a form.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b4": {
+          "type": "clause",
+          "settings": {
+            "title": "Privacy requests",
+            "body": "<p>privacy@wearryvt.com for a copy of your data, a correction, or deletion. We answer within thirty days.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b5": {
+          "type": "clause",
+          "settings": {
+            "title": "Post",
+            "body": "<p>RYVT LLC, Metro Detroit, Michigan. Write for a paper trail; email is faster for anything urgent.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      },
+      "block_order": [
+        "doc_b1",
+        "doc_b2",
+        "doc_b3",
+        "doc_b4",
+        "doc_b5"
+      ]
+    }
+  },
+  "order": [
+    "doc"
+  ]
+}

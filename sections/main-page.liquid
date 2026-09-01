@@ -1,0 +1,33 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<div class="doc-hd">
+  <div class="wrap">
+    {%- if section.settings.eyebrow != blank -%}<div class="lab">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    <h1>{{ page.title }}</h1>
+  </div>
+</div>
+<div class="wrap doc">
+  <div class="doc-body">{{ page.content }}</div>
+</div>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Page content",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Eyebrow","default":"RYVT"},
+    {"type":"header","content":"Layout"},
+    {"type":"checkbox","id":"visible","label":"Show this section","default":true},
+    {"type":"checkbox","id":"pad_override","label":"Override spacing","default":false},
+    {"type":"range","id":"pad_top","min":0,"max":240,"step":4,"unit":"px","label":"Padding top","default":80},
+    {"type":"range","id":"pad_bottom","min":0,"max":240,"step":4,"unit":"px","label":"Padding bottom","default":80},
+    {"type":"range","id":"max_width","min":0,"max":1800,"step":20,"unit":"px","label":"Content width (0 = theme default)","default":0},
+    {"type":"select","id":"align","label":"Text alignment","default":"default","options":[{"value":"default","label":"As designed"},{"value":"left","label":"Left"},{"value":"center","label":"Centre"},{"value":"right","label":"Right"}]},
+    {"type":"header","content":"Colour and type"},
+    {"type":"color","id":"bg_color","label":"Background"},
+    {"type":"color","id":"text_color","label":"Text"},
+    {"type":"range","id":"heading_size","min":0,"max":160,"step":2,"unit":"px","label":"Heading size (0 = theme default)","default":0},
+    {"type":"range","id":"body_size","min":0,"max":32,"step":1,"unit":"px","label":"Body size (0 = theme default)","default":0}
+  ],
+  "presets": [{"name":"Page content"}]
+}
+{% endschema %}

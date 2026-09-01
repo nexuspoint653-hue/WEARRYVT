@@ -1,11 +1,99 @@
 {
   "sections": {
-    "store": {
-      "type": "ryvt-store",
-      "settings": {}
+    "pdp": {
+      "type": "product-main",
+      "settings": {
+        "spa_view": "",
+        "spa_open": true
+      },
+      "blocks": {
+        "pdp_b1": {
+          "type": "trust",
+          "settings": {
+            "figure": "48h",
+            "label": "dispatch"
+          }
+        },
+        "pdp_b2": {
+          "type": "trust",
+          "settings": {
+            "figure": "30 days",
+            "label": "to return"
+          }
+        },
+        "pdp_b3": {
+          "type": "trust",
+          "settings": {
+            "figure": "1 year",
+            "label": "against faults"
+          }
+        },
+        "pdp_b4": {
+          "type": "acc_details",
+          "settings": {
+            "title": "Details",
+            "open": true
+          }
+        },
+        "pdp_b5": {
+          "type": "acc_text",
+          "settings": {
+            "title": "Fit & sizing",
+            "body": "Boxy through the body with a set shoulder. True to size for a relaxed fit; size down for a closer one. Model is 6'1\" wearing a large.",
+            "open": false,
+            "link_label": "",
+            "link_go": ""
+          }
+        },
+        "pdp_b6": {
+          "type": "acc_fabric",
+          "settings": {
+            "title": "Fabric & care",
+            "note": "Cold wash, inside out, like colours. Tumble low or hang. No softener, which coats heavyweight cotton and stops it breathing.",
+            "open": false
+          }
+        },
+        "pdp_b7": {
+          "type": "acc_size",
+          "settings": {
+            "title": "Size guide",
+            "note": "Measurements are of the garment, laid flat, in inches. Allow half an inch either way.",
+            "open": false
+          }
+        },
+        "pdp_b8": {
+          "type": "acc_text",
+          "settings": {
+            "title": "Shipping & returns",
+            "body": "Picked the same day and dispatched within 48 hours. Free shipping over $125, $8 standard otherwise. 30 days to return anything unworn with tags attached, return shipping covered inside the US.",
+            "open": false,
+            "link_label": "Read the full policy",
+            "link": "/pages/shipping",
+            "link_go": "shipping"
+          }
+        }
+      },
+      "block_order": [
+        "pdp_b1",
+        "pdp_b2",
+        "pdp_b3",
+        "pdp_b4",
+        "pdp_b5",
+        "pdp_b6",
+        "pdp_b7",
+        "pdp_b8"
+      ]
+    },
+    "pdp_related": {
+      "type": "product-related",
+      "settings": {
+        "spa_view": "",
+        "spa_open": true
+      }
     }
   },
   "order": [
-    "store"
+    "pdp",
+    "pdp_related"
   ]
 }

@@ -1,0 +1,134 @@
+{
+  "sections": {
+    "doc": {
+      "type": "legal-doc",
+      "settings": {
+        "eyebrow": "Help",
+        "heading": "Questions, answered",
+        "intro": "The eleven things people ask most, answered properly rather than in a sentence.",
+        "nav_title": "On this page",
+        "anchor_prefix": "faq",
+        "meta1": "Fit, fabric, orders",
+        "meta2": "Updated <b>weekly</b>",
+        "meta3": ""
+      },
+      "blocks": {
+        "doc_b1": {
+          "type": "clause",
+          "settings": {
+            "title": "How does the fit run?",
+            "body": "<p>True to size for a relaxed fit. Everything is cut to one block, so a large in the tee and a large in the crew sit the same across the shoulder. Size down once if you want it close; size up once and the tee reads as outerwear without losing its shape at the hem.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b2": {
+          "type": "clause",
+          "settings": {
+            "title": "What weight is the cotton?",
+            "body": "<p>8.2 oz on the tees and tanks, 12 oz twill on the cargo and shorts, 14 oz loopback fleece on the crew. All of it is garment-dyed, and all of it is washed twice before it is cut, which is why it does not shrink on you afterwards.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b3": {
+          "type": "clause",
+          "settings": {
+            "title": "Will it shrink?",
+            "body": "<p>No more than a percent or so. The shrink happens at the mill, before the cloth is cut, rather than in your dryer.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b4": {
+          "type": "clause",
+          "settings": {
+            "title": "How should I wash it?",
+            "body": "<p>Cold, inside out, with like colours. Tumble low or hang. No fabric softener, which coats heavyweight cotton and stops it breathing. No bleach on the garment-dyed colours.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b5": {
+          "type": "clause",
+          "settings": {
+            "title": "When do you restock?",
+            "body": "<p>Every four to six weeks, in small runs. Sold-out sizes come back rather than being replaced with something cheaper. Subscribe on any product page and you are emailed when your size lands, an hour before the drop goes public.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b6": {
+          "type": "clause",
+          "settings": {
+            "title": "Do you ship outside the United States?",
+            "body": "<p>Canada today, with duties payable on delivery. The rest of the world through 2026; join the list and you will hear when your country opens.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b7": {
+          "type": "clause",
+          "settings": {
+            "title": "Can I change or cancel an order?",
+            "body": "<p>Until it is picked, which is usually within a few hours. Email hello@wearryvt.com with the order number; if it has already been labelled we will tell you, and you can return it free instead.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b8": {
+          "type": "clause",
+          "settings": {
+            "title": "Do you offer wholesale?",
+            "body": "<p>To a small number of shops. Write to wholesale@wearryvt.com with your store, your city and the brands you carry.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b9": {
+          "type": "clause",
+          "settings": {
+            "title": "Is the packaging recyclable?",
+            "body": "<p>The mailer is recycled and recyclable, the tissue is unbleached, and there is no plastic in the parcel apart from the carrier label.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b10": {
+          "type": "clause",
+          "settings": {
+            "title": "Where is it made?",
+            "body": "<p>Cut and finished in Metro Detroit. The cloth is milled in North Carolina.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b11": {
+          "type": "clause",
+          "settings": {
+            "title": "Something is wrong with my order.",
+            "body": "<p>Send the order number and a photograph to hello@wearryvt.com. Faults inside the first year are repaired, replaced or refunded, shipping covered both ways.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      },
+      "block_order": [
+        "doc_b1",
+        "doc_b2",
+        "doc_b3",
+        "doc_b4",
+        "doc_b5",
+        "doc_b6",
+        "doc_b7",
+        "doc_b8",
+        "doc_b9",
+        "doc_b10",
+        "doc_b11"
+      ]
+    }
+  },
+  "order": [
+    "doc"
+  ]
+}

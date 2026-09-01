@@ -1,0 +1,206 @@
+{
+  "sections": {
+    "open": {
+      "type": "story-open",
+      "settings": {},
+      "blocks": {
+        "open_b1": {
+          "type": "link",
+          "settings": {
+            "num": "01",
+            "label": "Worn open",
+            "anchor": "#way-1"
+          }
+        },
+        "open_b2": {
+          "type": "link",
+          "settings": {
+            "num": "02",
+            "label": "Layered",
+            "anchor": "#way-2"
+          }
+        },
+        "open_b3": {
+          "type": "link",
+          "settings": {
+            "num": "03",
+            "label": "Tucked",
+            "anchor": "#way-3"
+          }
+        },
+        "open_b4": {
+          "type": "link",
+          "settings": {
+            "num": "04",
+            "label": "Oversized",
+            "anchor": "#way-4"
+          }
+        }
+      },
+      "block_order": [
+        "open_b1",
+        "open_b2",
+        "open_b3",
+        "open_b4"
+      ]
+    },
+    "spec": {
+      "type": "story-spec",
+      "settings": {},
+      "blocks": {
+        "spec_b1": {
+          "type": "spec",
+          "settings": {
+            "term": "Weight",
+            "value": "8.2 oz"
+          }
+        },
+        "spec_b2": {
+          "type": "spec",
+          "settings": {
+            "term": "Cotton",
+            "value": "Garment-dyed"
+          }
+        },
+        "spec_b3": {
+          "type": "spec",
+          "settings": {
+            "term": "Body",
+            "value": "Boxy, set shoulder"
+          }
+        },
+        "spec_b4": {
+          "type": "spec",
+          "settings": {
+            "term": "Sizes",
+            "value": "XS \u2013 XXL"
+          }
+        },
+        "spec_b5": {
+          "type": "spec",
+          "settings": {
+            "term": "Made",
+            "value": "Metro Detroit"
+          }
+        }
+      },
+      "block_order": [
+        "spec_b1",
+        "spec_b2",
+        "spec_b3",
+        "spec_b4",
+        "spec_b5"
+      ]
+    },
+    "ways": {
+      "type": "story-ways",
+      "settings": {},
+      "blocks": {
+        "ways_b1": {
+          "type": "way",
+          "settings": {
+            "num": "01",
+            "heading": "Worn open",
+            "body": "Straight out of the bag, nothing done to it. The collar is ribbed and double-stitched so it keeps its round after the first wash instead of going wavy at the back of the neck.",
+            "note": "Shown in Bone, size L on a 6'1\" frame.",
+            "anchor_id": "way-1",
+            "tone": ""
+          }
+        },
+        "ways_b2": {
+          "type": "way",
+          "settings": {
+            "num": "02",
+            "heading": "Layered",
+            "body": "Under a jacket the boxy cut matters: no sleeve bunching at the bicep, no hem riding up past the waistband when you reach. The shoulder seam sits where your shoulder ends.",
+            "note": "Shown in Washed Black under the Foundry overshirt.",
+            "anchor_id": "way-2",
+            "tone": "alt"
+          }
+        },
+        "ways_b3": {
+          "type": "way",
+          "settings": {
+            "num": "03",
+            "heading": "Tucked",
+            "body": "Cut two inches longer than a standard body so a tuck holds through a full day rather than creeping out by lunch. The side seam is flat, so nothing bulks at the belt.",
+            "note": "Shown in Bone with the Standard-Issue cargo.",
+            "anchor_id": "way-3",
+            "tone": "dark"
+          }
+        },
+        "ways_b4": {
+          "type": "way",
+          "settings": {
+            "num": "04",
+            "heading": "Oversized",
+            "body": "Size up once and the tee reads as outerwear without losing its shape at the hem. The heavier weight is what makes this work \u2014 a lighter knit would collapse.",
+            "note": "Shown in Chalk, size XXL on the same 6'1\" frame.",
+            "anchor_id": "way-4",
+            "tone": ""
+          }
+        }
+      },
+      "block_order": [
+        "ways_b1",
+        "ways_b2",
+        "ways_b3",
+        "ways_b4"
+      ]
+    },
+    "quote": {
+      "type": "story-quote",
+      "settings": {}
+    },
+    "detail": {
+      "type": "story-detail",
+      "settings": {},
+      "blocks": {
+        "detail_b1": {
+          "type": "detail",
+          "settings": {
+            "title": "Ribbed collar, double-needle",
+            "text": "The first thing to fail on a cheap tee, reinforced here so it holds its round.",
+            "spec_value": "1\u00d71 rib",
+            "spec_note": "Still round in year four"
+          }
+        },
+        "detail_b2": {
+          "type": "detail",
+          "settings": {
+            "title": "Garment-dyed, then washed twice",
+            "text": "The shrink happens before you own it, not in your dryer.",
+            "spec_value": "Under 1% shrink",
+            "spec_note": "Measured after ten washes"
+          }
+        },
+        "detail_b3": {
+          "type": "detail",
+          "settings": {
+            "title": "Flat side seams",
+            "text": "Nothing to twist after a wash, nothing to bulk under a belt.",
+            "spec_value": "No twist",
+            "spec_note": "Panels cut on the same grain"
+          }
+        }
+      },
+      "block_order": [
+        "detail_b1",
+        "detail_b2",
+        "detail_b3"
+      ]
+    },
+    "related": {
+      "type": "story-related",
+      "settings": {}
+    }
+  },
+  "order": [
+    "open",
+    "spec",
+    "ways",
+    "quote",
+    "detail",
+    "related"
+  ]
+}

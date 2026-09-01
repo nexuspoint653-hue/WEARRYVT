@@ -1,0 +1,212 @@
+{
+  "sections": {
+    "film": {
+      "type": "ryvt-landing",
+      "settings": {},
+      "blocks": {
+        "film_b1": {
+          "type": "promo_msg",
+          "settings": {
+            "text": "New drop is live &mdash; small run, built in Metro Detroit"
+          }
+        },
+        "film_b2": {
+          "type": "promo_msg",
+          "settings": {
+            "text": "Free shipping on every order over $125"
+          }
+        },
+        "film_b3": {
+          "type": "promo_msg",
+          "settings": {
+            "text": "Sign up and take 10% off your first order"
+          }
+        },
+        "film_b4": {
+          "type": "nav_link",
+          "settings": {
+            "label": "Shop",
+            "link": "/pages/store?view=shop"
+          }
+        },
+        "film_b5": {
+          "type": "nav_link",
+          "settings": {
+            "label": "New Arrivals",
+            "link": "/pages/store?view=shop"
+          }
+        },
+        "film_b6": {
+          "type": "nav_link",
+          "settings": {
+            "label": "The Renaissance Tee",
+            "link": "/pages/store?view=story"
+          }
+        },
+        "film_b7": {
+          "type": "nav_link",
+          "settings": {
+            "label": "Detroit",
+            "link": "/pages/store?view=about"
+          }
+        },
+        "film_b8": {
+          "type": "nav_link",
+          "settings": {
+            "label": "Contact",
+            "link": "/pages/store?view=contact"
+          }
+        },
+        "film_b9": {
+          "type": "bar_link",
+          "settings": {
+            "label": "Shop",
+            "link": "/pages/store?view=shop"
+          }
+        },
+        "film_b10": {
+          "type": "bar_link",
+          "settings": {
+            "label": "New Arrivals",
+            "link": "/pages/store?view=shop"
+          }
+        },
+        "film_b11": {
+          "type": "bar_link",
+          "settings": {
+            "label": "The Renaissance Tee",
+            "link": "/pages/store?view=story"
+          }
+        },
+        "film_b12": {
+          "type": "bar_link",
+          "settings": {
+            "label": "Detroit",
+            "link": "/pages/store?view=about"
+          }
+        },
+        "film_b13": {
+          "type": "slide",
+          "settings": {}
+        },
+        "film_b14": {
+          "type": "slide",
+          "settings": {}
+        },
+        "film_b15": {
+          "type": "slide",
+          "settings": {}
+        },
+        "film_b16": {
+          "type": "slide",
+          "settings": {}
+        },
+        "film_b17": {
+          "type": "foot_col",
+          "settings": {
+            "heading": "Customer care",
+            "l1_label": "Account",
+            "l1_link": "/pages/store?view=contact",
+            "l2_label": "Our store",
+            "l2_link": "/pages/store?view=about",
+            "l3_label": "FAQ",
+            "l3_link": "/pages/store?view=faq",
+            "l4_label": "Shipping &amp; returns",
+            "l4_link": "/pages/store?view=shipping"
+          }
+        },
+        "film_b18": {
+          "type": "foot_col",
+          "settings": {
+            "heading": "Shop",
+            "l1_label": "All styles",
+            "l1_link": "/pages/store?view=shop",
+            "l2_label": "Heavyweight tees",
+            "l2_link": "/pages/store?view=shop&amp;filter=Tees",
+            "l3_label": "Tank tops",
+            "l3_link": "/pages/store?view=shop&amp;filter=Tanks",
+            "l4_label": "Cargo &amp; shorts",
+            "l4_link": "/pages/store?view=shop&amp;filter=Bottoms"
+          }
+        },
+        "film_b19": {
+          "type": "foot_col",
+          "settings": {
+            "heading": "Brand",
+            "l1_label": "About RYVT",
+            "l1_link": "/pages/store?view=about",
+            "l2_label": "The Renaissance Tee",
+            "l2_link": "/pages/store?view=story",
+            "l3_label": "Made in Detroit",
+            "l3_link": "/pages/store?view=about",
+            "l4_label": "Wholesale",
+            "l4_link": "/pages/store?view=contact"
+          }
+        },
+        "film_b20": {
+          "type": "foot_col",
+          "settings": {
+            "heading": "Journal",
+            "l1_label": "One tee, four ways",
+            "l1_link": "/pages/store?view=story",
+            "l2_label": "Why we wash first",
+            "l2_link": "/pages/store?view=faq",
+            "l3_label": "The fourth-year test",
+            "l3_link": "/pages/store?view=faq",
+            "l4_label": "Press",
+            "l4_link": "/pages/store?view=contact"
+          }
+        },
+        "film_b21": {
+          "type": "legal_link",
+          "settings": {
+            "label": "Terms",
+            "link": "/pages/store?view=terms"
+          }
+        },
+        "film_b22": {
+          "type": "legal_link",
+          "settings": {
+            "label": "Privacy",
+            "link": "/pages/store?view=privacy"
+          }
+        },
+        "film_b23": {
+          "type": "legal_link",
+          "settings": {
+            "label": "Social media disclaimer",
+            "link": "/pages/store?view=social"
+          }
+        }
+      },
+      "block_order": [
+        "film_b1",
+        "film_b2",
+        "film_b3",
+        "film_b4",
+        "film_b5",
+        "film_b6",
+        "film_b7",
+        "film_b8",
+        "film_b9",
+        "film_b10",
+        "film_b11",
+        "film_b12",
+        "film_b13",
+        "film_b14",
+        "film_b15",
+        "film_b16",
+        "film_b17",
+        "film_b18",
+        "film_b19",
+        "film_b20",
+        "film_b21",
+        "film_b22",
+        "film_b23"
+      ]
+    }
+  },
+  "order": [
+    "film"
+  ]
+}

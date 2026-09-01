@@ -1,0 +1,187 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+{%- comment -%}
+  Real Shopify data when there is any, the original JS-driven markup when there
+  is not. shop_live is the single switch; see the header of gen_shop_live.py.
+{%- endcomment -%}
+{%- assign shop_live = false -%}
+{%- assign shop_filtered = false -%}
+{%- if collection -%}
+  {%- for f in collection.filters -%}
+    {%- if f.active_values.size > 0 -%}{%- assign shop_filtered = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if collection.products_count > 0 or shop_filtered -%}{%- assign shop_live = true -%}{%- endif -%}
+{%- endif -%}
+{%- if section.settings.spa_view != blank -%}<div data-view="{{ section.settings.spa_view }}"{% if section.settings.spa_open %} class="on"{% endif %}>{%- endif -%}
+{%- assign shop_hd = section.settings.heading -%}
+{%- assign shop_desc = false -%}
+{%- if shop_live and section.settings.use_collection -%}
+  {%- if collection.title != blank -%}{%- assign shop_hd = collection.title -%}{%- endif -%}
+  {%- if collection.description != blank -%}{%- assign shop_desc = true -%}{%- endif -%}
+{%- endif -%}
+<div class="wrap shop-hd">
+  {%- if shop_hd != blank -%}<h1>{{ shop_hd }}</h1>{%- endif -%}
+  {%- if shop_desc -%}
+    {%- capture shop_d -%}{{ collection.description | strip }}{%- endcapture -%}
+    {%- if shop_d contains '<p' or shop_d contains '<div' or shop_d contains '<ul' or shop_d contains '<ol' or shop_d contains '<h' -%}{{ shop_d }}{%- else -%}<p>{{ shop_d }}</p>{%- endif -%}
+  {%- elsif section.settings.body != blank -%}<p>{{ section.settings.body }}</p>{%- endif -%}
+</div>
+{%- if section.settings.spa_view != blank -%}</div>{%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Shop heading",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Runtime"
+    },
+    {
+      "type": "text",
+      "id": "spa_view",
+      "label": "Runtime view name",
+      "default": "shop",
+      "info": "Leave as-is. The storefront script shows and hides this group by this name."
+    },
+    {
+      "type": "checkbox",
+      "id": "spa_open",
+      "label": "Visible on page load",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body",
+      "default": "Every RYVT style in one place. The same fit standard, the same 8.2 oz cotton, the same size run from XS to XXL, cut and finished in Metro Detroit."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_collection",
+      "label": "Use the collection's own title and description",
+      "default": true,
+      "info": "On a collection page with products, the collection title and description replace the two fields above. Untick to always show the copy set here."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop heading"
+    }
+  ]
+}
+{% endschema %}

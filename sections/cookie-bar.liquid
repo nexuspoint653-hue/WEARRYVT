@@ -1,0 +1,242 @@
+{% render 'section-style', s: section %}
+<div aria-labelledby="ck-h" aria-modal="true" class="ck" data-ck="" hidden="" role="dialog">
+<div class="ck-scrim" data-ck-close=""></div>
+<div class="ck-card">
+<h2 id="ck-h">{{ section.settings.heading }}</h2>
+<p>{{ section.settings.intro }}</p>
+<div class="ck-row locked">
+<span class="ck-box"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"></path></svg></span>
+<span class="ck-txt"><b>{{ section.settings.locked_title }}</b>
+<span>{{ section.settings.locked_text }}</span></span>
+</div>
+{%- for block in section.blocks -%}
+<button aria-pressed="{% if block.settings.on %}true{% else %}false{% endif %}" class="ck-row{% if block.settings.on %} on{% endif %}" data-ck-toggle="{{ block.settings.key }}" type="button" {{ block.shopify_attributes }}>
+<span class="ck-box"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M4 12.5 9.5 18 20 6.5"></path></svg></span>
+<span class="ck-txt"><b>{{ block.settings.title }}</b>
+<span>{{ block.settings.text }}</span></span>
+</button>
+{%- endfor -%}
+<div class="ck-act">
+<button class="ck-reject" data-ck-reject="" type="button">{{ section.settings.reject_label }}</button>
+<button class="ck-save" data-ck-save="" type="button">{{ section.settings.save_label }}</button>
+</div>
+<p class="ck-note" data-ck-note=""></p>
+</div>
+</div>
+{% schema %}
+{
+  "name": "Cookie preferences",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Dialog"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Cookie preferences"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "Toggle the categories you\u2019re comfortable with. Necessary cookies (cart, auth, CSRF)\n       are always on. Choices are stored for 13 months."
+    },
+    {
+      "type": "header",
+      "content": "Necessary row"
+    },
+    {
+      "type": "text",
+      "id": "locked_title",
+      "label": "Title",
+      "default": "Necessary"
+    },
+    {
+      "type": "textarea",
+      "id": "locked_text",
+      "label": "Copy",
+      "default": "Required for the cart, sign-in, and CSRF protection. Cannot be disabled."
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "reject_label",
+      "label": "Reject button",
+      "default": "Reject all optional"
+    },
+    {
+      "type": "text",
+      "id": "save_label",
+      "label": "Save button",
+      "default": "Save preferences"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Optional category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Analytics"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Copy",
+          "default": "Helps us understand which pages are visited and where issues happen.\n              Google Analytics, with no advertising linkage."
+        },
+        {
+          "type": "text",
+          "id": "key",
+          "label": "Storage key (data-ck-toggle)",
+          "default": "analytics"
+        },
+        {
+          "type": "checkbox",
+          "id": "on",
+          "label": "On by default",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Cookie preferences",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "title": "Analytics",
+            "key": "analytics",
+            "on": true,
+            "text": "Helps us understand which pages are visited and where issues happen.\n              Google Analytics, with no advertising linkage."
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Marketing",
+            "key": "marketing",
+            "on": true,
+            "text": "Lets us measure which ads bring people here and show you more relevant\n              promotions. Meta and Facebook ads measurement."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

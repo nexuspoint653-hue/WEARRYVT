@@ -1,0 +1,261 @@
+{%- comment -%}
+  The product card, one-for-one with cardHTML() in ryvt-store.js - the same
+  elements, the same class names, in the same order - but painted from a real
+  Shopify product instead of the demo array. ryvt-store.css already styles
+  every part of it, so nothing here carries a style of its own except the
+  optional aspect-ratio override.
+
+  Accepts:
+    product      required.
+    index        1-based position. Becomes the zero-padded data-i the JS sets.
+    tone_index   0-based position. Drives the '', alt, dark, alt placeholder
+                 cycle the JS uses, so a product with no images still steps
+                 through the four plate tones exactly as the demo cards do.
+    ratio        aspect ratio for .card-media. 'default' = as designed (3:4).
+    hover        'video', 'image' or 'none'.
+    badge_mode / swatch_mode / colour_mode / fav_mode / compare_mode
+                 'default' (follow the theme setting), 'yes' or 'no'.
+    show_badge / show_swatches / show_colour / show_fav / show_compare
+                 booleans, for a caller that would rather pass one.
+    swatch_limit swatches shown before the +n overflow.
+
+  Every option falls back to Theme settings > Product cards, so
+  {% render 'product-card', product: product %} on its own is always valid.
+{%- endcomment -%}
+{%- liquid
+  assign c_index = index | default: 1
+  assign c_tone = tone_index | default: 0
+
+  assign c_badge = settings.card_show_badge
+  if c_badge == nil
+    assign c_badge = true
+  endif
+  if badge_mode == 'yes'
+    assign c_badge = true
+  elsif badge_mode == 'no'
+    assign c_badge = false
+  endif
+  if show_badge != nil
+    assign c_badge = show_badge
+  endif
+
+  assign c_sw = settings.card_show_swatches
+  if c_sw == nil
+    assign c_sw = true
+  endif
+  if swatch_mode == 'yes'
+    assign c_sw = true
+  elsif swatch_mode == 'no'
+    assign c_sw = false
+  endif
+  if show_swatches != nil
+    assign c_sw = show_swatches
+  endif
+
+  assign c_colour = settings.card_show_colour
+  if c_colour == nil
+    assign c_colour = true
+  endif
+  if colour_mode == 'yes'
+    assign c_colour = true
+  elsif colour_mode == 'no'
+    assign c_colour = false
+  endif
+  if show_colour != nil
+    assign c_colour = show_colour
+  endif
+
+  assign c_fav = settings.card_show_fav
+  if c_fav == nil
+    assign c_fav = true
+  endif
+  if fav_mode == 'yes'
+    assign c_fav = true
+  elsif fav_mode == 'no'
+    assign c_fav = false
+  endif
+  if show_fav != nil
+    assign c_fav = show_fav
+  endif
+
+  assign c_compare = settings.card_show_compare
+  if c_compare == nil
+    assign c_compare = true
+  endif
+  if compare_mode == 'yes'
+    assign c_compare = true
+  elsif compare_mode == 'no'
+    assign c_compare = false
+  endif
+  if show_compare != nil
+    assign c_compare = show_compare
+  endif
+
+  assign c_auto = settings.card_badge_auto
+  if c_auto == nil
+    assign c_auto = true
+  endif
+  assign c_sold = settings.card_badge_sold
+  if c_sold == nil
+    assign c_sold = true
+  endif
+
+  assign c_hover = hover | default: 'default'
+  if c_hover == 'default'
+    assign c_hover = settings.card_hover | default: 'video'
+  endif
+
+  assign c_ratio = ratio | default: 'default'
+  if c_ratio == 'default'
+    assign c_ratio = settings.card_ratio | default: 'default'
+  endif
+  if c_ratio == 'default'
+    assign c_ratio = ''
+  endif
+
+  assign c_swlimit = swatch_limit | default: settings.card_swatch_limit | default: 5 | plus: 0
+  assign c_width = settings.card_image_width | default: 800 | plus: 0
+  assign c_half = c_width | divided_by: 2
+  assign c_sizes = settings.card_image_sizes | default: '(max-width:700px) 50vw, 25vw'
+
+  assign tm = c_tone | modulo: 4
+  assign tone_a = ''
+  if tm == 1 or tm == 3
+    assign tone_a = 'alt'
+  elsif tm == 2
+    assign tone_a = 'dark'
+  endif
+  assign tn = c_tone | plus: 1 | modulo: 4
+  assign tone_b = ''
+  if tn == 1 or tn == 3
+    assign tone_b = 'alt'
+  elsif tn == 2
+    assign tone_b = 'dark'
+  endif
+
+  assign compare_at = product.compare_at_price | plus: 0
+  assign on_sale = false
+  if compare_at > product.price
+    assign on_sale = true
+  endif
+
+  assign still_img = product.featured_image
+  assign has_still = false
+  if still_img
+    assign has_still = true
+  endif
+  assign hover_img = product.images[1]
+  assign has_hover_img = false
+  if hover_img and c_hover != 'none'
+    assign has_hover_img = true
+  endif
+  assign pvideo = null
+  if c_hover == 'video'
+    for m in product.media
+      if m.media_type == 'video'
+        assign pvideo = m
+        break
+      endif
+    endfor
+  endif
+
+  assign copt = null
+  for opt in product.options_with_values
+    assign oname = opt.name | downcase
+    if oname contains 'colour' or oname contains 'color'
+      assign copt = opt
+      break
+    endif
+  endfor
+
+  assign colour_label = product.metafields.custom.colour_label | default: ''
+  if colour_label == '' and copt
+    assign colour_label = copt.values.first | default: ''
+  endif
+
+  assign badge_text = product.metafields.custom.badge | default: ''
+  if badge_text == '' and c_auto
+    assign is_new = false
+    assign is_best = false
+    for t in product.tags
+      assign td = t | downcase | strip
+      if td == 'new' or td == 'new in'
+        assign is_new = true
+      endif
+      if td == 'best seller' or td == 'bestseller' or td == 'best-seller'
+        assign is_best = true
+      endif
+    endfor
+    if product.available == false and c_sold
+      assign badge_text = settings.card_badge_sold_text | default: 'Sold out'
+    elsif on_sale
+      assign badge_text = settings.card_badge_sale_text | default: 'Sale'
+    elsif is_best
+      assign badge_text = settings.card_badge_best_text | default: 'Best seller'
+    elsif is_new
+      assign badge_text = settings.card_badge_new_text | default: 'New'
+    endif
+  endif
+
+  assign pad_i = c_index
+  if c_index < 10
+    capture pad_i
+      echo '0'
+      echo c_index
+    endcapture
+  endif
+
+  capture swatches
+    if c_sw and copt
+      for v in copt.values limit: c_swlimit
+        assign vname = v | escape_once
+        if v.swatch.color
+          echo '<i style="background:' | append: v.swatch.color | append: '" title="' | append: vname | append: '"></i>'
+        else
+          assign vhex = v | downcase | strip | replace: ' ', ''
+          echo '<i style="background:' | append: vhex | append: '" title="' | append: vname | append: '"></i>'
+        endif
+      endfor
+      if copt.values.size > c_swlimit
+        assign extra = copt.values.size | minus: c_swlimit
+        echo '<b>+' | append: extra | append: '</b>'
+      endif
+    endif
+  endcapture
+
+  assign show_sub = false
+  if swatches != ''
+    assign show_sub = true
+  endif
+  if c_colour and colour_label != ''
+    assign show_sub = true
+  endif
+-%}
+<a class="card" href="{{ product.url }}" data-i="{{ pad_i }}">
+  <div class="card-media"{% if c_ratio != '' %} style="aspect-ratio:{{ c_ratio }}"{% endif %}>
+    {%- if has_still -%}
+    <img class="still" src="{{ still_img | image_url: width: c_width }}" srcset="{{ still_img | image_url: width: c_half }} {{ c_half }}w, {{ still_img | image_url: width: c_width }} {{ c_width }}w" sizes="{{ c_sizes }}" alt="{{ still_img.alt | default: product.title | escape }}" width="{{ c_width }}" height="{{ c_width }}" loading="lazy">
+    {%- else -%}
+    <span class="ph {{ tone_a }} still">{% if colour_label != '' %}<em>{{ colour_label | escape }}</em>{% endif %}</span>
+    {%- endif -%}
+    {%- if pvideo -%}
+    {{ pvideo | video_tag: class: 'hover-img', image_size: '800x', muted: true, loop: true, autoplay: true, playsinline: true, controls: false, preload: 'metadata' }}
+    {%- elsif has_hover_img -%}
+    <img class="hover-img" src="{{ hover_img | image_url: width: c_width }}" srcset="{{ hover_img | image_url: width: c_half }} {{ c_half }}w, {{ hover_img | image_url: width: c_width }} {{ c_width }}w" sizes="{{ c_sizes }}" alt="" width="{{ c_width }}" height="{{ c_width }}" loading="lazy">
+    {%- elsif has_still == false -%}
+    <span class="ph {{ tone_b }} hover-img"></span>
+    {%- endif -%}
+    {%- if c_badge and badge_text != '' -%}
+    <span class="card-badge">{{ badge_text | escape }}</span>
+    {%- endif -%}
+    {%- if c_fav -%}
+    <button class="card-fav" type="button" aria-label="Save {{ product.title | escape }}" onclick="event.preventDefault();event.stopPropagation();this.classList.toggle('on')">
+      <svg viewBox="0 0 24 24"><path d="M12 3.6l2.5 5.4 5.9.7-4.4 4 1.2 5.8L12 16.6 6.8 19.5 8 13.7 3.6 9.7l5.9-.7z"/></svg>
+    </button>
+    {%- endif -%}
+  </div>
+  <div class="card-info"><span class="card-name">{{ product.title | escape }}</span><span class="card-price">{% if c_compare and on_sale %}<s style="opacity:.55">{{ product.compare_at_price | money }}</s>&nbsp;{% endif %}{{ product.price | money }}</span></div>
+  {%- if show_sub %}
+  <div class="card-sub"><span class="sw">{{ swatches }}</span>{% if c_colour and colour_label != '' %}<span class="card-colour">{{ colour_label | escape }}</span>{% endif %}</div>
+  {%- endif %}
+</a>

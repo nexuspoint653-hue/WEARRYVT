@@ -1,0 +1,202 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+{%- comment -%}
+  Real Shopify data when there is any, the original JS-driven markup when there
+  is not. shop_live is the single switch; see the header of gen_shop_live.py.
+{%- endcomment -%}
+{%- assign shop_live = false -%}
+{%- assign shop_filtered = false -%}
+{%- if collection -%}
+  {%- for f in collection.filters -%}
+    {%- if f.active_values.size > 0 -%}{%- assign shop_filtered = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if collection.products_count > 0 or shop_filtered -%}{%- assign shop_live = true -%}{%- endif -%}
+{%- endif -%}
+{%- if section.settings.spa_view != blank -%}<div data-view="{{ section.settings.spa_view }}"{% if section.settings.spa_open %} class="on"{% endif %}>{%- endif -%}
+<div class="wrap shop-bar">
+  {%- if shop_live %}
+  <span class="shop-tally">{{ collection.products_count }} {% if collection.products_count == 1 %}{{ section.settings.count_one }}{% else %}{{ section.settings.count_many }}{% endif %}</span>
+  {%- else %}
+  <span class="shop-tally" data-count=""></span>
+  {%- endif %}
+  <button aria-controls="filt-panel" aria-expanded="false" class="filt-btn" data-filt-toggle="" type="button">
+    {%- if section.settings.filter_label != blank -%}<span class="filt-btn-t">{{ section.settings.filter_label }}</span>{%- endif -%}
+    {%- if shop_live -%}
+    {%- capture shop_chip -%}
+      {%- assign shop_bits = 0 -%}
+      {%- for f in collection.filters -%}
+        {%- for v in f.active_values -%}
+          {%- if shop_bits > 0 %} / {% endif -%}{{ v.label }}{%- assign shop_bits = shop_bits | plus: 1 -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    <span class="filt-chip"{% if shop_chip == blank %} hidden=""{% endif %}>{{ shop_chip | strip }}</span>
+    {%- else -%}
+    <span class="filt-chip" data-filt-chip="" hidden=""></span>
+    {%- endif %}
+    <span aria-hidden="true" class="filt-ic"><i></i><i></i><i></i></span>
+  </button>
+</div>
+{%- if section.settings.spa_view != blank -%}</div>{%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Shop toolbar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Runtime"
+    },
+    {
+      "type": "text",
+      "id": "spa_view",
+      "label": "Runtime view name",
+      "default": "shop",
+      "info": "Leave as-is. The storefront script shows and hides this group by this name."
+    },
+    {
+      "type": "checkbox",
+      "id": "spa_open",
+      "label": "Visible on page load",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Filter button"
+    },
+    {
+      "type": "text",
+      "id": "filter_label",
+      "label": "Button label",
+      "default": "Filter",
+      "info": "With no collection the count beside it and the active-filter chip are written by the store script; on a real collection both are rendered here."
+    },
+    {
+      "type": "header",
+      "content": "Count"
+    },
+    {
+      "type": "text",
+      "id": "count_one",
+      "label": "Count word, one product",
+      "default": "style"
+    },
+    {
+      "type": "text",
+      "id": "count_many",
+      "label": "Count word, several products",
+      "default": "styles"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop toolbar"
+    }
+  ]
+}
+{% endschema %}

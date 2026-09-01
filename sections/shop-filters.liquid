@@ -1,0 +1,497 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+{%- comment -%}
+  Real Shopify data when there is any, the original JS-driven markup when there
+  is not. shop_live is the single switch; see the header of gen_shop_live.py.
+{%- endcomment -%}
+{%- assign shop_live = false -%}
+{%- assign shop_filtered = false -%}
+{%- if collection -%}
+  {%- for f in collection.filters -%}
+    {%- if f.active_values.size > 0 -%}{%- assign shop_filtered = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if collection.products_count > 0 or shop_filtered -%}{%- assign shop_live = true -%}{%- endif -%}
+{%- endif -%}
+{%- if section.settings.spa_view != blank -%}<div data-view="{{ section.settings.spa_view }}"{% if section.settings.spa_open %} class="on"{% endif %}>{%- endif -%}
+<div class="filt-panel" data-filt-panel="" hidden="" id="filt-panel">
+  <div class="wrap filt-in">
+{%- if shop_live -%}
+    {%- if section.settings.show_filters -%}
+    {%- assign f_shown = 0 -%}
+    {%- for f in collection.filters -%}
+    {%- if f.type == 'list' and f_shown < section.settings.max_filter_groups -%}
+    {%- assign f_shown = f_shown | plus: 1 -%}
+    <form class="filt-grp" method="get" action="{{ collection.url }}">
+      {%- if collection.sort_by != blank -%}<input type="hidden" name="sort_by" value="{{ collection.sort_by | escape }}">{%- endif -%}
+      {%- for o in collection.filters -%}
+        {%- unless o.param_name == f.param_name -%}
+          {%- for v in o.active_values -%}<input type="hidden" name="{{ o.param_name }}" value="{{ v.value | escape }}">{%- endfor -%}
+          {%- if o.type == 'price_range' -%}
+            {%- if o.min_value.value != blank -%}<input type="hidden" name="{{ o.min_value.param_name }}" value="{{ o.min_value.value }}">{%- endif -%}
+            {%- if o.max_value.value != blank -%}<input type="hidden" name="{{ o.max_value.param_name }}" value="{{ o.max_value.value }}">{%- endif -%}
+          {%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+      <span class="filt-lab">{{ f.label }}</span>
+      <div class="filters">
+        <button{% if f.active_values.size == 0 %} class="on"{% endif %} data-f="all" type="submit">{{ section.settings.all_label }}</button>
+        {%- for v in f.values -%}
+        <button{% if v.active %} class="on"{% endif %} data-f="{{ v.value | escape }}" name="{{ f.param_name }}" type="submit" value="{{ v.value | escape }}">{{ v.label }}{% if section.settings.show_counts %} <span class="count">{{ v.count }}</span>{% endif %}</button>
+        {%- endfor -%}
+      </div>
+    </form>
+    {%- endif -%}
+    {%- endfor -%}
+    {%- endif -%}
+    {%- assign cur_sort = collection.sort_by | default: collection.default_sort_by | default: section.settings.default_sort -%}
+    <form class="filt-grp" method="get" action="{{ collection.url }}">
+      {%- for o in collection.filters -%}
+        {%- for v in o.active_values -%}<input type="hidden" name="{{ o.param_name }}" value="{{ v.value | escape }}">{%- endfor -%}
+        {%- if o.type == 'price_range' -%}
+          {%- if o.min_value.value != blank -%}<input type="hidden" name="{{ o.min_value.param_name }}" value="{{ o.min_value.value }}">{%- endif -%}
+          {%- if o.max_value.value != blank -%}<input type="hidden" name="{{ o.max_value.param_name }}" value="{{ o.max_value.value }}">{%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if section.settings.sort_label != blank -%}<span class="filt-lab">{{ section.settings.sort_label }}</span>{%- endif -%}
+      <div class="filters">
+        {%- for block in section.blocks -%}
+        {%- if block.type == 'sort' -%}
+        {%- assign sv = block.settings.sort_value -%}
+        {%- if sv == blank -%}
+          {%- case block.settings.value -%}
+            {%- when 'low' -%}{%- assign sv = 'price-ascending' -%}
+            {%- when 'high' -%}{%- assign sv = 'price-descending' -%}
+            {%- when 'name' -%}{%- assign sv = 'title-ascending' -%}
+            {%- when 'new' -%}{%- assign sv = 'created-descending' -%}
+            {%- when 'best' -%}{%- assign sv = 'best-selling' -%}
+            {%- else -%}{%- assign sv = 'manual' -%}
+          {%- endcase -%}
+        {%- endif -%}
+        <button{% if sv == cur_sort %} class="on"{% endif %} data-s="{{ block.settings.value }}" name="sort_by" type="submit" value="{{ sv }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+        {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </form>
+    {%- if section.settings.clear_label != blank -%}
+    <a class="filt-clear" data-filt-clear="" href="{{ collection.url }}">{{ section.settings.clear_label }}</a>
+    {%- endif -%}
+{%- else %}
+    <div class="filt-grp">
+      {%- if section.settings.cat_label != blank -%}<span class="filt-lab">{{ section.settings.cat_label }}</span>{%- endif -%}
+      <div class="filters" data-filters="">
+        {%- for block in section.blocks -%}
+        {%- if block.type == 'filter' -%}
+        <button{% if block.settings.on %} class="on"{% endif %} data-f="{{ block.settings.value }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+        {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    <div class="filt-grp">
+      {%- if section.settings.sort_label != blank -%}<span class="filt-lab">{{ section.settings.sort_label }}</span>{%- endif -%}
+      <div class="filters" data-sorts="">
+        {%- for block in section.blocks -%}
+        {%- if block.type == 'sort' -%}
+        <button{% if block.settings.on %} class="on"{% endif %} data-s="{{ block.settings.value }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+        {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    {%- if section.settings.clear_label != blank -%}
+    <button class="filt-clear" data-filt-clear="" type="button">{{ section.settings.clear_label }}</button>
+    {%- endif -%}
+{%- endif -%}
+  </div>
+</div>
+{%- if section.settings.spa_view != blank -%}</div>{%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Shop filters",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Runtime"
+    },
+    {
+      "type": "text",
+      "id": "spa_view",
+      "label": "Runtime view name",
+      "default": "shop",
+      "info": "Leave as-is. The storefront script shows and hides this group by this name."
+    },
+    {
+      "type": "checkbox",
+      "id": "spa_open",
+      "label": "Visible on page load",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Group labels"
+    },
+    {
+      "type": "text",
+      "id": "cat_label",
+      "label": "Category group label",
+      "default": "Category",
+      "info": "Used for the hardcoded chips. A real collection labels each group with the filter's own name from Search & Discovery."
+    },
+    {
+      "type": "text",
+      "id": "sort_label",
+      "label": "Sort group label",
+      "default": "Sort"
+    },
+    {
+      "type": "text",
+      "id": "clear_label",
+      "label": "Clear button",
+      "default": "Clear all"
+    },
+    {
+      "type": "header",
+      "content": "Collection filters"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "Show filter groups",
+      "default": true,
+      "info": "Turn off to leave only the sort group on a real collection. Filters come from Shopify's Search & Discovery app; with none set up, no filter group is drawn."
+    },
+    {
+      "type": "range",
+      "id": "max_filter_groups",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Filter groups to show",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "all_label",
+      "label": "Unfiltered chip label",
+      "default": "All"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_counts",
+      "label": "Show the product count on each chip",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "default_sort",
+      "label": "Default sort",
+      "default": "manual",
+      "options": [
+        {
+          "value": "manual",
+          "label": "Featured (manual)"
+        },
+        {
+          "value": "best-selling",
+          "label": "Best selling"
+        },
+        {
+          "value": "title-ascending",
+          "label": "Alphabetically, A-Z"
+        },
+        {
+          "value": "price-ascending",
+          "label": "Price, low to high"
+        },
+        {
+          "value": "price-descending",
+          "label": "Price, high to low"
+        },
+        {
+          "value": "created-descending",
+          "label": "Date, new to old"
+        }
+      ],
+      "info": "Which chip is marked active before the shopper picks one. Match it to the collection's own default sort order."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "filter",
+      "name": "Category chip",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "All"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Category value (data-f)",
+          "default": "all",
+          "info": "Used only when no collection is connected. Must match the product category in the store script: all, Tees, Tanks, Bottoms or Fleece."
+        },
+        {
+          "type": "checkbox",
+          "id": "on",
+          "label": "Marked active in the markup",
+          "default": false,
+          "info": "The store script re-applies this on load; it only decides which chip looks selected before the script runs."
+        }
+      ]
+    },
+    {
+      "type": "sort",
+      "name": "Sort option",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Featured"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Sort key (data-s)",
+          "default": "feat",
+          "info": "Must be one of the keys the store script knows: feat, low, high or name."
+        },
+        {
+          "type": "select",
+          "id": "sort_value",
+          "label": "Shopify sort order",
+          "default": "",
+          "options": [
+            {
+              "value": "",
+              "label": "From the chip's sort key"
+            },
+            {
+              "value": "manual",
+              "label": "Featured (manual)"
+            },
+            {
+              "value": "best-selling",
+              "label": "Best selling"
+            },
+            {
+              "value": "title-ascending",
+              "label": "Alphabetically, A-Z"
+            },
+            {
+              "value": "price-ascending",
+              "label": "Price, low to high"
+            },
+            {
+              "value": "price-descending",
+              "label": "Price, high to low"
+            },
+            {
+              "value": "created-descending",
+              "label": "Date, new to old"
+            }
+          ],
+          "info": "What this chip sorts by on a real collection. Left on the first option it is read from the sort key: feat > manual, low > price-ascending, high > price-descending, name > title-ascending."
+        },
+        {
+          "type": "checkbox",
+          "id": "on",
+          "label": "Marked active in the markup",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "max_blocks": 16,
+  "presets": [
+    {
+      "name": "Shop filters",
+      "blocks": [
+        {
+          "type": "filter",
+          "settings": {
+            "label": "All",
+            "value": "all",
+            "on": true
+          }
+        },
+        {
+          "type": "filter",
+          "settings": {
+            "label": "Tees",
+            "value": "Tees",
+            "on": false
+          }
+        },
+        {
+          "type": "filter",
+          "settings": {
+            "label": "Tanks",
+            "value": "Tanks",
+            "on": false
+          }
+        },
+        {
+          "type": "filter",
+          "settings": {
+            "label": "Bottoms",
+            "value": "Bottoms",
+            "on": false
+          }
+        },
+        {
+          "type": "filter",
+          "settings": {
+            "label": "Fleece",
+            "value": "Fleece",
+            "on": false
+          }
+        },
+        {
+          "type": "sort",
+          "settings": {
+            "label": "Featured",
+            "value": "feat",
+            "sort_value": "manual",
+            "on": true
+          }
+        },
+        {
+          "type": "sort",
+          "settings": {
+            "label": "Price, low to high",
+            "value": "low",
+            "sort_value": "price-ascending",
+            "on": false
+          }
+        },
+        {
+          "type": "sort",
+          "settings": {
+            "label": "Price, high to low",
+            "value": "high",
+            "sort_value": "price-descending",
+            "on": false
+          }
+        },
+        {
+          "type": "sort",
+          "settings": {
+            "label": "A \u2013 Z",
+            "value": "name",
+            "sort_value": "title-ascending",
+            "on": false
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

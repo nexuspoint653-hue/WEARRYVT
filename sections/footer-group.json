@@ -1,0 +1,11 @@
+{
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "footer": { "type": "site-footer", "settings": {} },
+    "cart": { "type": "cart-drawer", "settings": {} },
+    "cookies": { "type": "cookie-bar", "settings": {} },
+    "chrome": { "type": "site-chrome", "settings": {} }
+  },
+  "order": ["footer", "cart", "cookies", "chrome"]
+}

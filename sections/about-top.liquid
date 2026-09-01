@@ -1,0 +1,183 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<section class="wrap br-top">
+  {%- if section.settings.heading != blank -%}<h1 class="br-title">{{ section.settings.heading }}</h1>{%- endif -%}
+  <div class="br-lead">
+    <figure class="br-hero">
+      {%- if section.settings.image != blank -%}<span class="ph" style="background-image:url({{ section.settings.image | image_url: width: 1600 }});background-size:cover;background-position:center"></span>{%- else -%}<span class="ph {{ section.settings.tone }}"></span>{%- endif -%}
+    </figure>
+    <div class="br-note">
+      {%- if section.settings.caption != blank -%}<span class="br-cap">{{ section.settings.caption }}</span>{%- endif -%}
+      {%- if section.settings.body != blank -%}<p>{{ section.settings.body }}</p>{%- endif -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Brand intro",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Brand"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "(Meet the founder)"
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body",
+      "default": "From a Detroit garage to a small workshop off Gratiot, a frustration with thinning cotton turned into a company. What began as one heavyweight tee, made properly for himself, became a run of eight pieces cut to a single block. Today RYVT is worn by people who wanted their clothes to outlast the season they bought them in."
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Founder image"
+    },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Placeholder tone (used when no image)",
+      "default": "",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand intro"
+    }
+  ]
+}
+{% endschema %}

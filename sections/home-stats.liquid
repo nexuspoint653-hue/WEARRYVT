@@ -1,0 +1,192 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<section class="stats">
+  <div class="stats-in">
+    {%- for block in section.blocks -%}
+    <div class="stat" {{ block.shopify_attributes }}>
+      <span class="stat-n num">{{ block.settings.figure }}</span>
+      <span class="stat-l">{{ block.settings.label }}</span>
+      {%- if block.settings.note != blank -%}<span class="stat-s">{{ block.settings.note }}</span>{%- endif -%}
+    </div>
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Stat band",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "figure",
+          "label": "Figure",
+          "default": "8.2 oz"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "The cloth"
+        },
+        {
+          "type": "textarea",
+          "id": "note",
+          "label": "Note",
+          "default": "Heavyweight cotton, garment-dyed, washed before it is cut."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Stat band",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "figure": "8.2 oz",
+            "label": "The cloth",
+            "note": "Heavyweight cotton, garment-dyed, washed before it is cut."
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "figure": "48h",
+            "label": "Dispatch",
+            "note": "Orders leave Metro Detroit inside two days."
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "figure": "8",
+            "label": "Styles in the run",
+            "note": "Restocked rather than replaced when they sell out."
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "figure": "30 days",
+            "label": "To change your mind",
+            "note": "Unworn, tags on, shipping covered both ways."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

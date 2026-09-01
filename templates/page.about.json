@@ -1,0 +1,93 @@
+{
+  "sections": {
+    "top": {
+      "type": "about-top",
+      "settings": {}
+    },
+    "based": {
+      "type": "about-based",
+      "settings": {}
+    },
+    "source": {
+      "type": "about-source",
+      "settings": {},
+      "blocks": {
+        "source_b1": {
+          "type": "column",
+          "settings": {
+            "text": "At RYVT we choose the cloth before we design to it. Every piece is 8.2 oz cotton, garment-dyed, and washed twice at the mill so the shrink happens there rather than in your dryer."
+          }
+        },
+        "source_b2": {
+          "type": "column",
+          "settings": {
+            "text": "The run is deliberately small. Eight styles, one block, restocked every four to six weeks rather than replaced with something cheaper when it sells out."
+          }
+        }
+      },
+      "block_order": [
+        "source_b1",
+        "source_b2"
+      ]
+    },
+    "figs": {
+      "type": "about-figs",
+      "settings": {},
+      "blocks": {
+        "figs_b1": {
+          "type": "figure",
+          "settings": {
+            "term": "Founded",
+            "value": "2024"
+          }
+        },
+        "figs_b2": {
+          "type": "figure",
+          "settings": {
+            "term": "Styles",
+            "value": "8"
+          }
+        },
+        "figs_b3": {
+          "type": "figure",
+          "settings": {
+            "term": "Cloth",
+            "value": "8.2 oz"
+          }
+        },
+        "figs_b4": {
+          "type": "figure",
+          "settings": {
+            "term": "Dispatch",
+            "value": "48h"
+          }
+        },
+        "figs_b5": {
+          "type": "figure",
+          "settings": {
+            "term": "Returns",
+            "value": "30 days"
+          }
+        }
+      },
+      "block_order": [
+        "figs_b1",
+        "figs_b2",
+        "figs_b3",
+        "figs_b4",
+        "figs_b5"
+      ]
+    },
+    "news": {
+      "type": "about-news",
+      "settings": {}
+    }
+  },
+  "order": [
+    "top",
+    "based",
+    "source",
+    "figs",
+    "news"
+  ]
+}

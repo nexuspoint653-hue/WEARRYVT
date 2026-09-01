@@ -1,0 +1,736 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+{%- assign pfx = section.settings.anchor_prefix | default: 'doc' -%}
+<div class="doc-hd">
+<div class="wrap">
+{%- if section.settings.eyebrow != blank -%}<div class="lab">{{ section.settings.eyebrow }}</div>{%- endif -%}
+{%- if section.settings.heading != blank -%}<h1>{{ section.settings.heading | newline_to_br }}</h1>{%- endif -%}
+{%- if section.settings.intro != blank -%}<p>{{ section.settings.intro }}</p>{%- endif -%}
+{%- if section.settings.meta1 != blank or section.settings.meta2 != blank or section.settings.meta3 != blank -%}
+<div class="doc-meta">{%- if section.settings.meta1 != blank -%}<span>{{ section.settings.meta1 }}</span>{%- endif -%}{%- if section.settings.meta2 != blank -%}<span>{{ section.settings.meta2 }}</span>{%- endif -%}{%- if section.settings.meta3 != blank -%}<span>{{ section.settings.meta3 }}</span>{%- endif -%}</div>
+{%- endif -%}
+</div>
+</div><div class="wrap doc">
+{%- if section.blocks.size > 0 -%}
+<aside class="doc-nav">
+{%- if section.settings.nav_title != blank -%}<h4>{{ section.settings.nav_title }}</h4>{%- endif -%}
+<ol>
+{%- for block in section.blocks -%}
+<li><a href="#{{ pfx }}-{{ forloop.index }}">{{ block.settings.title }}</a></li>
+{%- endfor -%}
+</ol>
+</aside>
+{%- endif -%}
+<div class="doc-body">
+{%- for block in section.blocks -%}
+{%- assign n = forloop.index | prepend: '0' | slice: -2, 2 -%}
+<section id="{{ pfx }}-{{ forloop.index }}" {{ block.shopify_attributes }}>
+<h2><span>{{ n }}</span>{{ block.settings.title }}</h2>
+{%- if block.settings.table != blank and block.settings.table_first -%}
+{{ block.settings.table }}
+{%- endif -%}
+{%- if block.settings.body != blank -%}
+{{ block.settings.body }}
+{%- endif -%}
+{%- if block.settings.table != blank and block.settings.table_first == false -%}
+{{ block.settings.table }}
+{%- endif -%}
+</section>
+{%- endfor -%}
+</div>
+</div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Legal document",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Page header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Legal"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Terms and Conditions"
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Intro",
+      "default": "The agreement between you and RYVT LLC when you buy from this store. Written to be read, not skipped."
+    },
+    {
+      "type": "header",
+      "content": "Header meta line"
+    },
+    {
+      "type": "text",
+      "id": "meta1",
+      "label": "Meta 1 (bold with <b>\u2026</b>)",
+      "default": "Effective <b>1 August 2026</b>"
+    },
+    {
+      "type": "text",
+      "id": "meta2",
+      "label": "Meta 2 (bold with <b>\u2026</b>)",
+      "default": "Version <b>2.0</b>"
+    },
+    {
+      "type": "text",
+      "id": "meta3",
+      "label": "Meta 3 (bold with <b>\u2026</b>)",
+      "default": "Michigan, USA"
+    },
+    {
+      "type": "header",
+      "content": "On this page"
+    },
+    {
+      "type": "text",
+      "id": "nav_title",
+      "label": "Rail title",
+      "default": "On this page"
+    },
+    {
+      "type": "text",
+      "id": "anchor_prefix",
+      "label": "Anchor id prefix",
+      "info": "Clause anchors are prefix-1, prefix-2 \u2026 Changing this breaks existing inbound links.",
+      "default": "terms"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "clause",
+      "name": "Clause",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Who you are dealing with"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body",
+          "default": "<p>This store is operated by RYVT LLC, a Michigan limited liability company with its workshop in Metro Detroit. Where these terms say \u201cwe\u201d or \u201cus\u201d, they mean RYVT LLC. Where they say \u201cyou\u201d, they mean the person placing the order.</p> <p>Placing an order means you accept these terms as they read on the day you order. We may change them, but a change never applies backwards to an order already placed.</p>"
+        },
+        {
+          "type": "html",
+          "id": "table",
+          "label": "Table markup (optional)",
+          "info": "Use for a <table class=\"doc-tbl\"> block. Leave empty for a text-only clause."
+        },
+        {
+          "type": "checkbox",
+          "id": "table_first",
+          "label": "Place the table above the body text",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "Legal doc \u2014 Terms and Conditions",
+      "settings": {
+        "eyebrow": "Legal",
+        "heading": "Terms and Conditions",
+        "intro": "The agreement between you and RYVT LLC when you buy from this store. Written to be read, not skipped.",
+        "nav_title": "On this page",
+        "anchor_prefix": "terms",
+        "meta1": "Effective <b>1 August 2026</b>",
+        "meta2": "Version <b>2.0</b>",
+        "meta3": "Michigan, USA"
+      },
+      "blocks": [
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Who you are dealing with",
+            "body": "<p>This store is operated by RYVT LLC, a Michigan limited liability company with its workshop in Metro Detroit. Where these terms say \u201cwe\u201d or \u201cus\u201d, they mean RYVT LLC. Where they say \u201cyou\u201d, they mean the person placing the order.</p> <p>Placing an order means you accept these terms as they read on the day you order. We may change them, but a change never applies backwards to an order already placed.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Orders and acceptance",
+            "body": "<p>An order is an offer to buy. It becomes a contract when we send the dispatch confirmation, not when the payment clears and not when the order confirmation arrives.</p> <ul><li>We may decline an order if a piece sells out between your checkout and our picking it.</li><li>We may limit quantities on a drop so that one buyer cannot take the whole run.</li><li>If we decline, you are refunded in full within three business days, to the original payment method.</li></ul>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Prices and payment",
+            "body": "<p>Prices are in US dollars and exclude sales tax, which is calculated at checkout against the delivery address. Payment is taken in full at checkout through our payment processor; we never see or store your card number.</p> <p>If a price is listed incorrectly through an obvious error, we contact you before dispatch and you may confirm at the corrected price or cancel for a full refund.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Delivery and risk",
+            "body": "<p>Risk passes to you on delivery to the address you gave us. Title passes when payment has cleared in full. Delivery estimates are estimates; a carrier delay is not a breach of these terms, though it may still entitle you to a return under the section below.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Returns, refunds and your statutory rights",
+            "body": "<p>Our returns policy sits alongside your rights under Michigan and federal law and does not replace them. Nothing in these terms limits liability for fraud, for death or personal injury caused by negligence, or for anything else that cannot lawfully be limited.</p> <p>The practical detail lives in the Shipping and Returns page, which forms part of these terms.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Intellectual property",
+            "body": "<p>The RYVT name, the chevron mark, the product photography, the copy on this site and the garment designs are ours. You may share and link to our pages. You may not put our marks on your own goods, resell our images, or use our copy to sell competing product.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Limitation of liability",
+            "body": "<p>Our total liability for any order is limited to the amount you paid for it. We are not liable for indirect or consequential loss, including lost profit or lost opportunity. This limit does not apply to the matters listed in section 05 that cannot lawfully be limited.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Governing law and disputes",
+            "body": "<p>These terms are governed by the laws of the State of Michigan. Before starting proceedings, write to us and give us thirty days to resolve the matter; most disputes end there. If they do not, the courts of Wayne County, Michigan have jurisdiction.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Contact",
+            "body": "<p>RYVT LLC, Metro Detroit, Michigan. Write to hello@wearryvt.com and a person answers, usually within one business day.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Legal doc \u2014 Privacy Policy",
+      "settings": {
+        "eyebrow": "Legal",
+        "heading": "Privacy Policy",
+        "intro": "What we collect when you shop with us, why we hold it, how long we keep it, and how to make us delete it.",
+        "nav_title": "On this page",
+        "anchor_prefix": "privacy",
+        "meta1": "Effective <b>1 August 2026</b>",
+        "meta2": "Data controller <b>RYVT LLC</b>",
+        "meta3": ""
+      },
+      "blocks": [
+        {
+          "type": "clause",
+          "settings": {
+            "title": "What we collect",
+            "body": "<ul><li>Order data: name, delivery and billing address, email, phone if you give it, and what you bought.</li><li>Payment data: handled by our payment processor. We receive the last four digits and the card type, never the full number.</li><li>Account data, if you create one: your email, a hashed password, your order history and saved addresses.</li><li>Site data: pages viewed, referring link, approximate location from IP address, and device type.</li></ul>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Why we hold it",
+            "body": "<p>To take payment, pick, pack and deliver an order; to handle returns and warranty claims; to answer your emails; to meet our tax and accounting obligations; and to keep the store working and secure.</p> <p>We send marketing email only to people who asked for it. Every one of those emails carries a one-click unsubscribe, and unsubscribing never affects an order in flight.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Who else sees it",
+            "body": "<ul><li>Our payment processor, to take the payment.</li><li>Our carrier, to deliver the parcel: name, address, and phone for delivery notifications.</li><li>Our email provider, if you subscribed.</li><li>Our accountant and, where the law requires it, a tax or law-enforcement authority.</li></ul> <p>We do not sell personal data, and we do not share it for anyone else\u2019s advertising.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "How long we keep it",
+            "body": "",
+            "table": "<table class=\"doc-tbl\">\n<tr><th>Record</th><th>Held for</th></tr>\n<tr><td>Order and invoice records</td><td>7 years</td></tr>\n<tr><td>Account details, while the account is open</td><td>Until you close it</td></tr>\n<tr><td>Marketing consent and email history</td><td>3 years from last activity</td></tr>\n<tr><td>Site analytics</td><td>14 months</td></tr>\n</table>",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Your choices",
+            "body": "<p>You can ask us for a copy of what we hold, to correct it, or to delete it. Deletion applies to everything except records we are legally required to keep, such as invoices. Write to privacy@wearryvt.com and we answer within thirty days.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Cookies",
+            "body": "<p>We use cookies that keep your bag and your session working, and one analytics cookie that tells us which pages are read. There are no advertising cookies on this site. Blocking cookies will not stop you shopping; it will empty your bag between visits.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Security and changes",
+            "body": "<p>The store runs over TLS, passwords are hashed, and access to order data is limited to the people who pack the parcels. If we change this policy we date the change at the top and, for anything material, we email subscribers before it takes effect.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Legal doc \u2014 Shipping and Returns",
+      "settings": {
+        "eyebrow": "Help",
+        "heading": "Shipping and Returns",
+        "intro": "What it costs, when it arrives, and exactly how to send something back if it is not right.",
+        "nav_title": "On this page",
+        "anchor_prefix": "shipping",
+        "meta1": "Dispatch <b>48 hours</b>",
+        "meta2": "Returns window <b>30 days</b>",
+        "meta3": "Free over <b>$125</b>"
+      },
+      "blocks": [
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Dispatch",
+            "body": "<p>Orders placed before 2pm Eastern on a business day are picked the same day and leave the workshop within forty-eight hours. Orders placed at a weekend leave on the Monday.</p> <p>You get a tracking link the moment the label is scanned, not when it is printed, so the first movement you see is a real one.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Rates and times",
+            "body": "<p>Duties and import taxes on orders outside the United States are payable by you on delivery. We cannot estimate them for you; your carrier can.</p>",
+            "table": "<table class=\"doc-tbl\">\n<tr><th>Service</th><th>Time</th><th>Cost</th></tr>\n<tr><td>Standard, US</td><td>3 to 5 business days</td><td>$8</td></tr>\n<tr><td>Express, US</td><td>1 to 2 business days</td><td>$18</td></tr>\n<tr><td>Any US order over $125</td><td>3 to 5 business days</td><td>Free</td></tr>\n<tr><td>Canada</td><td>6 to 10 business days</td><td>$22</td></tr>\n</table>",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Returns",
+            "body": "<p>Thirty days from delivery, for any reason. The piece must be unworn, unwashed and have its tags attached. We do not accept returns on anything altered or laundered.</p> <ul><li>Start the return with your order number and email.</li><li>Print the label we send you, or ask for a QR code if you have no printer.</li><li>Drop the parcel at any carrier point. Return shipping is free within the United States.</li></ul> <p>Refunds are issued to the original payment method within three business days of the parcel reaching us. Your bank then takes its own time, usually another two to five days.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Exchanges",
+            "body": "<p>Exchanges are handled as a return plus a new order, so the size you want is held the moment you start the return rather than waiting for the first parcel to travel back.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Faults",
+            "body": "<p>If a seam fails or a fabric fault appears in the first year of ordinary wear, send a photograph and the order number. We repair, replace, or refund, in that order of preference, and we cover the shipping both ways. Ordinary wear, fading from washing, and damage from alteration are not faults.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Lost and damaged parcels",
+            "body": "<p>If tracking has not moved for five business days, or the parcel arrives damaged, tell us within thirty days of dispatch. We open the carrier claim ourselves and send a replacement without waiting for it to settle.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Legal doc \u2014 Social Media Disclaimer",
+      "settings": {
+        "eyebrow": "Legal",
+        "heading": "Social Media Disclaimer",
+        "intro": "How our accounts work, what we do with posts you tag us in, and what our posts are not.",
+        "nav_title": "On this page",
+        "anchor_prefix": "social",
+        "meta1": "Applies to <b>Instagram, TikTok</b>",
+        "meta2": "Updated <b>1 August 2026</b>",
+        "meta3": ""
+      },
+      "blocks": [
+        {
+          "type": "clause",
+          "settings": {
+            "title": "The accounts we actually run",
+            "body": "<p>We post from @wearryvt on Instagram and TikTok. Any other account using our name, our chevron mark or our photography is not us. We will never message you first asking for payment, card details or a password.</p> <p>If you think you are dealing with an impersonator, send a screenshot to hello@wearryvt.com and we will report it.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "What our posts are",
+            "body": "<p>Marketing and general information about our own products. A post is not professional advice of any kind, it is not an offer capable of acceptance, and a price or a drop date named in a post does not bind us if it changes.</p> <p>Where the store and a post disagree, the store is correct.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Content you tag us in",
+            "body": "<p>If you tag @wearryvt or use our hashtag on a public post, you give us permission to reshare that post, with credit, on our own channels and in our email. You keep ownership of your photograph, and you can withdraw that permission at any time by messaging us; we take it down.</p> <ul><li>We never edit a reshared photograph beyond cropping it to fit.</li><li>We never use a tagged post in paid advertising without asking you first, in writing.</li><li>We do not reshare posts featuring anyone who is visibly a minor.</li></ul>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Comments and moderation",
+            "body": "<p>Comments belong to the people who write them and are not our opinions. We remove abuse, spam, and anything that publishes another person\u2019s private information, and we block repeat offenders. Removing a comment is not a comment on its argument.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Endorsements and gifting",
+            "body": "<p>When someone is paid or gifted product to post about us, that post is marked as an ad or a gift. If it is not marked, it was not paid for.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Support through social",
+            "body": "<p>We answer questions in messages, but never ask for card details, passwords or full addresses there. Anything to do with an order goes through hello@wearryvt.com so that it is on the record.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Legal doc \u2014 FAQ",
+      "settings": {
+        "eyebrow": "Help",
+        "heading": "Questions, answered",
+        "intro": "The eleven things people ask most, answered properly rather than in a sentence.",
+        "nav_title": "On this page",
+        "anchor_prefix": "faq",
+        "meta1": "Fit, fabric, orders",
+        "meta2": "Updated <b>weekly</b>",
+        "meta3": ""
+      },
+      "blocks": [
+        {
+          "type": "clause",
+          "settings": {
+            "title": "How does the fit run?",
+            "body": "<p>True to size for a relaxed fit. Everything is cut to one block, so a large in the tee and a large in the crew sit the same across the shoulder. Size down once if you want it close; size up once and the tee reads as outerwear without losing its shape at the hem.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "What weight is the cotton?",
+            "body": "<p>8.2 oz on the tees and tanks, 12 oz twill on the cargo and shorts, 14 oz loopback fleece on the crew. All of it is garment-dyed, and all of it is washed twice before it is cut, which is why it does not shrink on you afterwards.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Will it shrink?",
+            "body": "<p>No more than a percent or so. The shrink happens at the mill, before the cloth is cut, rather than in your dryer.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "How should I wash it?",
+            "body": "<p>Cold, inside out, with like colours. Tumble low or hang. No fabric softener, which coats heavyweight cotton and stops it breathing. No bleach on the garment-dyed colours.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "When do you restock?",
+            "body": "<p>Every four to six weeks, in small runs. Sold-out sizes come back rather than being replaced with something cheaper. Subscribe on any product page and you are emailed when your size lands, an hour before the drop goes public.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Do you ship outside the United States?",
+            "body": "<p>Canada today, with duties payable on delivery. The rest of the world through 2026; join the list and you will hear when your country opens.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Can I change or cancel an order?",
+            "body": "<p>Until it is picked, which is usually within a few hours. Email hello@wearryvt.com with the order number; if it has already been labelled we will tell you, and you can return it free instead.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Do you offer wholesale?",
+            "body": "<p>To a small number of shops. Write to wholesale@wearryvt.com with your store, your city and the brands you carry.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Is the packaging recyclable?",
+            "body": "<p>The mailer is recycled and recyclable, the tissue is unbleached, and there is no plastic in the parcel apart from the carrier label.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Where is it made?",
+            "body": "<p>Cut and finished in Metro Detroit. The cloth is milled in North Carolina.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Something is wrong with my order.",
+            "body": "<p>Send the order number and a photograph to hello@wearryvt.com. Faults inside the first year are repaired, replaced or refunded, shipping covered both ways.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Legal doc \u2014 Contact",
+      "settings": {
+        "eyebrow": "Help",
+        "heading": "Contact",
+        "intro": "One inbox, answered by the people who pack the parcels, usually inside one business day.",
+        "nav_title": "On this page",
+        "anchor_prefix": "contact",
+        "meta1": "Mon to Fri <b>9 to 5</b> Eastern",
+        "meta2": "Metro Detroit, Michigan",
+        "meta3": ""
+      },
+      "blocks": [
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Order questions",
+            "body": "<p>hello@wearryvt.com, with your order number in the subject line. That reaches the workshop directly and is the fastest way to change, cancel or chase anything.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Returns and faults",
+            "body": "<p>Start a return for a label. For a fault, email hello@wearryvt.com with the order number and a photograph; you do not need to start a return first.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Wholesale and press",
+            "body": "<p>wholesale@wearryvt.com for stockist enquiries, press@wearryvt.com for lookbooks and samples. Both are read by a person, not a form.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Privacy requests",
+            "body": "<p>privacy@wearryvt.com for a copy of your data, a correction, or deletion. We answer within thirty days.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        {
+          "type": "clause",
+          "settings": {
+            "title": "Post",
+            "body": "<p>RYVT LLC, Metro Detroit, Michigan. Write for a paper trail; email is faster for anything urgent.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,194 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<section class="br-news">
+  {%- if section.settings.image != blank -%}
+  <span class="br-news-plate" style="background-image:url({{ section.settings.image | image_url: width: 2400 }});background-size:cover;background-position:center"></span>
+  {%- else -%}
+  <span class="br-news-plate ph {{ section.settings.plate_style }}"></span>
+  {%- endif -%}
+  <div class="wrap br-news-in">
+    {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+    <form class="br-sub" data-sub2="">
+      {%- if section.settings.field_label != blank -%}<label for="br-email">{{ section.settings.field_label }}</label>{%- endif -%}
+      <div class="br-sub-row">
+        <input id="br-email" placeholder="{{ section.settings.placeholder }}" required="" type="email"/>
+        <button type="submit">{{ section.settings.btn_label }}</button>
+      </div>
+    </form>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Brand newsletter",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get in on the news"
+    },
+    {
+      "type": "text",
+      "id": "field_label",
+      "label": "Field label",
+      "default": "Subscribe to our newsletter"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Field placeholder",
+      "default": "Your email"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button label",
+      "default": "Join"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "plate_style",
+      "label": "Placeholder tone (used when no image)",
+      "default": "dark",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand newsletter"
+    }
+  ]
+}
+{% endschema %}

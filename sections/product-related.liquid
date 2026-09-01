@@ -1,0 +1,400 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+{%- comment -%}
+    Three ways to fill this grid, in order: Shopify's own recommendations when
+    the merchant asks for them and we are on a product page, then a picked
+    collection, then - if neither has anything - the original JS-driven
+    [data-pairs] container, untouched, so the demo still paints itself.
+{%- endcomment -%}
+{%- liquid
+  assign rel_products = null
+  assign rec_pending = false
+  assign rel_count = section.settings.count | default: 4 | plus: 0
+  if section.settings.use_recommendations and product != blank
+    if recommendations.performed
+      if recommendations.products_count > 0
+        assign rel_products = recommendations.products
+      endif
+    else
+      assign rec_pending = true
+    endif
+  endif
+  if rel_products == null
+    assign rel_coll = collections[section.settings.collection]
+    assign coll_size = rel_coll.products.size | plus: 0
+    if coll_size > 0
+      assign rel_products = rel_coll.products
+    endif
+  endif
+  assign has_products = false
+  if rel_products != null and rel_count > 0
+    assign has_products = true
+  endif
+  assign gcols = section.settings.columns | default: 'default'
+  assign gcols_n = gcols | plus: 0
+  assign gcols_m = gcols_n
+  if gcols_m > 3
+    assign gcols_m = 3
+  endif
+  assign gcols_s = gcols_n
+  if gcols_s > 2
+    assign gcols_s = 2
+  endif
+-%}
+{%- if section.settings.spa_view != blank -%}<div data-view="{{ section.settings.spa_view }}"{% if section.settings.spa_open %} class="on"{% endif %}>{%- endif -%}
+<section class="sec wrap"{% if rec_pending %} data-recs-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&amp;limit={{ rel_count }}&amp;product_id={{ product.id }}"{% endif %}>
+  <div class="sec-h">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<div class="lab">{{ section.settings.eyebrow }}</div>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 style="margin-top:8px">{{ section.settings.heading }}</h2>{%- endif -%}
+    </div>
+  </div>
+{%- if has_products %}
+{%- if gcols != 'default' %}
+  <style>#shopify-section-{{ section.id }} .grid{grid-template-columns:repeat({{ gcols_n }},1fr)}@media(max-width:1000px){#shopify-section-{{ section.id }} .grid{grid-template-columns:repeat({{ gcols_m }},1fr)}}@media(max-width:749px){#shopify-section-{{ section.id }} .grid{grid-template-columns:repeat({{ gcols_s }},1fr)}}</style>
+{%- endif %}
+  <div class="grid">
+    {%- for card_product in rel_products limit: rel_count %}
+    {% render 'product-card', product: card_product, index: forloop.index, tone_index: forloop.index0, ratio: section.settings.card_ratio, hover: section.settings.card_hover, badge_mode: section.settings.card_badge, swatch_mode: section.settings.card_swatches, colour_mode: section.settings.card_colour %}
+    {%- endfor %}
+  </div>
+{%- else %}
+  <div class="grid" data-pairs=""></div>
+{%- endif %}
+</section>
+{%- if section.settings.spa_view != blank -%}</div>{%- endif -%}
+{%- endif -%}
+{% schema %}
+{
+  "name": "Product pairs with",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Runtime"
+    },
+    {
+      "type": "text",
+      "id": "spa_view",
+      "label": "Runtime view name",
+      "default": "product",
+      "info": "Leave as-is. The storefront script shows and hides this group by this name."
+    },
+    {
+      "type": "checkbox",
+      "id": "spa_open",
+      "label": "Visible on page load",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Pairs with"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Finish the fit."
+    },
+    {
+      "type": "header",
+      "content": "Recommendations"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_recommendations",
+      "label": "Use Shopify's product recommendations",
+      "default": false,
+      "info": "On a product page, let Shopify choose what pairs with the product being viewed. Falls back to the collection below."
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "paragraph",
+      "content": "Recommendations first when they are switched on, then this collection. With neither, the storefront script paints the four cards itself, exactly as it does today."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "count",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "label": "Products shown",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed (4)"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "paragraph",
+      "content": "Left on Theme default these follow Theme settings, Product cards."
+    },
+    {
+      "type": "select",
+      "id": "card_ratio",
+      "label": "Image shape",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "3/4",
+          "label": "Portrait 3:4 (as designed)"
+        },
+        {
+          "value": "4/5",
+          "label": "Portrait 4:5"
+        },
+        {
+          "value": "2/3",
+          "label": "Tall 2:3"
+        },
+        {
+          "value": "1/1",
+          "label": "Square"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_hover",
+      "label": "On hover",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "video",
+          "label": "Product video, else second image"
+        },
+        {
+          "value": "image",
+          "label": "Second image"
+        },
+        {
+          "value": "none",
+          "label": "Nothing"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_badge",
+      "label": "Badge",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "yes",
+          "label": "Show"
+        },
+        {
+          "value": "no",
+          "label": "Hide"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_swatches",
+      "label": "Colour swatches",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "yes",
+          "label": "Show"
+        },
+        {
+          "value": "no",
+          "label": "Hide"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_colour",
+      "label": "Colour name",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "yes",
+          "label": "Show"
+        },
+        {
+          "value": "no",
+          "label": "Hide"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product pairs with"
+    }
+  ]
+}
+{% endschema %}

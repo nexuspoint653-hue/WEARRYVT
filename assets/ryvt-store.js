@@ -168,7 +168,8 @@
     var list = curFilter === 'all' ? P.slice() : P.filter(function(p){ return p.cat === curFilter; });
     if(SORTS[curSort]) list.sort(SORTS[curSort]);
     fill($('[data-shop]'), list);
-    $('[data-count]').textContent = list.length + (list.length === 1 ? ' style' : ' styles');
+    var _cnt = $('[data-count]');
+    if(_cnt) _cnt.textContent = list.length + (list.length === 1 ? ' style' : ' styles');
     $$('[data-filters] button').forEach(function(b){ b.classList.toggle('on', b.dataset.f === curFilter); });
     $$('[data-sorts] button').forEach(function(b){ b.classList.toggle('on', b.dataset.s === curSort); });
 
@@ -322,6 +323,7 @@
   var dockBtn = $('[data-dock-add]');
 
   function syncAdd(){
+    if(!addBtn || !dockBtn) return;
     var ready = !!curSize;
     addBtn.disabled  = !ready;
     dockBtn.disabled = !ready;
@@ -402,7 +404,7 @@
   });
 
   function addToBag(){
-    if(addBtn.disabled) return;
+    if(!addBtn || addBtn.disabled) return;
     var colour = cur.colours ? cur.colours[curColor].n : cur.colors[curColor].n;
     var found = null;
     lines.forEach(function(l){
@@ -416,8 +418,8 @@
     clearTimeout(addToBag._t);
     addToBag._t = setTimeout(function(){ t.classList.remove('on'); }, 2400);
   }
-  addBtn.addEventListener('click', addToBag);
-  dockBtn.addEventListener('click', function(){ addBtn.click(); });
+  if(addBtn)  addBtn.addEventListener('click', addToBag);
+  if(dockBtn) dockBtn.addEventListener('click', function(){ addBtn.click(); });
 
   function showDock(){
     dock.classList.add('on');
@@ -436,7 +438,7 @@
         if(e.isIntersecting) hideDock(); else showDock();
       });
     }, {threshold:0});
-    io.observe(addBtn);
+    if(addBtn) io.observe(addBtn);
   }
 
   /* ---------------- header panels ---------------- */
@@ -557,9 +559,26 @@
   /* ---------------- global navigation ---------------- */
   document.addEventListener('click', function(e){
     var prod = e.target.closest('[data-product]');
-    if(prod){ e.preventDefault(); openProduct(prod.dataset.product); return; }
+    if(prod){
+      /* the PDP only exists on the template that carries it; anywhere else the
+         link is followed so the browser does the navigating */
+      if(!$('[data-pdp-stage]')){
+        var ph = prod.getAttribute('href');
+        if(ph && ph !== '#') return;
+        e.preventDefault();
+        location.href = '/collections/all?product=' + encodeURIComponent(prod.dataset.product);
+        return;
+      }
+      e.preventDefault(); openProduct(prod.dataset.product); return;
+    }
     var go = e.target.closest('[data-go]');
     if(go){
+      var target = $('[data-view="' + go.dataset.go + '"]');
+      var href = go.getAttribute('href');
+      if(!target){
+        if(href && href !== '#') return;      /* let the browser navigate */
+        return;
+      }
       e.preventDefault();
       if(go.dataset.filter){ curFilter = go.dataset.filter; renderShop(); openFilters(); }
       show(go.dataset.go);
@@ -843,6 +862,8 @@
     var v = q.get('view'), f = q.get('filter');
     if(f){ curFilter = f; renderShop(); openFilters(); }
     if(v && $('[data-view="' + v + '"]')) show(v);
+    var ph = q.get('product');
+    if(ph && $('[data-pdp-stage]')) openProduct(ph);
   })();
 
   /* ---------------- the construction specs ----------------

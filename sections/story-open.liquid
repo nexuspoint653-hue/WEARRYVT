@@ -1,0 +1,251 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<section class="st-open">
+  {%- if section.settings.image != blank -%}
+  <div class="st-open-plate" style="background-image:url({{ section.settings.image | image_url: width: 2400 }});background-size:cover;background-position:center"></div>
+  {%- else -%}
+  <div class="st-open-plate ph {{ section.settings.plate_style }}"></div>
+  {%- endif -%}
+  <div class="wrap st-open-in">
+    {%- if section.settings.eyebrow != blank -%}<div class="lab" style="color:rgba(255,255,255,.72)">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    <h1 class="st-title">{{ section.settings.heading | newline_to_br }}</h1>
+    {%- if section.settings.lede != blank -%}<p class="st-lede">{{ section.settings.lede }}</p>{%- endif -%}
+    {%- if section.blocks.size > 0 -%}
+    <ol class="st-toc">
+      {%- for block in section.blocks -%}
+      <li {{ block.shopify_attributes }}><a href="{{ block.settings.anchor }}"><b>{{ block.settings.num }}</b> {{ block.settings.label }}</a></li>
+      {%- endfor -%}
+    </ol>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Story opener",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The Renaissance Tee"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading (line breaks kept)",
+      "default": "One Tee,\nFour Ways."
+    },
+    {
+      "type": "textarea",
+      "id": "lede",
+      "label": "Lede",
+      "default": "One 8.2 oz garment-dyed body, cut boxy and long enough to hold a tuck. Four ways people in this city actually wear it \u2014 photographed the way they wear it, not the way a studio would style it."
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "plate_style",
+      "label": "Placeholder tone (used when no image)",
+      "default": "dark",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Contents link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "num",
+          "label": "Number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Worn open"
+        },
+        {
+          "type": "text",
+          "id": "anchor",
+          "label": "Anchor (id of the way it jumps to)",
+          "default": "#way-1"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Story opener",
+      "blocks": [
+        {
+          "type": "link",
+          "settings": {
+            "num": "01",
+            "label": "Worn open",
+            "anchor": "#way-1"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "num": "02",
+            "label": "Layered",
+            "anchor": "#way-2"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "num": "03",
+            "label": "Tucked",
+            "anchor": "#way-3"
+          }
+        },
+        {
+          "type": "link",
+          "settings": {
+            "num": "04",
+            "label": "Oversized",
+            "anchor": "#way-4"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,11 +1,11 @@
 {
   "sections": {
-    "store": {
-      "type": "ryvt-store",
+    "main": {
+      "type": "main-404",
       "settings": {}
     }
   },
   "order": [
-    "store"
+    "main"
   ]
 }

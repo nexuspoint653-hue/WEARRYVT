@@ -1,0 +1,114 @@
+{
+  "sections": {
+    "doc": {
+      "type": "legal-doc",
+      "settings": {
+        "eyebrow": "Legal",
+        "heading": "Terms and Conditions",
+        "intro": "The agreement between you and RYVT LLC when you buy from this store. Written to be read, not skipped.",
+        "nav_title": "On this page",
+        "anchor_prefix": "terms",
+        "meta1": "Effective <b>1 August 2026</b>",
+        "meta2": "Version <b>2.0</b>",
+        "meta3": "Michigan, USA"
+      },
+      "blocks": {
+        "doc_b1": {
+          "type": "clause",
+          "settings": {
+            "title": "Who you are dealing with",
+            "body": "<p>This store is operated by RYVT LLC, a Michigan limited liability company with its workshop in Metro Detroit. Where these terms say \u201cwe\u201d or \u201cus\u201d, they mean RYVT LLC. Where they say \u201cyou\u201d, they mean the person placing the order.</p> <p>Placing an order means you accept these terms as they read on the day you order. We may change them, but a change never applies backwards to an order already placed.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b2": {
+          "type": "clause",
+          "settings": {
+            "title": "Orders and acceptance",
+            "body": "<p>An order is an offer to buy. It becomes a contract when we send the dispatch confirmation, not when the payment clears and not when the order confirmation arrives.</p> <ul><li>We may decline an order if a piece sells out between your checkout and our picking it.</li><li>We may limit quantities on a drop so that one buyer cannot take the whole run.</li><li>If we decline, you are refunded in full within three business days, to the original payment method.</li></ul>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b3": {
+          "type": "clause",
+          "settings": {
+            "title": "Prices and payment",
+            "body": "<p>Prices are in US dollars and exclude sales tax, which is calculated at checkout against the delivery address. Payment is taken in full at checkout through our payment processor; we never see or store your card number.</p> <p>If a price is listed incorrectly through an obvious error, we contact you before dispatch and you may confirm at the corrected price or cancel for a full refund.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b4": {
+          "type": "clause",
+          "settings": {
+            "title": "Delivery and risk",
+            "body": "<p>Risk passes to you on delivery to the address you gave us. Title passes when payment has cleared in full. Delivery estimates are estimates; a carrier delay is not a breach of these terms, though it may still entitle you to a return under the section below.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b5": {
+          "type": "clause",
+          "settings": {
+            "title": "Returns, refunds and your statutory rights",
+            "body": "<p>Our returns policy sits alongside your rights under Michigan and federal law and does not replace them. Nothing in these terms limits liability for fraud, for death or personal injury caused by negligence, or for anything else that cannot lawfully be limited.</p> <p>The practical detail lives in the Shipping and Returns page, which forms part of these terms.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b6": {
+          "type": "clause",
+          "settings": {
+            "title": "Intellectual property",
+            "body": "<p>The RYVT name, the chevron mark, the product photography, the copy on this site and the garment designs are ours. You may share and link to our pages. You may not put our marks on your own goods, resell our images, or use our copy to sell competing product.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b7": {
+          "type": "clause",
+          "settings": {
+            "title": "Limitation of liability",
+            "body": "<p>Our total liability for any order is limited to the amount you paid for it. We are not liable for indirect or consequential loss, including lost profit or lost opportunity. This limit does not apply to the matters listed in section 05 that cannot lawfully be limited.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b8": {
+          "type": "clause",
+          "settings": {
+            "title": "Governing law and disputes",
+            "body": "<p>These terms are governed by the laws of the State of Michigan. Before starting proceedings, write to us and give us thirty days to resolve the matter; most disputes end there. If they do not, the courts of Wayne County, Michigan have jurisdiction.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b9": {
+          "type": "clause",
+          "settings": {
+            "title": "Contact",
+            "body": "<p>RYVT LLC, Metro Detroit, Michigan. Write to hello@wearryvt.com and a person answers, usually within one business day.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      },
+      "block_order": [
+        "doc_b1",
+        "doc_b2",
+        "doc_b3",
+        "doc_b4",
+        "doc_b5",
+        "doc_b6",
+        "doc_b7",
+        "doc_b8",
+        "doc_b9"
+      ]
+    }
+  },
+  "order": [
+    "doc"
+  ]
+}

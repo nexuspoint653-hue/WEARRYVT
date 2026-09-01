@@ -1,0 +1,457 @@
+{% render 'section-style', s: section %}
+<footer class="hud-ft">
+<div class="hud-ft-in">
+<div class="hud-ft-l">
+{%- if section.settings.np_show -%}
+<div class="np" data-np="">
+<span aria-hidden="true" class="np-art"{% if section.settings.np_art != blank %} style="background-image:url({{ section.settings.np_art | image_url: width: 300 }});background-size:cover;background-position:center"{% endif %}></span>
+<span class="np-t">
+<b>{{ section.settings.np_title }}</b>
+<span>{{ section.settings.np_track }}</span>
+{%- if section.settings.np_chip != blank -%}<span class="np-chip">{{ section.settings.np_chip }}</span>{%- endif -%}
+</span>
+<span class="np-ctl">
+<button aria-label="Save track" type="button">
+<svg fill="none" height="17" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" width="17">
+<circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>
+</button>
+<button aria-label="More" type="button">
+<svg fill="currentColor" height="17" viewbox="0 0 24 24" width="17">
+<circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle></svg>
+</button>
+<button aria-label="Play preview" class="np-play" data-np-toggle="" type="button">
+<svg data-np-icon="" fill="currentColor" height="13" viewbox="0 0 24 24" width="13"><path d="M8 5l11 7-11 7z"></path></svg>
+</button>
+</span>
+</div>
+{%- endif -%}
+<a aria-label="RYVT" class="ft-lockup" data-go="home" href="{{ section.settings.home_link | default: '/' }}">
+{%- if section.settings.logo != blank -%}
+<img alt="RYVT" src="{{ section.settings.logo | image_url: width: 600 }}"/>
+{%- else -%}
+<img alt="RYVT" src="{{ 'ryvt-landing-bc1a5b33d5.png' | asset_url }}"/>
+{%- endif -%}
+</a>
+</div>
+{%- if section.settings.clock_show -%}
+<div class="clock"><b>{{ section.settings.clock_label }}</b><span data-time="">{{ section.settings.clock_placeholder }}</span></div>
+{%- endif -%}
+{%- if section.settings.sub_show -%}
+{%- form 'customer', class: 'ft-sub', data-sub: '' -%}
+<input name="customer[tags]" type="hidden" value="newsletter"/>
+<label for="ft-email">{{ section.settings.sub_label }}</label>
+<div class="ft-sub-row">
+<input id="ft-email" name="customer[email]" placeholder="{{ section.settings.sub_placeholder }}" required="" type="email"/>
+<button type="submit">{{ section.settings.sub_btn }}</button>
+</div>
+{%- endform -%}
+{%- endif -%}
+<div class="hud-ft-r">
+<a class="buy" data-go="shop" href="{{ section.settings.buy_link | default: routes.all_products_collection_url }}">
+<span aria-hidden="true" class="buy-m" data-slides="">
+{%- for block in section.blocks -%}
+{%- if block.type == 'slide' -%}
+{%- if block.settings.image != blank -%}
+<img alt=""{% if forloop.first %} class="on"{% endif %} src="{{ block.settings.image | image_url: width: 400 }}" {{ block.shopify_attributes }}/>
+{%- elsif block.settings.asset != blank -%}
+<img alt=""{% if forloop.first %} class="on"{% endif %} src="{{ block.settings.asset | asset_url }}" {{ block.shopify_attributes }}/>
+{%- endif -%}
+{%- endif -%}
+{%- endfor -%}
+</span>
+<span class="buy-t">
+<b>{{ section.settings.buy_title }}</b>
+<span>{{ section.settings.buy_sub }}{% if section.settings.buy_count != blank %} <i>{{ section.settings.buy_count }}</i>{% endif %}</span>
+</span>
+<span aria-hidden="true" class="buy-go">{{ section.settings.buy_go }}</span>
+</a>
+{%- if section.settings.ship_text != blank -%}
+<a class="ship" data-go="about" href="{{ section.settings.ship_link | default: '/pages/about' }}">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" viewbox="0 0 24 24">
+<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5 12 12l9-4.5M12 12v9"></path></svg>
+        {{ section.settings.ship_text }}{% if section.settings.ship_amount != blank %} <b>{{ section.settings.ship_amount }}</b>{% endif %}
+</a>
+{%- endif -%}
+</div>
+</div>
+<div class="hud-ft-btm">
+{%- assign btm = linklists[section.settings.bottom_menu] -%}
+{%- assign _n_btm = btm.links | size -%}{%- if _n_btm > 0 -%}
+<nav>{%- for link in btm.links -%}<a href="{{ link.url }}">{{ link.title }}</a>{%- endfor -%}</nav>
+{%- else -%}
+<nav><a data-go="shop" href="{{ routes.all_products_collection_url }}">Shop</a><a data-go="story" href="/pages/the-renaissance-tee">The Renaissance Tee</a>
+<a data-go="about" href="/pages/about">About</a><a data-go="shipping" href="/pages/shipping">Shipping &amp; returns</a>
+<a data-go="faq" href="/pages/faq">FAQ</a><a data-go="contact" href="/pages/contact">Contact</a>
+<a data-go="social" href="/pages/social-media-disclaimer">Social disclaimer</a></nav>
+{%- endif -%}
+{%- if section.settings.locale_line != blank -%}<span>{{ section.settings.locale_line }}</span>{%- endif -%}
+</div>
+<div class="ft-legal">
+{%- if section.settings.copyright != blank -%}<span>{{ section.settings.copyright }}</span>{%- endif -%}
+<nav>
+{%- assign legal = linklists[section.settings.legal_menu] -%}
+{%- assign _n_legal = legal.links | size -%}{%- if _n_legal > 0 -%}
+{%- for link in legal.links -%}
+<a href="{{ link.url }}">{{ link.title }}</a>
+{%- endfor -%}
+{%- else -%}
+<a data-go="privacy" href="/pages/privacy-policy">Privacy Policy</a>
+<a data-go="terms" href="/pages/terms-conditions">Terms of Service</a>
+{%- endif -%}
+{%- if section.settings.cookie_label != blank -%}
+<button data-cookie-open="" type="button">{{ section.settings.cookie_label }}</button>
+{%- endif -%}
+</nav>
+</div>
+</footer>
+{% schema %}
+{
+  "name": "Site footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Now playing"
+    },
+    {
+      "type": "checkbox",
+      "id": "np_show",
+      "label": "Show the music widget",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "np_title",
+      "label": "Label",
+      "default": "Now playing"
+    },
+    {
+      "type": "text",
+      "id": "np_track",
+      "label": "Track",
+      "default": "The RYVT mix"
+    },
+    {
+      "type": "text",
+      "id": "np_chip",
+      "label": "Chip",
+      "default": "Preview"
+    },
+    {
+      "type": "image_picker",
+      "id": "np_art",
+      "label": "Artwork"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "url",
+      "id": "home_link",
+      "label": "Logo link"
+    },
+    {
+      "type": "header",
+      "content": "Clock"
+    },
+    {
+      "type": "checkbox",
+      "id": "clock_show",
+      "label": "Show the clock",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "clock_label",
+      "label": "City",
+      "default": "DETROIT"
+    },
+    {
+      "type": "text",
+      "id": "clock_placeholder",
+      "label": "Placeholder before the clock starts",
+      "default": "--:--:--"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "sub_show",
+      "label": "Show the sign-up form",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Label",
+      "default": "First look at every drop"
+    },
+    {
+      "type": "text",
+      "id": "sub_placeholder",
+      "label": "Placeholder",
+      "default": "Email address"
+    },
+    {
+      "type": "text",
+      "id": "sub_btn",
+      "label": "Button",
+      "default": "Sign up"
+    },
+    {
+      "type": "header",
+      "content": "New Drops card"
+    },
+    {
+      "type": "text",
+      "id": "buy_title",
+      "label": "Title",
+      "default": "New Drops"
+    },
+    {
+      "type": "text",
+      "id": "buy_sub",
+      "label": "Sub-line",
+      "default": "Heavyweight release"
+    },
+    {
+      "type": "text",
+      "id": "buy_count",
+      "label": "Count chip",
+      "default": "8 styles"
+    },
+    {
+      "type": "text",
+      "id": "buy_go",
+      "label": "Arrow",
+      "default": "\u2192"
+    },
+    {
+      "type": "url",
+      "id": "buy_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Shipping line"
+    },
+    {
+      "type": "text",
+      "id": "ship_text",
+      "label": "Text",
+      "default": "Free shipping over"
+    },
+    {
+      "type": "text",
+      "id": "ship_amount",
+      "label": "Amount (bold)",
+      "default": "$125"
+    },
+    {
+      "type": "url",
+      "id": "ship_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Bottom row"
+    },
+    {
+      "type": "link_list",
+      "id": "bottom_menu",
+      "label": "Footer menu",
+      "info": "Empty = the designed Shop / Renaissance Tee / About / \u2026 row."
+    },
+    {
+      "type": "text",
+      "id": "locale_line",
+      "label": "Locale line",
+      "default": "Metro Detroit, Michigan \u00b7 Instagram \u00b7 TikTok"
+    },
+    {
+      "type": "header",
+      "content": "Legal row"
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright",
+      "default": "\u00a9 2026 RYVT. All rights reserved."
+    },
+    {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Legal menu",
+      "info": "Empty = the designed Privacy Policy / Terms of Service pair."
+    },
+    {
+      "type": "text",
+      "id": "cookie_label",
+      "label": "Cookie button",
+      "default": "Cookie preferences"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Card image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "asset",
+          "label": "Theme asset (used when no image is set)",
+          "default": "ryvt-landing-28b3195b55.jpg"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Site footer",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "asset": "ryvt-landing-28b3195b55.jpg"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "asset": "ryvt-landing-0cfd1c205a.jpg"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "asset": "ryvt-landing-0abe04c485.jpg"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "asset": "ryvt-landing-9ccfddc7d4.jpg"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,635 @@
+{% render 'section-style', s: section %}
+<header class="hd">
+{%- capture logo_img -%}
+{%- if section.settings.logo != blank -%}
+<img alt="RYVT" src="{{ section.settings.logo | image_url: width: 600 }}"/>
+{%- else -%}
+<img alt="RYVT" src="{{ 'ryvt-landing-bc1a5b33d5.png' | asset_url }}"/>
+{%- endif -%}
+{%- endcapture -%}
+{%- capture nav_mark -%}
+{%- if section.settings.nav_mark != blank -%}
+<img alt="" aria-hidden="true" class="nav-mark" src="{{ section.settings.nav_mark | image_url: width: 300 }}"/>
+{%- else -%}
+<img alt="" aria-hidden="true" class="nav-mark" src="{{ 'ryvt-store-ec63c81282.png' | asset_url }}"/>
+{%- endif -%}
+{%- endcapture -%}
+<div class="wrap hd-in">
+<a aria-label="RYVT home" class="logo" data-go="home" href="{{ section.settings.home_link | default: '/' }}">
+{{ logo_img }}
+</a>
+<nav aria-label="Main" class="nav">
+{%- assign main_menu = linklists[section.settings.main_menu] -%}
+{%- assign _n_main_menu = main_menu.links | size -%}{%- if _n_main_menu > 0 -%}
+{%- for link in main_menu.links -%}
+{%- assign _n_link = link.links | size -%}{%- if _n_link > 0 -%}
+<div data-menu="">
+<button aria-expanded="false" class="navbtn" data-drop="shop" data-shop-nav="">
+<span class="nfx"><i>{{ link.title }}</i><i aria-hidden="true">{{ link.title }}</i></span>
+</button>
+</div>
+{%- else -%}
+<div><a class="navbtn" href="{{ link.url }}">
+<span class="nfx"><i>{{ link.title }}</i><i aria-hidden="true">{{ link.title }}</i></span>{%- if forloop.last -%}{{ nav_mark }}{%- endif -%}
+</a></div>
+{%- endif -%}
+{%- endfor -%}
+{%- else -%}
+<div data-menu="">
+<button aria-expanded="false" class="navbtn" data-drop="shop" data-shop-nav="">
+<span class="nfx"><i>Shop</i><i aria-hidden="true">Shop</i></span>
+</button>
+</div>
+<div><button class="navbtn" data-go="shop">
+<span class="nfx"><i>New Arrivals</i><i aria-hidden="true">New Arrivals</i></span>
+</button></div>
+<div><button class="navbtn" data-go="story">
+<span class="nfx"><i>The Renaissance Tee</i><i aria-hidden="true">The Renaissance Tee</i></span>
+</button></div>
+<div><button class="navbtn" data-go="about">
+<span class="nfx"><i>About</i><i aria-hidden="true">About</i></span>{{ nav_mark }}
+</button></div>
+{%- endif -%}
+</nav>
+<div class="hd-r">
+<button aria-label="Search" class="ic" data-search-open="">
+<svg aria-hidden="true" fill="none" height="19" viewbox="0 0 19 19" width="19">
+<circle cx="8.2" cy="8.2" r="6.1" stroke="#0B0B0C" stroke-width="1.6"></circle>
+<path d="M12.7 12.7 L17 17" stroke="#0B0B0C" stroke-width="1.6"></path>
+</svg>
+</button>
+<button aria-label="Account" class="ic">
+<svg aria-hidden="true" fill="none" height="19" viewbox="0 0 19 19" width="19">
+<circle cx="9.5" cy="6.6" r="3.4" stroke="#0B0B0C" stroke-width="1.6"></circle>
+<path d="M3 17c0-3.6 2.9-5.6 6.5-5.6S16 13.4 16 17" stroke="#0B0B0C" stroke-width="1.6"></path>
+</svg>
+</button>
+<button aria-label="Bag" class="ic" data-bag-open="">
+<svg aria-hidden="true" fill="none" height="19" viewbox="0 0 19 19" width="19">
+<path d="M3.4 5.6h12.2l-1 11.4H4.4z" stroke="#0B0B0C" stroke-width="1.6"></path>
+<path d="M6.9 7.4V5.2a2.6 2.6 0 0 1 5.2 0v2.2" stroke="#0B0B0C" stroke-width="1.6"></path>
+</svg>
+<span class="bagn" data-bagn="" hidden="">0</span>
+</button>
+<button aria-label="Menu" class="ic burger" data-drop="shop">
+<svg aria-hidden="true" height="14" viewbox="0 0 19 14" width="19">
+<path d="M0 1h19M0 7h19M0 13h19" stroke="#0B0B0C" stroke-width="1.6"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- the Shop menu: four zones, each carrying weight, nothing left blank -->
+<div class="drop" data-panel="shop">
+<div class="wrap drop-in">
+<div class="drop-col" style="--d:1">
+{%- assign col1 = linklists[section.settings.col1_menu] -%}
+{%- assign _n_col1 = col1.links | size -%}{%- if _n_col1 > 0 -%}
+{%- for parent in col1.links -%}
+<h4{% unless forloop.first %} class="mt"{% endunless %}>{{ parent.title }}</h4>
+<ul>
+{%- for link in parent.links -%}
+<li><a href="{{ link.url }}">{{ link.title }}{%- if link.type == 'collection_link' and link.object != blank -%}<i>{{ link.object.all_products_count }}</i>{%- endif -%}</a></li>
+{%- endfor -%}
+</ul>
+{%- endfor -%}
+{%- else -%}
+<h4>Tops</h4>
+<ul>
+<li><a data-filter="Tees" data-go="shop" data-peek="1" href="{{ routes.all_products_collection_url }}">Heavyweight Tees<i>4</i></a></li>
+<li><a data-filter="Tanks" data-go="shop" data-peek="2" href="{{ routes.all_products_collection_url }}">Tank Tops<i>2</i></a></li>
+<li><a data-filter="Fleece" data-go="shop" data-peek="3" href="{{ routes.all_products_collection_url }}">Crews &amp; Fleece<i>1</i></a></li>
+<li><a data-filter="all" data-go="shop" data-peek="0" href="{{ routes.all_products_collection_url }}">Shop All Tops<i>7</i></a></li>
+</ul>
+<h4 class="mt">Bottoms</h4>
+<ul>
+<li><a data-filter="Bottoms" data-go="shop" data-peek="2" href="{{ routes.all_products_collection_url }}">Cargo Pants<i>1</i></a></li>
+<li><a data-filter="Bottoms" data-go="shop" data-peek="3" href="{{ routes.all_products_collection_url }}">Utility Shorts<i>1</i></a></li>
+</ul>
+{%- endif -%}
+</div>
+<div class="drop-col" style="--d:2">
+{%- assign col2 = linklists[section.settings.col2_menu] -%}
+{%- assign _n_col2 = col2.links | size -%}{%- if _n_col2 > 0 -%}
+{%- for parent in col2.links -%}
+<h4{% unless forloop.first %} class="mt"{% endunless %}>{{ parent.title }}</h4>
+<ul>
+{%- for link in parent.links -%}
+<li><a href="{{ link.url }}">{{ link.title }}{%- if link.type == 'collection_link' and link.object != blank -%}<i>{{ link.object.all_products_count }}</i>{%- endif -%}</a></li>
+{%- endfor -%}
+</ul>
+{%- endfor -%}
+{%- else -%}
+<h4>Collections</h4>
+<ul>
+<li><a data-go="story" data-peek="0" href="/pages/the-renaissance-tee">The Renaissance Tee<i>→</i></a></li>
+<li><a data-filter="all" data-go="shop" data-peek="1" href="{{ routes.all_products_collection_url }}">The Foundry Wash<i>2</i></a></li>
+<li><a data-filter="all" data-go="shop" data-peek="2" href="{{ routes.all_products_collection_url }}">Standard Issue<i>2</i></a></li>
+<li><a data-filter="all" data-go="shop" data-peek="3" href="{{ routes.all_products_collection_url }}">Back in Stock<i>3</i></a></li>
+</ul>
+<h4 class="mt">Help</h4>
+<ul>
+<li><a data-go="faq" href="/pages/faq">Sizing &amp; fit<i>FAQ</i></a></li>
+<li><a data-go="shipping" href="/pages/shipping">Shipping &amp; returns<i>48h</i></a></li>
+<li><a data-go="contact" href="/pages/contact">Contact<i>→</i></a></li>
+</ul>
+{%- endif -%}
+</div>
+<div class="drop-feat" style="--d:3">
+{%- for block in section.blocks -%}
+{%- if block.type == 'feature' -%}
+{%- assign fp = block.settings.product -%}
+<a class="dfeat" data-product="{{ block.settings.product_hook }}" href="{% if block.settings.link != blank %}{{ block.settings.link }}{% elsif fp != blank %}{{ fp.url }}{% else %}{{ routes.all_products_collection_url }}{% endif %}" {{ block.shopify_attributes }}>
+<span class="dfeat-m">{%- if block.settings.image != blank -%}<span class="ph" data-peek-slot="{{ block.settings.peek_slot }}" style="background-image:url({{ block.settings.image | image_url: width: 900 }});background-size:cover;background-position:center"></span>{%- elsif fp.featured_image != blank -%}<span class="ph" data-peek-slot="{{ block.settings.peek_slot }}" style="background-image:url({{ fp.featured_image | image_url: width: 900 }});background-size:cover;background-position:center"></span>{%- else -%}<span class="ph {{ block.settings.tone }}" data-peek-slot="{{ block.settings.peek_slot }}"></span>{%- endif -%}{%- if block.settings.tag != blank -%}<span class="dfeat-tag">{{ block.settings.tag }}</span>{%- endif -%}</span>
+<span class="dfeat-n">{% if block.settings.title != blank %}{{ block.settings.title }}{% else %}{{ fp.title }}{% endif %}</span><span class="dfeat-p">{% if block.settings.price != blank %}{{ block.settings.price }}{% elsif fp != blank %}{{ fp.price | money }}{% endif %}</span>
+</a>
+{%- endif -%}
+{%- endfor -%}
+</div>
+</div>
+<!-- the strip that would otherwise be empty space under the menu -->
+<div class="drop-strip">
+<div class="wrap">
+{%- for block in section.blocks -%}
+{%- if block.type == 'strip' -%}
+{%- if block.settings.link != blank -%}
+<a data-go="shop" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>{% if block.settings.bold != blank %}<b>{{ block.settings.bold }}</b> {% endif %}{{ block.settings.text }}</a>
+{%- else -%}
+<span {{ block.shopify_attributes }}>{% if block.settings.bold != blank %}<b>{{ block.settings.bold }}</b> {% endif %}{{ block.settings.text }}</span>
+{%- endif -%}
+{%- endif -%}
+{%- endfor -%}
+</div>
+</div>
+</div>
+<!-- search: one panel, three zones, nothing empty at any point -->
+<div class="srch" data-srch="">
+<div class="wrap srch-in">
+<div class="srch-row">
+<svg aria-hidden="true" fill="none" height="20" viewbox="0 0 19 19" width="20">
+<circle cx="8.2" cy="8.2" r="6.1" stroke="#6E6C68" stroke-width="1.6"></circle>
+<path d="M12.7 12.7 L17 17" stroke="#6E6C68" stroke-width="1.6"></path>
+</svg>
+<input aria-label="Search products" data-q="" placeholder="{{ section.settings.search_placeholder }}" type="search"/>
+<button class="srch-clear" data-search-clear="" hidden="">{{ section.settings.clear_label }}</button>
+<button class="srch-x" data-search-close="">{{ section.settings.close_label }} <span>{{ section.settings.close_key }}</span></button>
+</div>
+<div class="srch-body">
+<div class="srch-main">
+<div class="srch-head">
+<h4 data-hits-h="">{{ section.settings.hits_heading }}</h4>
+<span class="srch-count" data-hits-count="">{{ section.settings.hits_count }}</span>
+</div>
+<div class="hits" data-hits=""></div>
+</div>
+<div class="srch-side">
+<div>
+<h4 data-sugg-h="">{{ section.settings.sugg_heading }}</h4>
+<ul class="srch-terms">
+{%- for block in section.blocks -%}
+{%- if block.type == 'term' -%}
+<li {{ block.shopify_attributes }}><button data-term="{{ block.settings.term }}">{{ block.settings.label }}</button></li>
+{%- endif -%}
+{%- endfor -%}
+</ul>
+</div>
+<div>
+<h4>{{ section.settings.jump_heading }}</h4>
+<ul class="srch-jump">
+{%- assign jump = linklists[section.settings.jump_menu] -%}
+{%- assign _n_jump = jump.links | size -%}{%- if _n_jump > 0 -%}
+{%- for link in jump.links -%}
+<li><a href="{{ link.url }}">{{ link.title }}{%- if link.type == 'collection_link' and link.object != blank -%}<i>{{ link.object.all_products_count }}</i>{%- endif -%}</a></li>
+{%- endfor -%}
+{%- else -%}
+<li><a data-filter="Tees" data-go="shop" href="{{ routes.all_products_collection_url }}">Heavyweight Tees<i>4</i></a></li>
+<li><a data-filter="Tanks" data-go="shop" href="{{ routes.all_products_collection_url }}">Tank Tops<i>2</i></a></li>
+<li><a data-filter="Bottoms" data-go="shop" href="{{ routes.all_products_collection_url }}">Cargo &amp; Shorts<i>2</i></a></li>
+<li><a data-go="story" href="/pages/the-renaissance-tee">The Renaissance Tee<i>→</i></a></li>
+<li><a data-go="shipping" href="/pages/shipping">Shipping &amp; returns<i>→</i></a></li>
+<li><a data-go="faq" href="/pages/faq">Questions<i>11</i></a></li>
+{%- endif -%}
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+{% schema %}
+{
+  "name": "Site header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "nav_mark",
+      "label": "Nav mark (next to the last nav item)"
+    },
+    {
+      "type": "url",
+      "id": "home_link",
+      "label": "Logo link"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Main menu",
+      "info": "Leave empty to keep the designed nav (Shop, New Arrivals, The Renaissance Tee, About)."
+    },
+    {
+      "type": "link_list",
+      "id": "col1_menu",
+      "label": "Mega menu \u2014 column 1",
+      "info": "Top-level links become the headings, their child links become the list. Empty = the designed Tops / Bottoms column."
+    },
+    {
+      "type": "link_list",
+      "id": "col2_menu",
+      "label": "Mega menu \u2014 column 2",
+      "info": "Empty = the designed Collections / Help column."
+    },
+    {
+      "type": "header",
+      "content": "Search panel"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Input placeholder",
+      "default": "What are you looking for?"
+    },
+    {
+      "type": "text",
+      "id": "clear_label",
+      "label": "Clear button",
+      "default": "Clear"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Close button",
+      "default": "Close"
+    },
+    {
+      "type": "text",
+      "id": "close_key",
+      "label": "Close button key hint",
+      "default": "esc"
+    },
+    {
+      "type": "text",
+      "id": "hits_heading",
+      "label": "Results heading",
+      "default": "Most wanted"
+    },
+    {
+      "type": "text",
+      "id": "hits_count",
+      "label": "Results count label",
+      "default": "4 styles"
+    },
+    {
+      "type": "text",
+      "id": "sugg_heading",
+      "label": "Suggestions heading",
+      "default": "Popular right now"
+    },
+    {
+      "type": "text",
+      "id": "jump_heading",
+      "label": "Jump-to heading",
+      "default": "Jump to"
+    },
+    {
+      "type": "link_list",
+      "id": "jump_menu",
+      "label": "Jump-to menu",
+      "info": "Empty = the designed Jump to list."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Featured card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name (overrides the product title)",
+          "default": "The Detroit Renaissance Tee"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price (overrides the product price)",
+          "default": "$58"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag",
+          "default": "Best seller"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (overrides the product link)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Placeholder tone",
+          "default": "",
+          "options": [
+            {
+              "value": "",
+              "label": "Light"
+            },
+            {
+              "value": "alt",
+              "label": "Mid"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "product_hook",
+          "label": "Product hook (data-product)",
+          "default": "renaissance"
+        },
+        {
+          "type": "text",
+          "id": "peek_slot",
+          "label": "Peek slot (data-peek-slot)",
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "type": "strip",
+      "name": "Strip item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "bold",
+          "label": "Bold part",
+          "default": "Free shipping"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Rest",
+          "default": "over $125"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional \u2014 makes the item a link)"
+        }
+      ]
+    },
+    {
+      "type": "term",
+      "name": "Search term",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Heavyweight tees"
+        },
+        {
+          "type": "text",
+          "id": "term",
+          "label": "Search term (data-term)",
+          "default": "heavyweight"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "Site header",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "The Detroit Renaissance Tee",
+            "price": "$58",
+            "tag": "Best seller",
+            "tone": "",
+            "product_hook": "renaissance",
+            "peek_slot": "0"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "The Foundry Wash Tee",
+            "price": "$58",
+            "tag": "Restocked",
+            "tone": "dark",
+            "product_hook": "foundry",
+            "peek_slot": "1"
+          }
+        },
+        {
+          "type": "strip",
+          "settings": {
+            "bold": "Free shipping",
+            "text": "over $125"
+          }
+        },
+        {
+          "type": "strip",
+          "settings": {
+            "bold": "Ships in 48h",
+            "text": "from Metro Detroit"
+          }
+        },
+        {
+          "type": "strip",
+          "settings": {
+            "bold": "30-day returns",
+            "text": "unworn, tags on"
+          }
+        },
+        {
+          "type": "strip",
+          "settings": {
+            "bold": "",
+            "text": "Shop all 8 styles \u2192",
+            "link": "/collections/all"
+          }
+        },
+        {
+          "type": "term",
+          "settings": {
+            "label": "Heavyweight tees",
+            "term": "heavyweight"
+          }
+        },
+        {
+          "type": "term",
+          "settings": {
+            "label": "Tank tops",
+            "term": "tank"
+          }
+        },
+        {
+          "type": "term",
+          "settings": {
+            "label": "Cargo pants",
+            "term": "cargo"
+          }
+        },
+        {
+          "type": "term",
+          "settings": {
+            "label": "The Renaissance Tee",
+            "term": "renaissance"
+          }
+        },
+        {
+          "type": "term",
+          "settings": {
+            "label": "Everything in black",
+            "term": "black"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

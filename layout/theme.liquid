@@ -1,23 +1,45 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ request.locale.iso_code }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0B0B0C">
+  <meta name="theme-color" content="{{ settings.color_ink | default: '#0B0B0C' }}">
   <link rel="canonical" href="{{ canonical_url }}">
   <title>{{ page_title | default: shop.name }}</title>
   {%- if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif -%}
+  {%- if settings.favicon != blank %}<link rel="icon" href="{{ settings.favicon | image_url: width: 64 }}">{% endif -%}
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  {%- if template.name == 'index' -%}
+
+  {%- assign is_landing = false -%}
+  {%- if template.suffix == 'landing' -%}{%- assign is_landing = true -%}{%- endif -%}
+  {%- if is_landing -%}
     {{ 'ryvt-landing.css' | asset_url | stylesheet_tag }}
   {%- else -%}
     {{ 'ryvt-store.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
+
+  {% render 'brand-vars' %}
+  {%- unless settings.motion -%}<style>*,*::before,*::after{animation:none!important;transition:none!important}</style>{%- endunless -%}
+  {%- if settings.custom_css != blank -%}<style>{{ settings.custom_css }}</style>{%- endif -%}
+
   {{ content_for_header }}
 </head>
-<body>
-  {{ content_for_layout }}
+<body class="template-{{ template.name }}{% if template.suffix %} suffix-{{ template.suffix }}{% endif %}">
+  {%- unless is_landing -%}
+    {% sections 'header-group' %}
+  {%- endunless -%}
+
+  <main id="MainContent">
+    {{ content_for_layout }}
+  </main>
+
+  {%- unless is_landing -%}
+    {% sections 'footer-group' %}
+    <script src="{{ 'ryvt-store.js' | asset_url }}" defer></script>
+    <script src="{{ 'ryvt-cart.js' | asset_url }}" defer></script>
+  {%- endunless -%}
 </body>
 </html>

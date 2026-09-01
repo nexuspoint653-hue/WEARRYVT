@@ -1,0 +1,84 @@
+{
+  "sections": {
+    "doc": {
+      "type": "legal-doc",
+      "settings": {
+        "eyebrow": "Legal",
+        "heading": "Social Media Disclaimer",
+        "intro": "How our accounts work, what we do with posts you tag us in, and what our posts are not.",
+        "nav_title": "On this page",
+        "anchor_prefix": "social",
+        "meta1": "Applies to <b>Instagram, TikTok</b>",
+        "meta2": "Updated <b>1 August 2026</b>",
+        "meta3": ""
+      },
+      "blocks": {
+        "doc_b1": {
+          "type": "clause",
+          "settings": {
+            "title": "The accounts we actually run",
+            "body": "<p>We post from @wearryvt on Instagram and TikTok. Any other account using our name, our chevron mark or our photography is not us. We will never message you first asking for payment, card details or a password.</p> <p>If you think you are dealing with an impersonator, send a screenshot to hello@wearryvt.com and we will report it.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b2": {
+          "type": "clause",
+          "settings": {
+            "title": "What our posts are",
+            "body": "<p>Marketing and general information about our own products. A post is not professional advice of any kind, it is not an offer capable of acceptance, and a price or a drop date named in a post does not bind us if it changes.</p> <p>Where the store and a post disagree, the store is correct.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b3": {
+          "type": "clause",
+          "settings": {
+            "title": "Content you tag us in",
+            "body": "<p>If you tag @wearryvt or use our hashtag on a public post, you give us permission to reshare that post, with credit, on our own channels and in our email. You keep ownership of your photograph, and you can withdraw that permission at any time by messaging us; we take it down.</p> <ul><li>We never edit a reshared photograph beyond cropping it to fit.</li><li>We never use a tagged post in paid advertising without asking you first, in writing.</li><li>We do not reshare posts featuring anyone who is visibly a minor.</li></ul>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b4": {
+          "type": "clause",
+          "settings": {
+            "title": "Comments and moderation",
+            "body": "<p>Comments belong to the people who write them and are not our opinions. We remove abuse, spam, and anything that publishes another person\u2019s private information, and we block repeat offenders. Removing a comment is not a comment on its argument.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b5": {
+          "type": "clause",
+          "settings": {
+            "title": "Endorsements and gifting",
+            "body": "<p>When someone is paid or gifted product to post about us, that post is marked as an ad or a gift. If it is not marked, it was not paid for.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b6": {
+          "type": "clause",
+          "settings": {
+            "title": "Support through social",
+            "body": "<p>We answer questions in messages, but never ask for card details, passwords or full addresses there. Anything to do with an order goes through hello@wearryvt.com so that it is on the record.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      },
+      "block_order": [
+        "doc_b1",
+        "doc_b2",
+        "doc_b3",
+        "doc_b4",
+        "doc_b5",
+        "doc_b6"
+      ]
+    }
+  },
+  "order": [
+    "doc"
+  ]
+}

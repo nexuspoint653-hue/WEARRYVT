@@ -1,0 +1,207 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+{%- comment -%}
+  Real Shopify data when there is any, the original JS-driven markup when there
+  is not. shop_live is the single switch; see the header of gen_shop_live.py.
+{%- endcomment -%}
+{%- assign shop_live = false -%}
+{%- assign shop_filtered = false -%}
+{%- if collection -%}
+  {%- for f in collection.filters -%}
+    {%- if f.active_values.size > 0 -%}{%- assign shop_filtered = true -%}{%- endif -%}
+  {%- endfor -%}
+  {%- if collection.products_count > 0 or shop_filtered -%}{%- assign shop_live = true -%}{%- endif -%}
+{%- endif -%}
+{%- if section.settings.spa_view != blank -%}<div data-view="{{ section.settings.spa_view }}"{% if section.settings.spa_open %} class="on"{% endif %}>{%- endif -%}
+{%- assign shop_cols = section.settings.columns | plus: 0 -%}
+{%- if shop_cols > 0 -%}<style>@media(min-width:1001px){#shopify-section-{{ section.id }} .grid.indexed{grid-template-columns:repeat({{ shop_cols }},1fr)}}</style>{%- endif -%}
+<section class="sec wrap" style="padding-top:26px">
+{%- if shop_live -%}
+  {%- paginate collection.products by section.settings.per_page -%}
+  {%- if collection.products.size > 0 -%}
+  <div class="grid indexed">
+    {%- for product in collection.products -%}
+    {% render 'product-card', product: product, index: forloop.index %}
+    {%- endfor -%}
+  </div>
+  {%- if paginate.pages > 1 -%}
+  <div class="shop-pager">{{ paginate | default_pagination }}</div>
+  {%- endif -%}
+  {%- elsif section.settings.empty_text != blank -%}
+  <p class="shop-empty">{{ section.settings.empty_text }}</p>
+  {%- endif -%}
+  {%- endpaginate -%}
+{%- else %}
+  <div class="grid indexed" data-shop=""></div>
+{%- endif %}
+</section>
+{%- if section.settings.spa_view != blank -%}</div>{%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Shop grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Runtime"
+    },
+    {
+      "type": "text",
+      "id": "spa_view",
+      "label": "Runtime view name",
+      "default": "shop",
+      "info": "Leave as-is. The storefront script shows and hides this group by this name."
+    },
+    {
+      "type": "checkbox",
+      "id": "spa_open",
+      "label": "Visible on page load",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product grid"
+    },
+    {
+      "type": "paragraph",
+      "content": "On a collection page the cards are rendered here from that collection's products. With no collection connected, or an empty one, the store script paints its own demo list into this grid instead. Use the Shop filters section to change the filter and sort chips."
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "min": 4,
+      "max": 48,
+      "step": 4,
+      "label": "Products per page",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "label": "Columns on desktop (0 = as designed)",
+      "default": 0,
+      "info": "The design is three across on desktop, two on tablet, two on phone. Only the desktop count is overridden here."
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty state",
+      "default": "Nothing matches those filters yet.",
+      "info": "Shown when a filter or search leaves the collection with no products."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop grid"
+    }
+  ]
+}
+{% endschema %}

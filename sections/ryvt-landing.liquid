@@ -1,9 +1,30 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
 
+{%- if section.settings.poster != blank -%}{%- assign poster_url = section.settings.poster | image_url: width: 2400 -%}{%- else -%}{%- assign poster_url = 'ryvt-landing-29e16db41a.png' | asset_url -%}{%- endif -%}
+{%- if section.settings.logo != blank -%}{%- assign logo_url = section.settings.logo | image_url: width: 640 -%}{%- else -%}{%- assign logo_url = 'ryvt-landing-bc1a5b33d5.png' | asset_url -%}{%- endif -%}
+{%- if section.settings.bar_logo != blank -%}{%- assign bar_logo_url = section.settings.bar_logo | image_url: width: 640 -%}{%- else -%}{%- assign bar_logo_url = 'ryvt-landing-bc1a5b33d5.png' | asset_url -%}{%- endif -%}
+{%- assign film_source = section.settings.video.sources | where: 'format', 'mp4' | first -%}
+{%- if film_source == blank -%}{%- assign film_source = section.settings.video.sources | first -%}{%- endif -%}
+{%- if section.settings.video_url.type == 'vimeo' -%}{%- assign film_embed = 'https://player.vimeo.com/video/' | append: section.settings.video_url.id | append: '?autoplay=1&amp;muted=1&amp;loop=1&amp;background=1' -%}{%- else -%}{%- assign film_embed = 'https://www.youtube.com/embed/' | append: section.settings.video_url.id | append: '?autoplay=1&amp;mute=1&amp;loop=1&amp;controls=0&amp;playsinline=1&amp;modestbranding=1&amp;rel=0&amp;playlist=' | append: section.settings.video_url.id -%}{%- endif -%}
+{%- assign lp_stills = 'ryvt-landing-28b3195b55.jpg,ryvt-landing-0cfd1c205a.jpg,ryvt-landing-0abe04c485.jpg,ryvt-landing-9ccfddc7d4.jpg' | split: ',' -%}
+{%- assign promo_blocks = section.blocks | where: 'type', 'promo_msg' -%}
+{%- assign nav_blocks = section.blocks | where: 'type', 'nav_link' -%}
+{%- assign bar_blocks = section.blocks | where: 'type', 'bar_link' -%}
+{%- assign slide_blocks = section.blocks | where: 'type', 'slide' -%}
+{%- assign foot_blocks = section.blocks | where: 'type', 'foot_col' -%}
+{%- assign legal_blocks = section.blocks | where: 'type', 'legal_link' -%}
 <div class="stage" data-stage>
-  <video data-film autoplay muted loop playsinline preload="auto" poster="{{ 'ryvt-landing-29e16db41a.png' | asset_url }}">
+{%- if section.settings.video != blank %}
+  <video data-film autoplay muted loop playsinline preload="auto" poster="{{ poster_url }}" src="{{ film_source.url }}"></video>
+{%- elsif section.settings.video_url != blank %}
+  <iframe class="film-embed" src="{{ film_embed }}" title="{{ section.settings.video_title }}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none"></iframe>
+{%- else %}
+  <video data-film autoplay muted loop playsinline preload="auto" poster="{{ poster_url }}">
     <source src="" type="video/webm">
     <source src="" type="video/mp4">
   </video>
+{%- endif %}
 </div>
 <div class="grain" aria-hidden="true"></div>
 
@@ -11,11 +32,19 @@
   <div class="promo-in">
     <span class="promo-dot" aria-hidden="true"></span>
     <span class="promo-track" data-promo-track aria-live="polite">
+{%- if promo_blocks.size > 0 %}
+{%- for block in promo_blocks %}
+      <span class="promo-msg{% if forloop.first %} on{% endif %}" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+{%- endfor %}
+{%- else %}
       <span class="promo-msg on">New drop is live &mdash; small run, built in Metro Detroit</span>
       <span class="promo-msg">Free shipping on every order over $125</span>
       <span class="promo-msg">Sign up and take 10% off your first order</span>
+{%- endif %}
     </span>
-    <a class="promo-cta" href="/pages/store?view=shop">Shop the drop</a>
+{%- if section.settings.promo_cta_label != blank %}
+    <a class="promo-cta" href="{{ section.settings.promo_cta_link | default: '/pages/store?view=shop' }}">{{ section.settings.promo_cta_label }}</a>
+{%- endif %}
     <button class="promo-x" type="button" data-promo-close aria-label="Dismiss">
       <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6">
         <path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -27,21 +56,27 @@
   <div class="core-in">
     <div class="mark">
       <span class="orb" aria-hidden="true"></span>
-      <img class="logo" src="{{ 'ryvt-landing-bc1a5b33d5.png' | asset_url }}" alt="RYVT" width="320" height="66">
+      <img class="logo" src="{{ logo_url }}" alt="{{ section.settings.logo_alt }}" width="320" height="66">
     </div>
 
     <nav class="menu" aria-label="Main">
+{%- if nav_blocks.size > 0 %}
+{%- for block in nav_blocks %}
+      <a href="{{ block.settings.link | default: '/pages/store?view=shop' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+{%- endfor %}
+{%- else %}
       <a href="/pages/store?view=shop">Shop</a>
       <a href="/pages/store?view=shop">New Arrivals</a>
       <a href="/pages/store?view=story">The Renaissance Tee</a>
       <a href="/pages/store?view=about">Detroit</a>
       <a href="/pages/store?view=contact">Contact</a>
+{%- endif %}
     </nav>
   </div>
 </main>
 
 <div class="hud hud-bc">
-  <div class="clock"><b data-city>DETROIT</b><span data-time>--:--:--</span></div>
+  <div class="clock"><b data-city>{{ section.settings.city }}</b><span data-time>{{ section.settings.clock_placeholder }}</span></div>
 </div>
 
 <div class="hud-row">
@@ -49,9 +84,11 @@
     <div class="np" data-np>
       <span class="np-art" aria-hidden="true"></span>
       <span class="np-t">
-        <b>Now playing</b>
-        <span>The RYVT mix</span>
-        <span class="np-chip">Preview</span>
+        <b>{{ section.settings.np_label }}</b>
+        <span>{{ section.settings.np_track }}</span>
+{%- if section.settings.np_chip != blank %}
+        <span class="np-chip">{{ section.settings.np_chip }}</span>
+{%- endif %}
       </span>
       <span class="np-ctl">
         <button type="button" aria-label="Save track">
@@ -71,55 +108,86 @@
   </div>
 
   <div class="hud hud-br">
-    <a class="buy" href="/pages/store?view=shop">
+    <a class="buy" href="{{ section.settings.buy_link | default: '/pages/store?view=shop' }}">
       <span class="buy-m" aria-hidden="true" data-slides>
+{%- if slide_blocks.size > 0 %}
+{%- for block in slide_blocks %}{%- assign still = forloop.index0 | modulo: 4 %}
+          <img src="{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 }}{% else %}{{ lp_stills[still] | asset_url }}{% endif %}" alt=""{% if forloop.first %} class="on"{% endif %} {{ block.shopify_attributes }}>
+{%- endfor %}
+{%- else %}
           <img src="{{ 'ryvt-landing-28b3195b55.jpg' | asset_url }}" alt="" class="on">
           <img src="{{ 'ryvt-landing-0cfd1c205a.jpg' | asset_url }}" alt="">
           <img src="{{ 'ryvt-landing-0abe04c485.jpg' | asset_url }}" alt="">
           <img src="{{ 'ryvt-landing-9ccfddc7d4.jpg' | asset_url }}" alt="">
+{%- endif %}
         </span>
       <span class="buy-t">
-        <b>New Drops</b>
-        <span>Heavyweight release <i>8 styles</i></span>
+        <b>{{ section.settings.buy_title }}</b>
+        <span>{{ section.settings.buy_line }} <i>{{ section.settings.buy_meta }}</i></span>
       </span>
       <span class="buy-go" aria-hidden="true">&rarr;</span>
     </a>
-    <a class="ship" href="/pages/store?view=shipping">
+    <a class="ship" href="{{ section.settings.ship_link | default: '/pages/store?view=shipping' }}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
         <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></svg>
-      Free shipping over <b>$125</b>
+      {{ section.settings.ship_text }} <b>{{ section.settings.ship_amount }}</b>
     </a>
   </div>
 </div>
 
 <div class="bar" data-bar>
-  <a class="bar-mark" href="/pages/store"><img src="{{ 'ryvt-landing-bc1a5b33d5.png' | asset_url }}" alt="RYVT"></a>
+  <a class="bar-mark" href="{{ section.settings.bar_logo_link | default: '/pages/store' }}"><img src="{{ bar_logo_url }}" alt="{{ section.settings.logo_alt }}"></a>
   <nav class="bar-nav">
-    <a href="/pages/store?view=shop">Shop</a><a href="/pages/store?view=shop">New Arrivals</a><a href="/pages/store?view=story">The Renaissance Tee</a><a href="/pages/store?view=about">Detroit</a>
+    {% if bar_blocks.size > 0 %}{% for block in bar_blocks %}<a href="{{ block.settings.link | default: '/pages/store?view=shop' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>{% endfor %}{% else %}<a href="/pages/store?view=shop">Shop</a><a href="/pages/store?view=shop">New Arrivals</a><a href="/pages/store?view=story">The Renaissance Tee</a><a href="/pages/store?view=about">Detroit</a>{% endif %}
   </nav>
-  <a class="bar-cart" href="/pages/store?view=shop">
+  <a class="bar-cart" href="{{ section.settings.cart_link | default: '/pages/store?view=shop' }}">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
       <path d="M4 7h16l-1.2 13H5.2z"/><path d="M8.6 9V6.4a3.4 3.4 0 0 1 6.8 0V9"/></svg>
-    Bag (0)
+    {{ section.settings.cart_label }}
   </a>
 </div>
+{%- if section.settings.scroll_label != blank %}
 
-<div class="lp-scroll" aria-hidden="true"><span>Scroll</span><i></i></div>
+<div class="lp-scroll" aria-hidden="true"><span>{{ section.settings.scroll_label }}</span><i></i></div>
+{%- endif %}
 
 <div class="lp-spacer" aria-hidden="true"></div>
 
 <footer class="lp-ft">
   <div class="lp-ft-in">
     <form class="lp-sub" data-sub>
-      <label for="lp-email">Subscribe to our newsletter</label>
+      <label for="lp-email">{{ section.settings.sub_label }}</label>
       <div class="lp-sub-row">
-        <input id="lp-email" type="email" placeholder="Your email" required>
-        <button type="submit">Join</button>
+        <input id="lp-email" type="email" placeholder="{{ section.settings.sub_placeholder }}" required>
+        <button type="submit">{{ section.settings.sub_button }}</button>
       </div>
-      <p>First look at every drop, an hour before it lists. One email a fortnight, no more.</p>
+{%- if section.settings.sub_note != blank %}
+      <p>{{ section.settings.sub_note }}</p>
+{%- endif %}
     </form>
 
     <div class="lp-cols">
+{%- if foot_blocks.size > 0 %}
+{%- for block in foot_blocks %}
+      <div {{ block.shopify_attributes }}>
+        <h4>{{ block.settings.heading }}</h4>
+        <ul>
+{%- if block.settings.l1_label != blank %}
+          <li><a href="{{ block.settings.l1_link | default: '/pages/store' }}">{{ block.settings.l1_label }}</a></li>
+{%- endif %}
+{%- if block.settings.l2_label != blank %}
+          <li><a href="{{ block.settings.l2_link | default: '/pages/store' }}">{{ block.settings.l2_label }}</a></li>
+{%- endif %}
+{%- if block.settings.l3_label != blank %}
+          <li><a href="{{ block.settings.l3_link | default: '/pages/store' }}">{{ block.settings.l3_label }}</a></li>
+{%- endif %}
+{%- if block.settings.l4_label != blank %}
+          <li><a href="{{ block.settings.l4_link | default: '/pages/store' }}">{{ block.settings.l4_label }}</a></li>
+{%- endif %}
+        </ul>
+      </div>
+{%- endfor %}
+{%- else %}
       <div>
         <h4>Customer care</h4>
         <ul>
@@ -156,17 +224,28 @@
           <li><a href="/pages/store?view=contact">Press</a></li>
         </ul>
       </div>
+{%- endif %}
     </div>
   </div>
 
   <div class="lp-ft-btm">
-    <span>&copy; 2026 RYVT &middot; Metro Detroit, Michigan</span>
+{%- if section.settings.copyright != blank %}
+    <span>{{ section.settings.copyright }}</span>
+{%- endif %}
     <nav>
+{%- if legal_blocks.size > 0 %}
+{%- for block in legal_blocks %}
+      <a href="{{ block.settings.link | default: '/pages/store' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+{%- endfor %}
+{%- else %}
       <a href="/pages/store?view=terms">Terms</a>
       <a href="/pages/store?view=privacy">Privacy</a>
       <a href="/pages/store?view=social">Social media disclaimer</a>
+{%- endif %}
     </nav>
-    <span>Instagram &middot; TikTok</span>
+{%- if section.settings.socials != blank %}
+    <span>{{ section.settings.socials }}</span>
+{%- endif %}
   </div>
 </footer>
 
@@ -175,11 +254,651 @@
 
 <script src="{{ 'ryvt-film.js' | asset_url }}" defer></script>
 <script src="{{ 'ryvt-landing.js' | asset_url }}" defer></script>
+{%- endif -%}
 
 {% schema %}
 {
   "name": "Landing film",
-  "settings": [],
-  "presets": [{ "name": "Landing film" }]
+  "settings": [
+    {
+      "type": "header",
+      "content": "Film"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Background film (replaces the shipped film)"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Or a film URL",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "info": "Used only when no film is chosen above. With both empty the film shipped with the theme plays."
+    },
+    {
+      "type": "text",
+      "id": "video_title",
+      "label": "Embedded film title (accessibility)",
+      "default": "RYVT"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "Poster still (shown while the film loads)"
+    },
+    {
+      "type": "header",
+      "content": "Promo bar"
+    },
+    {
+      "type": "text",
+      "id": "promo_cta_label",
+      "label": "Promo link label",
+      "default": "Shop the drop"
+    },
+    {
+      "type": "url",
+      "id": "promo_cta_link",
+      "label": "Promo link"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Centre logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_alt",
+      "label": "Logo alt text",
+      "default": "RYVT"
+    },
+    {
+      "type": "header",
+      "content": "Clock"
+    },
+    {
+      "type": "text",
+      "id": "city",
+      "label": "City",
+      "default": "DETROIT"
+    },
+    {
+      "type": "text",
+      "id": "clock_placeholder",
+      "label": "Clock placeholder (before the time ticks)",
+      "default": "--:--:--"
+    },
+    {
+      "type": "header",
+      "content": "Now playing"
+    },
+    {
+      "type": "text",
+      "id": "np_label",
+      "label": "Label",
+      "default": "Now playing"
+    },
+    {
+      "type": "text",
+      "id": "np_track",
+      "label": "Track",
+      "default": "The RYVT mix"
+    },
+    {
+      "type": "text",
+      "id": "np_chip",
+      "label": "Chip",
+      "default": "Preview"
+    },
+    {
+      "type": "header",
+      "content": "New drops card"
+    },
+    {
+      "type": "text",
+      "id": "buy_title",
+      "label": "Title",
+      "default": "New Drops"
+    },
+    {
+      "type": "text",
+      "id": "buy_line",
+      "label": "Line",
+      "default": "Heavyweight release"
+    },
+    {
+      "type": "text",
+      "id": "buy_meta",
+      "label": "Emphasis",
+      "default": "8 styles"
+    },
+    {
+      "type": "url",
+      "id": "buy_link",
+      "label": "Card link"
+    },
+    {
+      "type": "header",
+      "content": "Shipping pill"
+    },
+    {
+      "type": "text",
+      "id": "ship_text",
+      "label": "Text",
+      "default": "Free shipping over"
+    },
+    {
+      "type": "text",
+      "id": "ship_amount",
+      "label": "Amount",
+      "default": "$125"
+    },
+    {
+      "type": "url",
+      "id": "ship_link",
+      "label": "Shipping link"
+    },
+    {
+      "type": "header",
+      "content": "Sticky bar"
+    },
+    {
+      "type": "image_picker",
+      "id": "bar_logo",
+      "label": "Bar logo"
+    },
+    {
+      "type": "url",
+      "id": "bar_logo_link",
+      "label": "Bar logo link"
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Cart label",
+      "default": "Bag (0)"
+    },
+    {
+      "type": "url",
+      "id": "cart_link",
+      "label": "Cart link"
+    },
+    {
+      "type": "text",
+      "id": "scroll_label",
+      "label": "Scroll cue",
+      "default": "Scroll"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "sub_label",
+      "label": "Label",
+      "default": "Subscribe to our newsletter"
+    },
+    {
+      "type": "text",
+      "id": "sub_placeholder",
+      "label": "Email placeholder",
+      "default": "Your email"
+    },
+    {
+      "type": "text",
+      "id": "sub_button",
+      "label": "Button label",
+      "default": "Join"
+    },
+    {
+      "type": "textarea",
+      "id": "sub_note",
+      "label": "Note",
+      "default": "First look at every drop, an hour before it lists. One email a fortnight, no more."
+    },
+    {
+      "type": "header",
+      "content": "Footer base"
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright line",
+      "default": "&copy; 2026 RYVT &middot; Metro Detroit, Michigan"
+    },
+    {
+      "type": "text",
+      "id": "socials",
+      "label": "Social line",
+      "default": "Instagram &middot; TikTok"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promo_msg",
+      "name": "Promo message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Message",
+          "default": "New drop is live &mdash; small run, built in Metro Detroit"
+        }
+      ]
+    },
+    {
+      "type": "nav_link",
+      "name": "Menu link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shop"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "bar_link",
+      "name": "Sticky bar link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shop"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "name": "Card slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "foot_col",
+      "name": "Footer column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Customer care"
+        },
+        {
+          "type": "text",
+          "id": "l1_label",
+          "label": "Link 1 label",
+          "default": "Account"
+        },
+        {
+          "type": "url",
+          "id": "l1_link",
+          "label": "Link 1"
+        },
+        {
+          "type": "text",
+          "id": "l2_label",
+          "label": "Link 2 label",
+          "default": "Our store"
+        },
+        {
+          "type": "url",
+          "id": "l2_link",
+          "label": "Link 2"
+        },
+        {
+          "type": "text",
+          "id": "l3_label",
+          "label": "Link 3 label",
+          "default": "FAQ"
+        },
+        {
+          "type": "url",
+          "id": "l3_link",
+          "label": "Link 3"
+        },
+        {
+          "type": "text",
+          "id": "l4_label",
+          "label": "Link 4 label",
+          "default": "Shipping &amp; returns"
+        },
+        {
+          "type": "url",
+          "id": "l4_link",
+          "label": "Link 4"
+        }
+      ]
+    },
+    {
+      "type": "legal_link",
+      "name": "Legal link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Terms"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 32,
+  "presets": [
+    {
+      "name": "Landing film",
+      "blocks": [
+        {
+          "type": "promo_msg",
+          "settings": {
+            "text": "New drop is live &mdash; small run, built in Metro Detroit"
+          }
+        },
+        {
+          "type": "promo_msg",
+          "settings": {
+            "text": "Free shipping on every order over $125"
+          }
+        },
+        {
+          "type": "promo_msg",
+          "settings": {
+            "text": "Sign up and take 10% off your first order"
+          }
+        },
+        {
+          "type": "nav_link",
+          "settings": {
+            "label": "Shop",
+            "link": "/pages/store?view=shop"
+          }
+        },
+        {
+          "type": "nav_link",
+          "settings": {
+            "label": "New Arrivals",
+            "link": "/pages/store?view=shop"
+          }
+        },
+        {
+          "type": "nav_link",
+          "settings": {
+            "label": "The Renaissance Tee",
+            "link": "/pages/store?view=story"
+          }
+        },
+        {
+          "type": "nav_link",
+          "settings": {
+            "label": "Detroit",
+            "link": "/pages/store?view=about"
+          }
+        },
+        {
+          "type": "nav_link",
+          "settings": {
+            "label": "Contact",
+            "link": "/pages/store?view=contact"
+          }
+        },
+        {
+          "type": "bar_link",
+          "settings": {
+            "label": "Shop",
+            "link": "/pages/store?view=shop"
+          }
+        },
+        {
+          "type": "bar_link",
+          "settings": {
+            "label": "New Arrivals",
+            "link": "/pages/store?view=shop"
+          }
+        },
+        {
+          "type": "bar_link",
+          "settings": {
+            "label": "The Renaissance Tee",
+            "link": "/pages/store?view=story"
+          }
+        },
+        {
+          "type": "bar_link",
+          "settings": {
+            "label": "Detroit",
+            "link": "/pages/store?view=about"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {}
+        },
+        {
+          "type": "slide",
+          "settings": {}
+        },
+        {
+          "type": "slide",
+          "settings": {}
+        },
+        {
+          "type": "slide",
+          "settings": {}
+        },
+        {
+          "type": "foot_col",
+          "settings": {
+            "heading": "Customer care",
+            "l1_label": "Account",
+            "l1_link": "/pages/store?view=contact",
+            "l2_label": "Our store",
+            "l2_link": "/pages/store?view=about",
+            "l3_label": "FAQ",
+            "l3_link": "/pages/store?view=faq",
+            "l4_label": "Shipping &amp; returns",
+            "l4_link": "/pages/store?view=shipping"
+          }
+        },
+        {
+          "type": "foot_col",
+          "settings": {
+            "heading": "Shop",
+            "l1_label": "All styles",
+            "l1_link": "/pages/store?view=shop",
+            "l2_label": "Heavyweight tees",
+            "l2_link": "/pages/store?view=shop&amp;filter=Tees",
+            "l3_label": "Tank tops",
+            "l3_link": "/pages/store?view=shop&amp;filter=Tanks",
+            "l4_label": "Cargo &amp; shorts",
+            "l4_link": "/pages/store?view=shop&amp;filter=Bottoms"
+          }
+        },
+        {
+          "type": "foot_col",
+          "settings": {
+            "heading": "Brand",
+            "l1_label": "About RYVT",
+            "l1_link": "/pages/store?view=about",
+            "l2_label": "The Renaissance Tee",
+            "l2_link": "/pages/store?view=story",
+            "l3_label": "Made in Detroit",
+            "l3_link": "/pages/store?view=about",
+            "l4_label": "Wholesale",
+            "l4_link": "/pages/store?view=contact"
+          }
+        },
+        {
+          "type": "foot_col",
+          "settings": {
+            "heading": "Journal",
+            "l1_label": "One tee, four ways",
+            "l1_link": "/pages/store?view=story",
+            "l2_label": "Why we wash first",
+            "l2_link": "/pages/store?view=faq",
+            "l3_label": "The fourth-year test",
+            "l3_link": "/pages/store?view=faq",
+            "l4_label": "Press",
+            "l4_link": "/pages/store?view=contact"
+          }
+        },
+        {
+          "type": "legal_link",
+          "settings": {
+            "label": "Terms",
+            "link": "/pages/store?view=terms"
+          }
+        },
+        {
+          "type": "legal_link",
+          "settings": {
+            "label": "Privacy",
+            "link": "/pages/store?view=privacy"
+          }
+        },
+        {
+          "type": "legal_link",
+          "settings": {
+            "label": "Social media disclaimer",
+            "link": "/pages/store?view=social"
+          }
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}

@@ -1,0 +1,285 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<section class="st-detail">
+  <div class="st-detail-media">
+    {%- if section.settings.image_1 != blank -%}<span class="ph" style="background-image:url({{ section.settings.image_1 | image_url: width: 1600 }});background-size:cover;background-position:center"></span>{%- else -%}<span class="ph {{ section.settings.tone_1 }}"></span>{%- endif -%}
+    {%- if section.settings.image_2 != blank -%}<span class="ph" style="background-image:url({{ section.settings.image_2 | image_url: width: 1600 }});background-size:cover;background-position:center"></span>{%- else -%}<span class="ph {{ section.settings.tone_2 }}"></span>{%- endif -%}
+  </div>
+  <div class="st-detail-txt">
+    {%- if section.settings.eyebrow != blank -%}<div class="lab">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    {%- if section.settings.heading != blank -%}<h3>{{ section.settings.heading }}</h3>{%- endif -%}
+    <div class="st-list">
+      {%- for block in section.blocks -%}
+      <div data-detail="" {{ block.shopify_attributes }}>
+        <b>{{ block.settings.title }}</b>
+        <span>{{ block.settings.text }}</span>
+        {%- if block.settings.spec_value != blank or block.settings.spec_note != blank -%}<span aria-hidden="true" class="st-spec-out"><i>{{ block.settings.spec_value }}</i>{{ block.settings.spec_note }}</span>{%- endif -%}
+      </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.btn_label != blank -%}
+    <a class="btn btn-dark" data-product="renaissance" href="{{ section.settings.btn_link | default: routes.all_products_collection_url }}">{{ section.settings.btn_label }}</a>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Story construction detail",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image one"
+    },
+    {
+      "type": "select",
+      "id": "tone_1",
+      "label": "Placeholder tone one (used when no image)",
+      "default": "alt",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image two"
+    },
+    {
+      "type": "select",
+      "id": "tone_2",
+      "label": "Placeholder tone two (used when no image)",
+      "default": "",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The construction"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Three details that decide whether a tee lasts."
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button label",
+      "default": "Shop the Renaissance Tee"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "detail",
+      "name": "Detail",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Ribbed collar, double-needle"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "The first thing to fail on a cheap tee, reinforced here so it holds its round."
+        },
+        {
+          "type": "text",
+          "id": "spec_value",
+          "label": "Spec figure",
+          "default": "1\u00d71 rib"
+        },
+        {
+          "type": "text",
+          "id": "spec_note",
+          "label": "Spec note",
+          "default": "Still round in year four"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Story construction detail",
+      "blocks": [
+        {
+          "type": "detail",
+          "settings": {
+            "title": "Ribbed collar, double-needle",
+            "text": "The first thing to fail on a cheap tee, reinforced here so it holds its round.",
+            "spec_value": "1\u00d71 rib",
+            "spec_note": "Still round in year four"
+          }
+        },
+        {
+          "type": "detail",
+          "settings": {
+            "title": "Garment-dyed, then washed twice",
+            "text": "The shrink happens before you own it, not in your dryer.",
+            "spec_value": "Under 1% shrink",
+            "spec_note": "Measured after ten washes"
+          }
+        },
+        {
+          "type": "detail",
+          "settings": {
+            "title": "Flat side seams",
+            "text": "Nothing to twist after a wash, nothing to bulk under a belt.",
+            "spec_value": "No twist",
+            "spec_note": "Panels cut on the same grain"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

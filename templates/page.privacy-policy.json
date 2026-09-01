@@ -1,0 +1,94 @@
+{
+  "sections": {
+    "doc": {
+      "type": "legal-doc",
+      "settings": {
+        "eyebrow": "Legal",
+        "heading": "Privacy Policy",
+        "intro": "What we collect when you shop with us, why we hold it, how long we keep it, and how to make us delete it.",
+        "nav_title": "On this page",
+        "anchor_prefix": "privacy",
+        "meta1": "Effective <b>1 August 2026</b>",
+        "meta2": "Data controller <b>RYVT LLC</b>",
+        "meta3": ""
+      },
+      "blocks": {
+        "doc_b1": {
+          "type": "clause",
+          "settings": {
+            "title": "What we collect",
+            "body": "<ul><li>Order data: name, delivery and billing address, email, phone if you give it, and what you bought.</li><li>Payment data: handled by our payment processor. We receive the last four digits and the card type, never the full number.</li><li>Account data, if you create one: your email, a hashed password, your order history and saved addresses.</li><li>Site data: pages viewed, referring link, approximate location from IP address, and device type.</li></ul>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b2": {
+          "type": "clause",
+          "settings": {
+            "title": "Why we hold it",
+            "body": "<p>To take payment, pick, pack and deliver an order; to handle returns and warranty claims; to answer your emails; to meet our tax and accounting obligations; and to keep the store working and secure.</p> <p>We send marketing email only to people who asked for it. Every one of those emails carries a one-click unsubscribe, and unsubscribing never affects an order in flight.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b3": {
+          "type": "clause",
+          "settings": {
+            "title": "Who else sees it",
+            "body": "<ul><li>Our payment processor, to take the payment.</li><li>Our carrier, to deliver the parcel: name, address, and phone for delivery notifications.</li><li>Our email provider, if you subscribed.</li><li>Our accountant and, where the law requires it, a tax or law-enforcement authority.</li></ul> <p>We do not sell personal data, and we do not share it for anyone else\u2019s advertising.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b4": {
+          "type": "clause",
+          "settings": {
+            "title": "How long we keep it",
+            "body": "",
+            "table": "<table class=\"doc-tbl\">\n<tr><th>Record</th><th>Held for</th></tr>\n<tr><td>Order and invoice records</td><td>7 years</td></tr>\n<tr><td>Account details, while the account is open</td><td>Until you close it</td></tr>\n<tr><td>Marketing consent and email history</td><td>3 years from last activity</td></tr>\n<tr><td>Site analytics</td><td>14 months</td></tr>\n</table>",
+            "table_first": true
+          }
+        },
+        "doc_b5": {
+          "type": "clause",
+          "settings": {
+            "title": "Your choices",
+            "body": "<p>You can ask us for a copy of what we hold, to correct it, or to delete it. Deletion applies to everything except records we are legally required to keep, such as invoices. Write to privacy@wearryvt.com and we answer within thirty days.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b6": {
+          "type": "clause",
+          "settings": {
+            "title": "Cookies",
+            "body": "<p>We use cookies that keep your bag and your session working, and one analytics cookie that tells us which pages are read. There are no advertising cookies on this site. Blocking cookies will not stop you shopping; it will empty your bag between visits.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b7": {
+          "type": "clause",
+          "settings": {
+            "title": "Security and changes",
+            "body": "<p>The store runs over TLS, passwords are hashed, and access to order data is limited to the people who pack the parcels. If we change this policy we date the change at the top and, for anything material, we email subscribers before it takes effect.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      },
+      "block_order": [
+        "doc_b1",
+        "doc_b2",
+        "doc_b3",
+        "doc_b4",
+        "doc_b5",
+        "doc_b6",
+        "doc_b7"
+      ]
+    }
+  },
+  "order": [
+    "doc"
+  ]
+}

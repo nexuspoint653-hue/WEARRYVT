@@ -1,0 +1,183 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.show_dock -%}
+<div class="dock" data-dock="">
+<div class="i">
+<span class="t" data-dock-name=""></span>
+<span class="p" data-dock-price=""></span>
+</div>
+<button data-dock-add="" disabled="">{{ section.settings.dock_label }}</button>
+</div>
+{%- endif -%}
+{%- if section.settings.show_toast -%}
+<div aria-live="polite" class="toast" data-toast="" role="status"><b>{{ section.settings.toast_label }}</b><span data-toast-item=""></span></div>
+{%- endif -%}
+{%- if section.settings.show_cursor -%}
+<div aria-hidden="true" class="cur off" data-cur=""></div>
+{%- endif -%}
+{%- if section.settings.show_cursor_ring -%}
+<div aria-hidden="true" class="cur-r off" data-cur-ring=""></div>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Site chrome",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sticky add-to-bag dock"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dock",
+      "label": "Show the dock",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "dock_label",
+      "label": "Button label",
+      "default": "Select size"
+    },
+    {
+      "type": "header",
+      "content": "Toast"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_toast",
+      "label": "Show the toast",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "toast_label",
+      "label": "Toast text",
+      "default": "Added to bag"
+    },
+    {
+      "type": "header",
+      "content": "Custom cursor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cursor",
+      "label": "Show the cursor dot",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cursor_ring",
+      "label": "Show the cursor ring",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Site chrome"
+    }
+  ]
+}
+{% endschema %}

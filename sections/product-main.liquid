@@ -1,0 +1,1275 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+{%- comment -%}
+  Real Shopify data when the page carries a product, the original JS-driven
+  markup when it does not. pdp_live is the single switch: with no product every
+  node below falls back to the empty data-pdp-* container ryvt-store.js paints,
+  byte for byte, so the demo product page keeps working untouched.
+{%- endcomment -%}
+{%- liquid
+  assign pdp_live = false
+  if product
+    assign pdp_live = true
+  endif
+-%}
+{%- if pdp_live -%}
+{%- liquid
+  assign pv = product.selected_or_first_available_variant
+
+  assign pdp_iw = section.settings.image_width | plus: 0
+  assign pdp_ih = pdp_iw | times: 5 | divided_by: 4
+  assign pdp_max = section.settings.max_shots | plus: 0
+  assign pdp_shots = product.media | where: 'media_type', 'image'
+  assign pdp_shot_n = pdp_shots.size | plus: 0
+  if pdp_shot_n > pdp_max
+    assign pdp_shot_n = pdp_max
+  endif
+
+  assign pdp_cat = product.type
+  if pdp_cat == blank
+    assign pdp_cat = product.vendor
+  endif
+
+  assign pdp_cmp = product.compare_at_price | plus: 0
+  assign pdp_sale = false
+  if pdp_cmp > product.price and section.settings.show_compare
+    assign pdp_sale = true
+  endif
+
+  assign pdp_video = null
+  if section.settings.show_video
+    for m in product.media
+      if m.media_type == 'video'
+        assign pdp_video = m
+        break
+      endif
+    endfor
+  endif
+
+  assign pdp_colour_opt = null
+  for opt in product.options_with_values
+    assign optn = opt.name | downcase
+    if optn contains 'colour' or optn contains 'color'
+      assign pdp_colour_opt = opt
+      break
+    endif
+  endfor
+  assign pdp_colour_name = pdp_colour_opt.selected_value
+  if pdp_colour_name == blank
+    assign pdp_colour_name = pdp_colour_opt.values.first
+  endif
+
+  assign pdp_size_opt = null
+  for opt in product.options_with_values
+    assign optn = opt.name | downcase
+    unless optn contains 'colour' or optn contains 'color'
+      assign pdp_size_opt = opt
+      break
+    endunless
+  endfor
+
+  assign pdp_pick = false
+  if section.settings.require_size_choice and pdp_size_opt and pdp_size_opt.values.size > 1
+    assign pdp_pick = true
+  endif
+
+  assign pdp_blurb = ''
+  if section.settings.blurb_source != 'none'
+    if section.settings.blurb_source == 'auto'
+      assign pdp_blurb = product.metafields.custom.short_description | strip_html | strip
+    endif
+    if pdp_blurb == blank
+      assign pdp_blurb = product.description | strip_html | strip
+    endif
+    assign pdp_bw = section.settings.blurb_words | plus: 0
+    if pdp_bw > 0
+      assign pdp_blurb = pdp_blurb | truncatewords: pdp_bw
+    endif
+  endif
+
+  assign pdp_front = pdp_colour_name
+  if pdp_front == blank
+    assign pdp_front = product.title
+  endif
+  assign pdp_plates = section.settings.placeholder_shots | split: ','
+-%}
+{%- endif -%}
+{%- if section.settings.spa_view != blank -%}<div data-view="{{ section.settings.spa_view }}"{% if section.settings.spa_open or pdp_live %} class="on"{% endif %}>{%- endif -%}
+{%- if pdp_live -%}
+{%- comment -%}
+  Live-only geometry. ryvt-store.css styles the plates the script draws; a real
+  photograph or a real video needs the same box, so the two rules below are
+  scoped to this section and never reach the stylesheet.
+{%- endcomment -%}
+<style>#shopify-section-{{ section.id }} .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}#shopify-section-{{ section.id }} .motion .ph video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+{%- if section.settings.gallery_ratio != blank %}#shopify-section-{{ section.id }} .pdp-stage{aspect-ratio:{{ section.settings.gallery_ratio }}}{% endif %}
+{%- if section.settings.gallery_layout == 'stack' %}#shopify-section-{{ section.id }} .pdp-stage{aspect-ratio:auto;background:transparent;overflow:visible}#shopify-section-{{ section.id }} .shot{position:relative;inset:auto;opacity:1;background:var(--concrete);aspect-ratio:{{ section.settings.gallery_ratio | default: '4/5' }};overflow:hidden;margin-bottom:8px}#shopify-section-{{ section.id }} .mos{display:none}{% endif %}</style>
+{%- endif -%}
+<div class="wrap">
+  <div class="crumbs">
+    {%- if section.settings.crumb_home != blank -%}<a data-go="home" href="{{ section.settings.crumb_home_link | default: '/' }}">{{ section.settings.crumb_home }}</a>{{ ' / ' }}{%- endif -%}
+    {%- if section.settings.crumb_shop != blank -%}<a data-go="shop" href="{{ section.settings.crumb_shop_link | default: routes.all_products_collection_url }}">{{ section.settings.crumb_shop }}</a>{{ ' / ' }}{%- endif -%}
+    <span data-pdp-crumb="">{%- if pdp_live -%}{{ product.title | escape }}{%- endif -%}</span>
+  </div>
+  <div class="pdp">
+    <div>
+      <div class="pdp-stage"{% if pdp_live == false or section.settings.keep_stage_hook %} data-pdp-stage=""{% endif %}>
+        {%- if pdp_live -%}
+        {%- if pdp_shot_n > 0 -%}
+        {%- for m in pdp_shots limit: pdp_shot_n -%}
+        <span class="shot{% if forloop.first %} on{% endif %}" data-shot="{{ forloop.index0 }}" data-media-id="{{ m.id }}"><img src="{{ m | image_url: width: pdp_iw }}" srcset="{{ m | image_url: width: 700 }} 700w, {{ m | image_url: width: pdp_iw }} {{ pdp_iw }}w" sizes="(max-width: 900px) 100vw, 55vw" alt="{{ m.alt | default: product.title | escape }}" width="{{ pdp_iw }}" height="{{ pdp_ih }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"></span>
+        {%- endfor -%}
+        {%- else -%}
+        <span class="shot on" data-shot="0"><span class="ph"><em>{{ pdp_front | escape }}</em></span></span>
+        {%- for l in pdp_plates -%}
+        {%- assign pl_t = forloop.index | modulo: 4 -%}
+        {%- assign pl_k = '' -%}
+        {%- if pl_t == 1 or pl_t == 3 -%}{%- assign pl_k = 'alt' -%}{%- elsif pl_t == 2 -%}{%- assign pl_k = 'dark' -%}{%- endif -%}
+        <span class="shot" data-shot="{{ forloop.index }}"><span class="ph {{ pl_k }}"><em>{{ l | strip | escape }}</em></span></span>
+        {%- endfor -%}
+        {%- endif -%}
+        {%- if section.settings.show_mosaic -%}
+        <div class="mos">
+          {%- if pdp_shot_n > 0 -%}
+          {%- for m in pdp_shots limit: pdp_shot_n -%}
+          <button class="chip{% if forloop.first %} on{% endif %}" type="button" data-chip="{{ forloop.index0 }}" aria-label="{{ section.settings.chip_label_prefix }} {{ m.alt | default: product.title | escape }}"><span class="ph" style="background-image:url({{ m | image_url: width: 260 }});background-size:cover;background-position:center"></span></button>
+          {%- endfor -%}
+          {%- else -%}
+          <button class="chip on" type="button" data-chip="0" aria-label="{{ section.settings.chip_label_prefix }} {{ pdp_front | escape }}"><span class="ph"></span></button>
+          {%- for l in pdp_plates -%}
+          {%- assign pl_t = forloop.index | modulo: 4 -%}
+          {%- assign pl_k = '' -%}
+          {%- if pl_t == 1 or pl_t == 3 -%}{%- assign pl_k = 'alt' -%}{%- elsif pl_t == 2 -%}{%- assign pl_k = 'dark' -%}{%- endif -%}
+          <button class="chip" type="button" data-chip="{{ forloop.index }}" aria-label="{{ section.settings.chip_label_prefix }} {{ l | strip | escape }}"><span class="ph {{ pl_k }}"></span></button>
+          {%- endfor -%}
+          {%- endif -%}
+          {%- if section.settings.show_film_chip and section.settings.show_motion -%}
+          <button class="chip film" type="button" data-film-chip="" aria-label="{{ section.settings.film_chip_label }}"><span class="ph dark"></span></button>
+          {%- endif -%}
+        </div>
+        {%- endif -%}
+        {%- endif -%}
+      </div>
+      {%- if section.settings.show_motion %}
+      <div class="motion">
+        {%- if pdp_live and pdp_video -%}
+        <span class="ph dark" data-film="">{{ pdp_video | video_tag: image_size: '1200x', controls: true, muted: true, loop: true, playsinline: true, preload: 'metadata' }}</span>
+        {%- elsif section.settings.film_image != blank -%}
+        <span class="ph" data-film="" style="background-image:url({{ section.settings.film_image | image_url: width: 1600 }});background-size:cover;background-position:center">{%- if section.settings.film_label != blank -%}<em>{{ section.settings.film_label }}</em>{%- endif -%}</span>
+        {%- else -%}
+        <span class="ph {{ section.settings.film_tone }}" data-film="">{%- if section.settings.film_label != blank -%}<em>{{ section.settings.film_label }}</em>{%- endif -%}</span>
+        {%- endif -%}
+        {%- if section.settings.film_cap != blank -%}<div class="cap">{{ section.settings.film_cap }}</div>{%- endif -%}
+      </div>
+      {%- endif %}
+    </div>
+    <div class="side">
+      <div class="lab" data-pdp-cat="">{%- if pdp_live and section.settings.show_category -%}{{ pdp_cat }}{%- endif -%}</div>
+      <h1 data-pdp-name="" style="margin-top:8px">{%- if pdp_live -%}{{ product.title | escape }}{%- endif -%}</h1>
+      <div class="price" data-pdp-price="">{%- if pdp_live -%}{% if pdp_sale %}<s style="opacity:.55">{{ product.compare_at_price | money }}</s>&nbsp;{% endif %}{{ product.price | money }}{%- endif -%}</div>
+      <p class="blurb" data-pdp-blurb="">{%- if pdp_live -%}{{ pdp_blurb }}{%- endif -%}</p>
+      {%- if pdp_live -%}
+      <script type="application/json" data-pdp-variants="">[{% for var in product.variants %}{"id":{{ var.id }},"available":{{ var.available }},"options":{{ var.options | json }},"price":{{ var.price | money | json }},"compare":{% if section.settings.show_compare and var.compare_at_price > var.price %}{{ var.compare_at_price | money | json }}{% else %}null{% endif %},"media":{% if var.featured_media %}{{ var.featured_media.id | json }}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}]</script>
+      {% form 'product', product %}
+        {%- for opt in product.options_with_values -%}
+        {%- assign optn = opt.name | downcase -%}
+        {%- assign opt_i = opt.position | minus: 1 -%}
+        {%- if optn contains 'colour' or optn contains 'color' -%}
+        <div class="opt" data-color-block="" data-opt-row="" data-opt-kind="colour" data-opt-index="{{ opt_i }}">
+          <div class="lab"><span>{{ section.settings.color_label }} <b data-color-name="" style="font-weight:600">{{ pdp_colour_name | escape }}</b></span></div>
+          <div class="colors" data-colors="">
+            {%- for cv in opt.values -%}
+            {%- if cv.swatch.color -%}{%- assign cv_hex = cv.swatch.color -%}{%- else -%}{%- assign cv_hex = cv | downcase | strip | replace: ' ', '' -%}{%- endif -%}
+            <button type="button" data-c="{{ forloop.index0 }}" data-value="{{ cv | escape }}"{% if cv == pdp_colour_name %} class="on"{% endif %} style="background:{{ cv_hex }}" aria-label="{{ cv | escape }}"></button>
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- else -%}
+        <div class="opt" data-opt-row="" data-opt-kind="size" data-opt-index="{{ opt_i }}">
+          <div class="lab"><span>{% if optn contains 'size' %}{{ section.settings.size_label }}{% else %}{{ opt.name }}{% endif %}</span>{%- if optn contains 'size' and section.settings.show_size_guide and section.settings.size_guide_label != blank -%}<a href="{{ section.settings.size_guide_link | default: '/pages/faq' }}">{{ section.settings.size_guide_label }}</a>{%- endif -%}</div>
+          <div class="sizes"{% if opt.name == pdp_size_opt.name %} data-sizes=""{% endif %}>
+            {%- for sv in opt.values -%}
+            {%- assign sv_ok = false -%}
+            {%- for var in product.variants -%}{%- if var.available and var.options[opt_i] == sv -%}{%- assign sv_ok = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
+            <button type="button" data-s="{{ sv | escape }}" data-value="{{ sv | escape }}"{% unless pdp_pick %}{% if sv == opt.selected_value and sv_ok %} class="on"{% endif %}{% endunless %}{% unless sv_ok %} disabled=""{% endunless %}>{{ sv | escape }}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- endif -%}
+        {%- endfor -%}
+        <input type="hidden" name="id" value="{{ pv.id }}" data-variant-id="">
+        <input type="hidden" name="quantity" value="1">
+        {%- liquid
+          assign pdp_add_label = section.settings.add_label
+          assign pdp_add_off = true
+          if product.available == false
+            assign pdp_add_label = section.settings.sold_out_label
+          elsif pdp_pick
+            assign pdp_add_label = section.settings.add_label
+          elsif pv.available
+            assign pdp_add_off = false
+            capture pdp_add_label
+              echo section.settings.add_label_ready
+              if section.settings.add_show_price
+                echo ' — '
+                echo pv.price | money
+              endif
+            endcapture
+          else
+            assign pdp_add_label = section.settings.sold_out_label
+          endif
+        -%}
+        <button class="add" data-add="" type="submit"{% if pdp_add_off %} disabled=""{% endif %}>{{ pdp_add_label }}</button>
+      {% endform %}
+      {%- else %}
+      <div class="opt" data-color-block="">
+        <div class="lab"><span>{{ section.settings.color_label }} <b data-color-name="" style="font-weight:600"></b></span></div>
+        <div class="colors" data-colors=""></div>
+      </div>
+      <div class="opt">
+        <div class="lab"><span>{{ section.settings.size_label }}</span>{%- if section.settings.show_size_guide and section.settings.size_guide_label != blank -%}<a href="{{ section.settings.size_guide_link | default: '/pages/faq' }}">{{ section.settings.size_guide_label }}</a>{%- endif -%}</div>
+        <div class="sizes" data-sizes=""></div>
+      </div>
+      <button class="add" data-add="" disabled="">{{ section.settings.add_label }}</button>
+      {%- endif -%}
+      {%- if section.settings.show_ship and section.settings.ship_pre != blank or section.settings.ship_time != blank or section.settings.ship_mid != blank or section.settings.ship_amount != blank -%}
+      <div class="pdp-ship" data-ship="" tabindex="0">{{ section.settings.ship_pre }}{% if section.settings.ship_time != blank %} <b>{{ section.settings.ship_time }}</b>{% endif %} {{ section.settings.ship_mid }}{% if section.settings.ship_amount != blank %} <b>{{ section.settings.ship_amount }}</b>{% endif %}</div>
+      {%- endif -%}
+      {%- if section.settings.show_trust -%}
+      <ul class="pdp-trust">
+        {%- for block in section.blocks -%}
+        {%- if block.type == 'trust' -%}
+        <li {{ block.shopify_attributes }}><b>{{ block.settings.figure }}</b>{{ block.settings.label }}</li>
+        {%- endif -%}
+        {%- endfor -%}
+      </ul>
+      {%- endif %}
+      <div class="acc">
+        {%- for block in section.blocks -%}
+        {%- case block.type -%}
+
+        {%- when 'acc_details' -%}
+        {%- liquid
+          assign det_list = null
+          if pdp_live
+            assign det_mf = product.metafields.custom.details.value
+            if det_mf != blank
+              assign det_type = product.metafields.custom.details.type
+              if det_type contains 'list.'
+                assign det_list = det_mf
+              else
+                assign det_list = det_mf | strip_html | newline_to_br | strip_newlines | split: '<br />'
+              endif
+            endif
+            if det_list == null and block.settings.items != blank
+              assign det_list = block.settings.items | newline_to_br | strip_newlines | split: '<br />'
+            endif
+          endif
+        -%}
+        <details{% if block.settings.open %} open=""{% endif %} {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.title }}</summary>
+          <div class="body"><ul data-pdp-details="">{%- if det_list -%}{%- for d in det_list -%}<li>{{ d | strip }}</li>{%- endfor -%}{%- endif -%}</ul>{%- if pdp_live and det_list == null and block.settings.use_description and product.description != blank -%}{{ product.description }}{%- endif -%}</div>
+        </details>
+
+        {%- when 'acc_fabric' -%}
+        {%- liquid
+          assign fab_list = null
+          if pdp_live
+            assign fab_mf = product.metafields.custom.fabric.value
+            if fab_mf != blank
+              assign fab_type = product.metafields.custom.fabric.type
+              if fab_type contains 'list.'
+                assign fab_list = fab_mf
+              else
+                assign fab_list = fab_mf | strip_html | newline_to_br | strip_newlines | split: '<br />'
+              endif
+            endif
+            if fab_list == null and block.settings.items != blank
+              assign fab_list = block.settings.items | newline_to_br | strip_newlines | split: '<br />'
+            endif
+          endif
+        -%}
+        <details{% if block.settings.open %} open=""{% endif %} {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.title }}</summary>
+          <div class="body">
+            <ul data-pdp-fabric="">{%- if fab_list -%}{%- for f in fab_list -%}<li>{{ f | strip }}</li>{%- endfor -%}{%- endif -%}</ul>
+            {%- if block.settings.note != blank -%}<p style="margin-top:12px">{{ block.settings.note }}</p>{%- endif -%}
+          </div>
+        </details>
+
+        {%- when 'acc_size' -%}
+        {%- liquid
+          assign sz_rows = null
+          if pdp_live
+            assign sz_src = block.settings.rows_top
+            assign bot_type = section.settings.bottoms_type | downcase | strip
+            assign this_type = product.type | downcase | strip
+            if bot_type != blank and this_type == bot_type and block.settings.rows_bottom != blank
+              assign sz_src = block.settings.rows_bottom
+            endif
+            if sz_src != blank
+              assign sz_rows = sz_src | newline_to_br | strip_newlines | split: '<br />'
+            endif
+          endif
+        -%}
+        <details{% if block.settings.open %} open=""{% endif %} {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.title }}</summary>
+          <div class="body">
+            <table class="doc-tbl" data-pdp-size="">{%- if sz_rows -%}{%- assign sz_i = 0 -%}{%- for row in sz_rows -%}{%- assign rw = row | strip -%}{%- if rw != blank -%}<tr>{%- assign cells = rw | split: ',' -%}{%- for c in cells -%}{%- if sz_i == 0 -%}<th>{{ c | strip }}</th>{%- else -%}<td>{{ c | strip }}</td>{%- endif -%}{%- endfor -%}</tr>{%- assign sz_i = sz_i | plus: 1 -%}{%- endif -%}{%- endfor -%}{%- endif -%}</table>
+            {%- if block.settings.note != blank -%}<p style="margin-top:12px">{{ block.settings.note }}</p>{%- endif -%}
+          </div>
+        </details>
+
+        {%- when 'acc_text' -%}
+        <details{% if block.settings.open %} open=""{% endif %} {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.title }}</summary>
+          <div class="body">{{ block.settings.body }}{%- if block.settings.link_label != blank -%}<div class="doc-cta" style="margin-top:16px"><a class="more"{% if block.settings.link_go != blank %} data-go="{{ block.settings.link_go }}"{% endif %} href="{{ block.settings.link | default: '/pages/shipping' }}">{{ block.settings.link_label }}</a></div>{%- endif -%}</div>
+        </details>
+
+        {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+{%- if pdp_live and section.settings.show_related -%}
+{%- liquid
+  assign rel_n = section.settings.related_count | plus: 0
+  assign rel_list = null
+  if section.settings.related_use_recommendations and recommendations.performed and recommendations.products_count > 0
+    assign rel_list = recommendations.products
+  endif
+  if rel_list == null
+    assign rel_coll = collections[section.settings.related_collection]
+    if rel_coll.products.size > 0
+      assign rel_list = rel_coll.products
+    endif
+  endif
+-%}
+{%- if rel_list -%}
+<section class="sec wrap">
+  <div class="sec-h">
+    <div>
+      {%- if section.settings.related_eyebrow != blank -%}<div class="lab">{{ section.settings.related_eyebrow }}</div>{%- endif -%}
+      {%- if section.settings.related_heading != blank -%}<h2 style="margin-top:8px">{{ section.settings.related_heading }}</h2>{%- endif -%}
+    </div>
+  </div>
+  <div class="grid">
+    {%- assign rel_i = 0 -%}
+    {%- for rp in rel_list -%}
+    {%- if rp.id != product.id and rel_i < rel_n -%}
+    {%- assign rel_i = rel_i | plus: 1 -%}
+    {% render 'product-card', product: rp, index: rel_i, tone_index: forloop.index0 %}
+    {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+{%- endif -%}
+{%- if pdp_live -%}
+<script>
+/* The server-rendered product page carries its own switching. renderStage()
+   in ryvt-store.js binds the chips it draws itself, so the chips written here
+   need the same three lines; everything else is variant selection, which the
+   demo script has no concept of. Delegated, so a stray repaint cannot unbind
+   it, and idempotent, so a repaint cannot double-toggle. */
+(function(){
+  var root = document.getElementById('shopify-section-{{ section.id }}');
+  if(!root) return;
+  var stage = root.querySelector('.pdp-stage');
+  function shots(){ return Array.prototype.slice.call(stage.querySelectorAll('.shot')); }
+  if(stage){
+    stage.addEventListener('click', function(e){
+      var c = e.target.closest ? e.target.closest('[data-chip]') : null;
+      if(!c) return;
+      var i = c.getAttribute('data-chip');
+      shots().forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-shot') === i); });
+      Array.prototype.forEach.call(stage.querySelectorAll('.chip'), function(x){
+        x.classList.toggle('on', x === c);
+      });
+    });
+    var film = stage.querySelector('[data-film-chip]');
+    if(film) film.addEventListener('click', function(){
+      var f = root.querySelector('[data-film]');
+      if(!f) return;
+      f.scrollIntoView({ block:'center', behavior:'smooth' });
+      if(f.animate) f.animate([{opacity:.55},{opacity:1}], {duration:600, easing:'ease-out'});
+    });
+  }
+
+  var src = root.querySelector('[data-pdp-variants]');
+  if(!src) return;
+  var variants = [];
+  try { variants = JSON.parse(src.textContent); } catch(err){ return; }
+  var rows = Array.prototype.slice.call(root.querySelectorAll('[data-opt-row]'));
+  var idInput = root.querySelector('[data-variant-id]');
+  var addBtn  = root.querySelector('[data-add]');
+  var priceEl = root.querySelector('[data-pdp-price]');
+  var nameEl  = root.querySelector('[data-color-name]');
+  var CFG = {
+    rest: {{ section.settings.add_label | json }},
+    ready: {{ section.settings.add_label_ready | json }},
+    sold: {{ section.settings.sold_out_label | json }},
+    gone: {{ section.settings.unavailable_label | json }},
+    price: {{ section.settings.add_show_price | json }}
+  };
+
+  /* the demo's addToBag() reads a catalogue this page is not in; the real
+     button posts to /cart/add instead, so its listener is stopped here.
+     This runs before the deferred script binds, and never preventDefault. */
+  if(addBtn) addBtn.addEventListener('click', function(e){ e.stopImmediatePropagation(); });
+
+  var chosen = rows.map(function(r){
+    var on = r.querySelector('button.on');
+    return on ? on.getAttribute('data-value') : null;
+  });
+  function idx(r){ return parseInt(r.getAttribute('data-opt-index'), 10) || 0; }
+
+  function match(){
+    for(var i = 0; i < variants.length; i++){
+      var v = variants[i], ok = true;
+      for(var j = 0; j < rows.length; j++){
+        if(chosen[j] === null || v.options[idx(rows[j])] !== chosen[j]) { ok = false; break; }
+      }
+      if(ok) return v;
+    }
+    return null;
+  }
+
+  function narrow(){
+    rows.forEach(function(row, ri){
+      if(row.getAttribute('data-opt-kind') !== 'size') return;
+      var mine = idx(row);
+      Array.prototype.forEach.call(row.querySelectorAll('button[data-value]'), function(b){
+        var val = b.getAttribute('data-value');
+        var any = variants.some(function(v){
+          if(!v.available || v.options[mine] !== val) return false;
+          for(var j = 0; j < rows.length; j++){
+            if(j === ri || chosen[j] === null) continue;
+            if(v.options[idx(rows[j])] !== chosen[j]) return false;
+          }
+          return true;
+        });
+        b.disabled = !any;
+        if(!any) b.classList.remove('on');
+      });
+    });
+  }
+
+  function refresh(){
+    narrow();
+    var full = chosen.every(function(c){ return c !== null; });
+    var v = full ? match() : null;
+    if(v && idInput) idInput.value = v.id;
+    if(v && priceEl) priceEl.innerHTML =
+      (v.compare ? '<s style="opacity:.55">' + v.compare + '</s>&nbsp;' : '') + v.price;
+    if(v && v.media && stage){
+      var target = stage.querySelector('[data-media-id="' + v.media + '"]');
+      if(target){
+        var i = target.getAttribute('data-shot');
+        shots().forEach(function(s){ s.classList.toggle('on', s.getAttribute('data-shot') === i); });
+        Array.prototype.forEach.call(stage.querySelectorAll('[data-chip]'), function(x){
+          x.classList.toggle('on', x.getAttribute('data-chip') === i);
+        });
+      }
+    }
+    if(addBtn){
+      var ready = !!(v && v.available);
+      addBtn.disabled = !ready;
+      addBtn.textContent = !full ? CFG.rest
+        : ready ? (CFG.ready + (CFG.price ? ' — ' + v.price : ''))
+        : (v ? CFG.sold : CFG.gone);
+    }
+  }
+
+  rows.forEach(function(row, ri){
+    row.addEventListener('click', function(e){
+      var b = e.target.closest ? e.target.closest('button[data-value]') : null;
+      if(!b || b.disabled) return;
+      chosen[ri] = b.getAttribute('data-value');
+      Array.prototype.forEach.call(row.querySelectorAll('button[data-value]'), function(x){
+        x.classList.toggle('on', x === b);
+      });
+      if(row.getAttribute('data-opt-kind') === 'colour' && nameEl) nameEl.textContent = chosen[ri];
+      refresh();
+    });
+  });
+  refresh();
+})();
+</script>
+{%- endif -%}
+{%- if section.settings.spa_view != blank -%}</div>{%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product detail",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Runtime"
+    },
+    {
+      "type": "text",
+      "id": "spa_view",
+      "label": "Runtime view name",
+      "default": "product",
+      "info": "Leave as-is. The storefront script shows and hides this group by this name. On a real product page the group is always shown."
+    },
+    {
+      "type": "checkbox",
+      "id": "spa_open",
+      "label": "Visible on page load",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "keep_stage_hook",
+      "label": "Keep the gallery hook on a real product",
+      "default": true,
+      "info": "The data-pdp-stage hook stays on the gallery so the store script can still find it. Untick only if a demo product card on the same page is repainting the real gallery."
+    },
+    {
+      "type": "header",
+      "content": "Breadcrumbs"
+    },
+    {
+      "type": "text",
+      "id": "crumb_home",
+      "label": "First crumb",
+      "default": "Home"
+    },
+    {
+      "type": "url",
+      "id": "crumb_home_link",
+      "label": "First crumb link"
+    },
+    {
+      "type": "text",
+      "id": "crumb_shop",
+      "label": "Second crumb",
+      "default": "Shop All"
+    },
+    {
+      "type": "url",
+      "id": "crumb_shop_link",
+      "label": "Second crumb link"
+    },
+    {
+      "type": "paragraph",
+      "content": "The last crumb is the product title. With no product on the page the crumb, category, name, price, blurb, gallery, colours and sizes are all written by the store script instead."
+    },
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "select",
+      "id": "gallery_layout",
+      "label": "Layout",
+      "default": "stage",
+      "options": [
+        {
+          "value": "stage",
+          "label": "Spotlight (as designed)"
+        },
+        {
+          "value": "stack",
+          "label": "Stacked images"
+        }
+      ],
+      "info": "Spotlight shows one image at a time with the mosaic in the corner. Stacked shows every image down the column and hides the mosaic."
+    },
+    {
+      "type": "select",
+      "id": "gallery_ratio",
+      "label": "Image shape",
+      "default": "",
+      "options": [
+        {
+          "value": "",
+          "label": "As designed (4:5)"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4"
+        },
+        {
+          "value": "1/1",
+          "label": "Square"
+        },
+        {
+          "value": "16/9",
+          "label": "16:9"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "max_shots",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "label": "Images in the gallery",
+      "default": 3,
+      "info": "Three plus the film chip fills the mosaic exactly, which is how it was drawn."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mosaic",
+      "label": "Show the mosaic of other views",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_film_chip",
+      "label": "Show the film chip in the mosaic",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "chip_label_prefix",
+      "label": "Mosaic button label prefix",
+      "default": "View",
+      "info": "Read by screen readers as \u201cView \u2026\u201d plus the image's alt text."
+    },
+    {
+      "type": "text",
+      "id": "film_chip_label",
+      "label": "Film chip label",
+      "default": "Play the film"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_shots",
+      "label": "Placeholder view names",
+      "default": "Back, Detail",
+      "info": "Used only for a product with no images: the first plate is named after its colour, the rest after this comma-separated list."
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 600,
+      "max": 2400,
+      "step": 100,
+      "unit": "px",
+      "label": "Largest image width",
+      "default": 1400
+    },
+    {
+      "type": "header",
+      "content": "Motion plate"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_motion",
+      "label": "Show the motion plate",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video",
+      "label": "Play the product's own video here",
+      "default": true,
+      "info": "The first video on the product replaces the plate below. With no video, or no product, the plate is shown as set here."
+    },
+    {
+      "type": "text",
+      "id": "film_label",
+      "label": "Plate label",
+      "default": "In motion \u2014 12s loop"
+    },
+    {
+      "type": "text",
+      "id": "film_cap",
+      "label": "Caption",
+      "default": "Worn, not styled"
+    },
+    {
+      "type": "image_picker",
+      "id": "film_image",
+      "label": "Plate image"
+    },
+    {
+      "type": "select",
+      "id": "film_tone",
+      "label": "Placeholder tone (used when no image)",
+      "default": "dark",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Product text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category",
+      "label": "Show the category line",
+      "default": true,
+      "info": "The product type, or the vendor when the type is empty."
+    },
+    {
+      "type": "select",
+      "id": "blurb_source",
+      "label": "Blurb",
+      "default": "auto",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Short description metafield, then description"
+        },
+        {
+          "value": "description",
+          "label": "Description"
+        },
+        {
+          "value": "none",
+          "label": "Hide"
+        }
+      ],
+      "info": "Reads custom.short_description when it is set, otherwise the product description with its markup stripped."
+    },
+    {
+      "type": "range",
+      "id": "blurb_words",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "label": "Blurb length in words (0 = whole thing)",
+      "default": 45
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare",
+      "label": "Show the compare-at price struck through",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Options"
+    },
+    {
+      "type": "text",
+      "id": "color_label",
+      "label": "Colour label",
+      "default": "Colour \u2014",
+      "info": "Swatches come from the option named Colour or Color, using each value's native swatch colour."
+    },
+    {
+      "type": "text",
+      "id": "size_label",
+      "label": "Size label",
+      "default": "Size",
+      "info": "Used for the option named Size. Any other option keeps its own name."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_guide",
+      "label": "Show the size guide link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "size_guide_label",
+      "label": "Size guide link label",
+      "default": "Size guide"
+    },
+    {
+      "type": "url",
+      "id": "size_guide_link",
+      "label": "Size guide link"
+    },
+    {
+      "type": "header",
+      "content": "Add to bag"
+    },
+    {
+      "type": "checkbox",
+      "id": "require_size_choice",
+      "label": "Make the shopper pick a size first",
+      "default": true,
+      "info": "As designed: the button rests disabled until a size is chosen. Untick to preselect the first available variant."
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Button \u2014 resting label",
+      "default": "Select a size",
+      "info": "Shown until a size is picked."
+    },
+    {
+      "type": "text",
+      "id": "add_label_ready",
+      "label": "Button \u2014 ready label",
+      "default": "Add to bag"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_show_price",
+      "label": "Put the price on the button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sold_out_label",
+      "label": "Button \u2014 sold out",
+      "default": "Sold out"
+    },
+    {
+      "type": "text",
+      "id": "unavailable_label",
+      "label": "Button \u2014 combination not made",
+      "default": "Unavailable"
+    },
+    {
+      "type": "header",
+      "content": "Shipping line"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_ship",
+      "label": "Show the shipping line",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "ship_pre",
+      "label": "Before the time",
+      "default": "Ships in"
+    },
+    {
+      "type": "text",
+      "id": "ship_time",
+      "label": "Time (bold)",
+      "default": "48 hours"
+    },
+    {
+      "type": "text",
+      "id": "ship_mid",
+      "label": "Between",
+      "default": "from Metro Detroit \u00b7 Free over"
+    },
+    {
+      "type": "text",
+      "id": "ship_amount",
+      "label": "Threshold (bold)",
+      "default": "$125"
+    },
+    {
+      "type": "header",
+      "content": "Trust row"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust",
+      "label": "Show the trust row",
+      "default": true,
+      "info": "The figures themselves are Trust item blocks."
+    },
+    {
+      "type": "header",
+      "content": "Size guide table"
+    },
+    {
+      "type": "text",
+      "id": "bottoms_type",
+      "label": "Product type measured at the waist",
+      "default": "Bottoms",
+      "info": "A product of this type gets the waist and inseam table from the Size guide block instead of the chest and length one."
+    },
+    {
+      "type": "header",
+      "content": "Related products"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_related",
+      "label": "Show a related rail here",
+      "default": false,
+      "info": "Off by default because the Product related section already draws one. Turn it on to keep the rail inside this section instead."
+    },
+    {
+      "type": "text",
+      "id": "related_eyebrow",
+      "label": "Eyebrow",
+      "default": "More to wear with it"
+    },
+    {
+      "type": "text",
+      "id": "related_heading",
+      "label": "Heading",
+      "default": "Complete the look"
+    },
+    {
+      "type": "checkbox",
+      "id": "related_use_recommendations",
+      "label": "Use Shopify's own recommendations",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "related_collection",
+      "label": "Fall back to this collection"
+    },
+    {
+      "type": "range",
+      "id": "related_count",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Products to show",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "figure",
+          "label": "Figure (bold)",
+          "default": "48h"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "dispatch"
+        }
+      ]
+    },
+    {
+      "type": "acc_details",
+      "name": "Accordion \u2014 Details",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Summary",
+          "default": "Details"
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "items",
+          "label": "Details, one per line",
+          "default": "",
+          "info": "Used when the product has no custom.details metafield. With no product the list is written by the store script."
+        },
+        {
+          "type": "checkbox",
+          "id": "use_description",
+          "label": "Fall back to the product description",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "acc_text",
+      "name": "Accordion \u2014 Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Summary",
+          "default": "Fit & sizing"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body",
+          "default": "Boxy through the body with a set shoulder. True to size for a relaxed fit; size down for a closer one. Model is 6'1\" wearing a large."
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label (optional)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "link_go",
+          "label": "View hook (data-go)",
+          "info": "Leave blank for a normal link. Set to a view name (shipping, faq, contact\u2026) to keep the in-page navigation the store script does."
+        }
+      ]
+    },
+    {
+      "type": "acc_fabric",
+      "name": "Accordion \u2014 Fabric",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Summary",
+          "default": "Fabric & care"
+        },
+        {
+          "type": "textarea",
+          "id": "items",
+          "label": "Fabric notes, one per line",
+          "default": "",
+          "info": "Used when the product has no custom.fabric metafield. With no product the list is written by the store script."
+        },
+        {
+          "type": "textarea",
+          "id": "note",
+          "label": "Note under the list",
+          "default": "Cold wash, inside out, like colours. Tumble low or hang. No softener, which coats heavyweight cotton and stops it breathing."
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "acc_size",
+      "name": "Accordion \u2014 Size guide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Summary",
+          "default": "Size guide"
+        },
+        {
+          "type": "textarea",
+          "id": "rows_top",
+          "label": "Table \u2014 tops",
+          "default": "Size, Chest, Length, Shoulder\nXS, 19, 26.5, 17\nS, 20.5, 28, 18\nM, 22, 29, 19\nL, 23.5, 30, 20\nXL, 25, 31, 21\nXXL, 26.5, 32, 22",
+          "info": "One row per line, cells separated by commas. The first line is the header."
+        },
+        {
+          "type": "textarea",
+          "id": "rows_bottom",
+          "label": "Table \u2014 bottoms",
+          "default": "Size, Waist, Inseam, Leg opening\n28, 14, 30, 7.5\n30, 15, 30, 7.75\n32, 16, 30, 8\n34, 17, 30, 8.25\n36, 18, 30, 8.5\n38, 19, 30, 8.75",
+          "info": "Used for the product type named in Size guide table above."
+        },
+        {
+          "type": "textarea",
+          "id": "note",
+          "label": "Note under the table",
+          "default": "Measurements are of the garment, laid flat, in inches. Allow half an inch either way."
+        },
+        {
+          "type": "checkbox",
+          "id": "open",
+          "label": "Open by default",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "max_blocks": 16,
+  "presets": [
+    {
+      "name": "Product detail",
+      "blocks": [
+        {
+          "type": "trust",
+          "settings": {
+            "figure": "48h",
+            "label": "dispatch"
+          }
+        },
+        {
+          "type": "trust",
+          "settings": {
+            "figure": "30 days",
+            "label": "to return"
+          }
+        },
+        {
+          "type": "trust",
+          "settings": {
+            "figure": "1 year",
+            "label": "against faults"
+          }
+        },
+        {
+          "type": "acc_details",
+          "settings": {
+            "title": "Details",
+            "open": true
+          }
+        },
+        {
+          "type": "acc_text",
+          "settings": {
+            "title": "Fit & sizing",
+            "body": "Boxy through the body with a set shoulder. True to size for a relaxed fit; size down for a closer one. Model is 6'1\" wearing a large.",
+            "open": false,
+            "link_label": "",
+            "link_go": ""
+          }
+        },
+        {
+          "type": "acc_fabric",
+          "settings": {
+            "title": "Fabric & care",
+            "note": "Cold wash, inside out, like colours. Tumble low or hang. No softener, which coats heavyweight cotton and stops it breathing.",
+            "open": false
+          }
+        },
+        {
+          "type": "acc_size",
+          "settings": {
+            "title": "Size guide",
+            "note": "Measurements are of the garment, laid flat, in inches. Allow half an inch either way.",
+            "open": false
+          }
+        },
+        {
+          "type": "acc_text",
+          "settings": {
+            "title": "Shipping & returns",
+            "body": "Picked the same day and dispatched within 48 hours. Free shipping over $125, $8 standard otherwise. 30 days to return anything unworn with tags attached, return shipping covered inside the US.",
+            "open": false,
+            "link_label": "Read the full policy",
+            "link": "/pages/shipping",
+            "link_go": "shipping"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

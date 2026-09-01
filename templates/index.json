@@ -1,11 +1,223 @@
 {
   "sections": {
-    "landing": {
-      "type": "ryvt-landing",
+    "hero": {
+      "type": "home-hero",
       "settings": {}
+    },
+    "stats": {
+      "type": "home-stats",
+      "settings": {},
+      "blocks": {
+        "stats_b1": {
+          "type": "stat",
+          "settings": {
+            "figure": "8.2 oz",
+            "label": "The cloth",
+            "note": "Heavyweight cotton, garment-dyed, washed before it is cut."
+          }
+        },
+        "stats_b2": {
+          "type": "stat",
+          "settings": {
+            "figure": "48h",
+            "label": "Dispatch",
+            "note": "Orders leave Metro Detroit inside two days."
+          }
+        },
+        "stats_b3": {
+          "type": "stat",
+          "settings": {
+            "figure": "8",
+            "label": "Styles in the run",
+            "note": "Restocked rather than replaced when they sell out."
+          }
+        },
+        "stats_b4": {
+          "type": "stat",
+          "settings": {
+            "figure": "30 days",
+            "label": "To change your mind",
+            "note": "Unworn, tags on, shipping covered both ways."
+          }
+        }
+      },
+      "block_order": [
+        "stats_b1",
+        "stats_b2",
+        "stats_b3",
+        "stats_b4"
+      ]
+    },
+    "marquee": {
+      "type": "home-marquee",
+      "settings": {},
+      "blocks": {
+        "marquee_b1": {
+          "type": "word",
+          "settings": {
+            "text": "Built in Metro Detroit",
+            "dim": false
+          }
+        },
+        "marquee_b2": {
+          "type": "word",
+          "settings": {
+            "text": "8.2 oz heavyweight cotton",
+            "dim": true
+          }
+        },
+        "marquee_b3": {
+          "type": "word",
+          "settings": {
+            "text": "Small runs, restocked",
+            "dim": false
+          }
+        },
+        "marquee_b4": {
+          "type": "word",
+          "settings": {
+            "text": "Ships in 48 hours",
+            "dim": true
+          }
+        },
+        "marquee_b5": {
+          "type": "word",
+          "settings": {
+            "text": "Free over $125",
+            "dim": false
+          }
+        },
+        "marquee_b6": {
+          "type": "word",
+          "settings": {
+            "text": "One block, eight styles",
+            "dim": true
+          }
+        }
+      },
+      "block_order": [
+        "marquee_b1",
+        "marquee_b2",
+        "marquee_b3",
+        "marquee_b4",
+        "marquee_b5",
+        "marquee_b6"
+      ]
+    },
+    "categories": {
+      "type": "home-category-row",
+      "settings": {},
+      "blocks": {
+        "categories_b1": {
+          "type": "category",
+          "settings": {
+            "title": "Heavyweight Tees",
+            "count": "4 styles",
+            "tone": ""
+          }
+        },
+        "categories_b2": {
+          "type": "category",
+          "settings": {
+            "title": "Tank Tops",
+            "count": "2 styles",
+            "tone": "alt"
+          }
+        },
+        "categories_b3": {
+          "type": "category",
+          "settings": {
+            "title": "Cargo & Shorts",
+            "count": "2 styles",
+            "tone": "dark"
+          }
+        },
+        "categories_b4": {
+          "type": "category",
+          "settings": {
+            "title": "Shop All",
+            "count": "8 styles",
+            "tone": "alt"
+          }
+        }
+      },
+      "block_order": [
+        "categories_b1",
+        "categories_b2",
+        "categories_b3",
+        "categories_b4"
+      ]
+    },
+    "rail": {
+      "type": "home-product-rail",
+      "settings": {
+        "tight": true
+      }
+    },
+    "teaser": {
+      "type": "home-story-teaser",
+      "settings": {},
+      "blocks": {
+        "teaser_b1": {
+          "type": "tile",
+          "settings": {
+            "caption": "Way 01",
+            "tone": ""
+          }
+        },
+        "teaser_b2": {
+          "type": "tile",
+          "settings": {
+            "caption": "Way 02",
+            "tone": "alt"
+          }
+        },
+        "teaser_b3": {
+          "type": "tile",
+          "settings": {
+            "caption": "Way 03",
+            "tone": "dark"
+          }
+        },
+        "teaser_b4": {
+          "type": "tile",
+          "settings": {
+            "caption": "Way 04",
+            "tone": ""
+          }
+        }
+      },
+      "block_order": [
+        "teaser_b1",
+        "teaser_b2",
+        "teaser_b3",
+        "teaser_b4"
+      ]
+    },
+    "split": {
+      "type": "home-editorial-split",
+      "settings": {}
+    },
+    "rail2": {
+      "type": "home-product-rail",
+      "settings": {
+        "eyebrow": "Back in stock",
+        "heading": "Restocked this week.",
+        "body": "",
+        "more_label": "Shop all",
+        "rail": "rail2",
+        "tight": false
+      }
     }
   },
   "order": [
-    "landing"
+    "hero",
+    "stats",
+    "marquee",
+    "categories",
+    "rail",
+    "teaser",
+    "split",
+    "rail2"
   ]
 }

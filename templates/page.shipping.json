@@ -1,0 +1,84 @@
+{
+  "sections": {
+    "doc": {
+      "type": "legal-doc",
+      "settings": {
+        "eyebrow": "Help",
+        "heading": "Shipping and Returns",
+        "intro": "What it costs, when it arrives, and exactly how to send something back if it is not right.",
+        "nav_title": "On this page",
+        "anchor_prefix": "shipping",
+        "meta1": "Dispatch <b>48 hours</b>",
+        "meta2": "Returns window <b>30 days</b>",
+        "meta3": "Free over <b>$125</b>"
+      },
+      "blocks": {
+        "doc_b1": {
+          "type": "clause",
+          "settings": {
+            "title": "Dispatch",
+            "body": "<p>Orders placed before 2pm Eastern on a business day are picked the same day and leave the workshop within forty-eight hours. Orders placed at a weekend leave on the Monday.</p> <p>You get a tracking link the moment the label is scanned, not when it is printed, so the first movement you see is a real one.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b2": {
+          "type": "clause",
+          "settings": {
+            "title": "Rates and times",
+            "body": "<p>Duties and import taxes on orders outside the United States are payable by you on delivery. We cannot estimate them for you; your carrier can.</p>",
+            "table": "<table class=\"doc-tbl\">\n<tr><th>Service</th><th>Time</th><th>Cost</th></tr>\n<tr><td>Standard, US</td><td>3 to 5 business days</td><td>$8</td></tr>\n<tr><td>Express, US</td><td>1 to 2 business days</td><td>$18</td></tr>\n<tr><td>Any US order over $125</td><td>3 to 5 business days</td><td>Free</td></tr>\n<tr><td>Canada</td><td>6 to 10 business days</td><td>$22</td></tr>\n</table>",
+            "table_first": true
+          }
+        },
+        "doc_b3": {
+          "type": "clause",
+          "settings": {
+            "title": "Returns",
+            "body": "<p>Thirty days from delivery, for any reason. The piece must be unworn, unwashed and have its tags attached. We do not accept returns on anything altered or laundered.</p> <ul><li>Start the return with your order number and email.</li><li>Print the label we send you, or ask for a QR code if you have no printer.</li><li>Drop the parcel at any carrier point. Return shipping is free within the United States.</li></ul> <p>Refunds are issued to the original payment method within three business days of the parcel reaching us. Your bank then takes its own time, usually another two to five days.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b4": {
+          "type": "clause",
+          "settings": {
+            "title": "Exchanges",
+            "body": "<p>Exchanges are handled as a return plus a new order, so the size you want is held the moment you start the return rather than waiting for the first parcel to travel back.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b5": {
+          "type": "clause",
+          "settings": {
+            "title": "Faults",
+            "body": "<p>If a seam fails or a fabric fault appears in the first year of ordinary wear, send a photograph and the order number. We repair, replace, or refund, in that order of preference, and we cover the shipping both ways. Ordinary wear, fading from washing, and damage from alteration are not faults.</p>",
+            "table": "",
+            "table_first": true
+          }
+        },
+        "doc_b6": {
+          "type": "clause",
+          "settings": {
+            "title": "Lost and damaged parcels",
+            "body": "<p>If tracking has not moved for five business days, or the parcel arrives damaged, tell us within thirty days of dispatch. We open the carrier claim ourselves and send a replacement without waiting for it to settle.</p>",
+            "table": "",
+            "table_first": true
+          }
+        }
+      },
+      "block_order": [
+        "doc_b1",
+        "doc_b2",
+        "doc_b3",
+        "doc_b4",
+        "doc_b5",
+        "doc_b6"
+      ]
+    }
+  },
+  "order": [
+    "doc"
+  ]
+}

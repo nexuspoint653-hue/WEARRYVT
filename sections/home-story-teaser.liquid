@@ -1,0 +1,233 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<section class="keep">
+  <div class="wrap keep-in">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<div class="lab">{{ section.settings.eyebrow }}</div>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h3 style="margin-top:10px">{{ section.settings.heading }}</h3>{%- endif -%}
+      {%- if section.settings.body != blank -%}<p>{{ section.settings.body }}</p>{%- endif -%}
+      {%- if section.settings.stamp != blank -%}<span class="stamp">{{ section.settings.stamp }}</span>{%- endif -%}
+    </div>
+    <div class="four">
+      {%- for block in section.blocks -%}
+      {%- if block.settings.image != blank -%}
+      <span class="ph" style="background-image:url({{ block.settings.image | image_url: width: 800 }});background-size:cover;background-position:center" {{ block.shopify_attributes }}><em>{{ block.settings.caption }}</em></span>
+      {%- else -%}
+      <span class="ph {{ block.settings.tone }}" {{ block.shopify_attributes }}><em>{{ block.settings.caption }}</em></span>
+      {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Story teaser",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Existing section \u2014 kept as built"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Renaissance Tee. One Tee, Four Ways."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body",
+      "default": "Your scroll storytelling block is untouched by this redesign. It keeps its own layout, copy and scroll behaviour; the new header and footer simply sit around it."
+    },
+    {
+      "type": "text",
+      "id": "stamp",
+      "label": "Stamp",
+      "default": "Not modified"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption",
+          "default": "Way 01"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Placeholder tone",
+          "default": "",
+          "options": [
+            {
+              "value": "",
+              "label": "Light"
+            },
+            {
+              "value": "alt",
+              "label": "Mid"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Story teaser",
+      "blocks": [
+        {
+          "type": "tile",
+          "settings": {
+            "caption": "Way 01",
+            "tone": ""
+          }
+        },
+        {
+          "type": "tile",
+          "settings": {
+            "caption": "Way 02",
+            "tone": "alt"
+          }
+        },
+        {
+          "type": "tile",
+          "settings": {
+            "caption": "Way 03",
+            "tone": "dark"
+          }
+        },
+        {
+          "type": "tile",
+          "settings": {
+            "caption": "Way 04",
+            "tone": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

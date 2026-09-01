@@ -1,0 +1,247 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<section class="wrap br-source">
+  <div class="br-source-txt">
+    {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+    <div class="br-cols">
+      {%- for block in section.blocks -%}
+      <p {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+      {%- endfor -%}
+    </div>
+  </div>
+  <figure class="br-tall">
+    {%- if section.settings.tall_image != blank -%}<span class="ph" style="background-image:url({{ section.settings.tall_image | image_url: width: 1600 }});background-size:cover;background-position:center"></span>{%- else -%}<span class="ph {{ section.settings.tall_tone }}"></span>{%- endif -%}
+    {%- if section.settings.tall_caption != blank -%}<figcaption class="br-cap">{{ section.settings.tall_caption }}</figcaption>{%- endif -%}
+  </figure>
+  <figure class="br-small">
+    {%- if section.settings.small_image != blank -%}<span class="ph" style="background-image:url({{ section.settings.small_image | image_url: width: 1200 }});background-size:cover;background-position:center"></span>{%- else -%}<span class="ph {{ section.settings.small_tone }}"></span>{%- endif -%}
+    {%- if section.settings.small_caption != blank -%}<figcaption class="br-cap">{{ section.settings.small_caption }}</figcaption>{%- endif -%}
+  </figure>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Brand sourcing",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made properly: heavyweight cotton, washed before it is ever cut."
+    },
+    {
+      "type": "header",
+      "content": "Tall image"
+    },
+    {
+      "type": "image_picker",
+      "id": "tall_image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "tall_tone",
+      "label": "Placeholder tone (used when no image)",
+      "default": "",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "tall_caption",
+      "label": "Caption",
+      "default": "(Cut and finished in Metro Detroit)"
+    },
+    {
+      "type": "header",
+      "content": "Small image"
+    },
+    {
+      "type": "image_picker",
+      "id": "small_image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "small_tone",
+      "label": "Placeholder tone (used when no image)",
+      "default": "alt",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "small_caption",
+      "label": "Caption",
+      "default": "(8.2 oz cotton)"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Paragraph",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "At RYVT we choose the cloth before we design to it. Every piece is 8.2 oz cotton, garment-dyed, and washed twice at the mill so the shrink happens there rather than in your dryer."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Brand sourcing",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "text": "At RYVT we choose the cloth before we design to it. Every piece is 8.2 oz cotton, garment-dyed, and washed twice at the mill so the shrink happens there rather than in your dryer."
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "text": "The run is deliberately small. Eight styles, one block, restocked every four to six weeks rather than replaced with something cheaper when it sells out."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,20 @@
+{%- comment -%}
+  Global brand overrides as CSS custom properties. A value is only emitted when
+  the merchant has actually set one - capturing first means an unset setting can
+  never write an empty variable and wipe the palette the design ships with.
+{%- endcomment -%}
+{%- capture brand -%}
+{%- capture v -%}{{ settings.color_ink }}{%- endcapture -%}{%- if v != blank -%}--ink:{{ v }};{%- endif -%}
+{%- capture v -%}{{ settings.color_white }}{%- endcapture -%}{%- if v != blank -%}--white:{{ v }};{%- endif -%}
+{%- capture v -%}{{ settings.color_paper }}{%- endcapture -%}{%- if v != blank -%}--paper:{{ v }};{%- endif -%}
+{%- capture v -%}{{ settings.color_line }}{%- endcapture -%}{%- if v != blank -%}--line:{{ v }};{%- endif -%}
+{%- capture v -%}{{ settings.color_muted }}{%- endcapture -%}{%- if v != blank -%}--muted:{{ v }};{%- endif -%}
+{%- capture v -%}{{ settings.color_cream }}{%- endcapture -%}{%- if v != blank -%}--cream:{{ v }};{%- endif -%}
+{%- capture v -%}{{ settings.color_stock }}{%- endcapture -%}{%- if v != blank -%}--stock:{{ v }};{%- endif -%}
+{%- capture v -%}{{ settings.color_brass }}{%- endcapture -%}{%- if v != blank -%}--brass:{{ v }};{%- endif -%}
+{%- capture v -%}{{ settings.easing }}{%- endcapture -%}{%- if v != blank -%}--e:{{ v }};{%- endif -%}
+{%- capture v -%}{{ settings.font_heading.family }}{%- endcapture -%}{%- if v != blank -%}--sans:{{ v }},{{ settings.font_heading.fallback_families }};{%- endif -%}
+{%- capture v -%}{{ settings.font_mono.family }}{%- endcapture -%}{%- if v != blank -%}--mono:{{ v }},{{ settings.font_mono.fallback_families }};{%- endif -%}
+{%- assign _hh = settings.hero_height | plus: 0 -%}{%- if _hh > 0 -%}--hero-h:{{ _hh }}vh;{%- endif -%}
+{%- endcapture -%}
+{%- if brand != blank -%}<style>:root{ {{ brand }} }</style>{%- endif -%}

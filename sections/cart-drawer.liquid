@@ -1,0 +1,439 @@
+{% render 'section-style', s: section %}
+{%- comment -%}
+  The bag drawer.
+
+  Two branches, one shape. When the theme is running on a real store the drawer
+  is rendered server-side from the `cart` object - real line items, real
+  subtotal, real free-shipping progress - using exactly the markup, the class
+  names and the data-* hooks that paintCart() in ryvt-store.js builds today, so
+  ryvt-store.css needs no change at all. ryvt-cart.js then drives it against
+  Shopify's AJAX cart API and re-renders this section after every change.
+
+  When there is nothing real to show, the original JS-driven drawer is emitted
+  byte-for-byte and the demo cart in ryvt-store.js keeps working untouched.
+
+  The signal for "real store": the cart object exists (`cart.item_count` is not
+  nil - it is nil only where Shopify gives the template no cart) AND the shop
+  actually has something to sell (`collections.all.products_count > 0`, the
+  automatic all-products collection Shopify always maintains) - or the bag
+  already holds something, which can only happen on a real store. An unstocked
+  store with an empty bag therefore always falls back. `cart_mode` lets the
+  merchant pin either branch.
+
+  ryvt-cart.js does nothing at all unless window.__RYVT_REAL_CART__ is set, and
+  that flag is only ever printed by the real branch below.
+{%- endcomment -%}
+{%- liquid
+  assign bag_n = cart.item_count | plus: 0
+  assign shop_n = collections.all.products_count | plus: 0
+
+  assign has_cart = false
+  if cart.item_count != nil
+    assign has_cart = true
+  endif
+
+  assign real_cart = false
+  if has_cart and shop_n > 0
+    assign real_cart = true
+  elsif has_cart and bag_n > 0
+    assign real_cart = true
+  endif
+
+  assign mode = section.settings.cart_mode | default: 'auto'
+  if mode == 'demo'
+    assign real_cart = false
+  elsif mode == 'real' and has_cart
+    assign real_cart = true
+  endif
+
+  assign sep = section.settings.option_separator | default: '/'
+  assign thr = section.settings.free_threshold | default: 125 | times: 100 | plus: 0
+  assign paid = cart.total_price | plus: 0
+  assign left = 0
+  assign pct = 100
+  if thr > 0 and paid < thr
+    assign left = thr | minus: paid
+    assign pct = paid | times: 100 | divided_by: thr
+  endif
+-%}
+{%- if real_cart %}
+<aside aria-label="{{ section.settings.drawer_aria }}" class="cart{% if bag_n == 0 %} empty{% endif %}" data-cart="" data-cart-section="{{ section.id }}" data-cart-url="{{ routes.cart_url }}" data-cart-add-url="{{ routes.cart_add_url }}" data-cart-change-url="{{ routes.cart_change_url }}" data-cart-checkout-url="{{ section.settings.checkout_url | default: '/checkout' }}" hidden="">
+<div class="cart-scrim" data-cart-close=""></div>
+<div class="cart-panel">
+<header class="cart-hd">
+<h3>{{ section.settings.title }} <span class="cart-n" data-cart-count="">{{ bag_n }}</span></h3>
+<button aria-label="{{ section.settings.close_label }}" data-cart-close="" type="button">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24" width="16">
+<path d="M6 6l12 12M18 6L6 18"></path></svg>
+</button>
+</header>
+<div class="cart-ship" data-cart-ship="">
+<div class="cart-bar"><i data-cart-bar="" style="width:{{ pct }}%"></i></div>
+<p data-cart-ship-msg="">{% if left > 0 %}{{ section.settings.ship_pre }} <b>{{ left | money }}</b> {{ section.settings.ship_post }}{% else %}{{ section.settings.ship_unlocked }}{% endif %}</p>
+</div>
+<div class="cart-items" data-cart-items="">{% for item in cart.items %}{%- liquid
+  assign parts = ''
+  for opt in item.options_with_values
+    if opt.value == 'Default Title' or opt.value == blank
+      continue
+    endif
+    if parts != ''
+      assign parts = parts | append: ' ' | append: sep | append: ' '
+    endif
+    assign parts = parts | append: opt.value
+  endfor
+  if parts == ''
+    assign parts = item.variant.title | remove: 'Default Title' | strip
+  endif
+-%}
+<div class="cart-line" data-key="{{ item.key }}" data-line="{{ forloop.index }}" data-line-qty="{{ item.quantity }}">
+<span class="thumb"{% if item.image %} style="background-image:url({{ item.image | image_url: width: 200 }});background-size:cover;background-position:50% 50%"{% endif %}></span>
+<div><b>{{ item.product.title | escape }}</b><span>{{ parts | escape }}</span>
+<div class="cart-qty">
+<button type="button" data-qty="-1" data-i="{{ forloop.index0 }}" data-line="{{ forloop.index }}" data-key="{{ item.key }}" data-line-qty="{{ item.quantity }}" aria-label="{{ section.settings.qty_down_label }}">&minus;</button>
+<span>{{ item.quantity }}</span>
+<button type="button" data-qty="1" data-i="{{ forloop.index0 }}" data-line="{{ forloop.index }}" data-key="{{ item.key }}" data-line-qty="{{ item.quantity }}" aria-label="{{ section.settings.qty_up_label }}">+</button>
+</div>
+</div>
+<div><span class="price">{{ item.final_line_price | money }}</span>
+<a class="cart-x" href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" data-remove="{{ forloop.index0 }}" data-line="{{ forloop.index }}" data-key="{{ item.key }}">{{ section.settings.remove_label }}</a></div>
+</div>
+{% endfor %}</div>
+<div class="cart-empty" data-cart-empty="">
+<p>{{ section.settings.empty_text }}</p>
+<a class="btn btn-dark" data-cart-close="" data-go="shop" href="{{ section.settings.empty_link | default: routes.all_products_collection_url }}">{{ section.settings.empty_btn }}</a>
+</div>
+<footer class="cart-ft">
+<div class="cart-row"><span>{{ section.settings.subtotal_label }}</span><b data-cart-total="">{{ cart.total_price | money }}</b></div>
+<div class="cart-row muted"><span>{{ section.settings.shipping_label }}</span><span data-cart-shipline="">{% if left > 0 %}{{ section.settings.shipping_value }}{% else %}{{ section.settings.shipping_value_free }}{% endif %}</span></div>
+<button class="btn btn-dark cart-go" data-checkout=""{% if bag_n == 0 %} disabled=""{% endif %}>{{ section.settings.checkout_label }}</button>
+{%- if section.settings.note != blank -%}<p class="cart-note">{{ section.settings.note }}</p>{%- endif -%}
+</footer>
+</div>
+</aside>
+<script>/* Real bag on. Snapshot the panel while it is still pristine: ryvt-store.js
+runs its count-up pass over the whole document and would otherwise rewrite every
+figure in here - quantities, line prices, even "Slate / 32" - down to zero.
+ryvt-cart.js puts this back. */
+window.__RYVT_REAL_CART__=true;
+(function(){var a=document.querySelector('[data-cart]');if(a)window.__RYVT_CART_HTML__=a.innerHTML;}());</script>
+{%- else %}
+<aside aria-label="{{ section.settings.drawer_aria }}" class="cart" data-cart="" hidden="">
+<div class="cart-scrim" data-cart-close=""></div>
+<div class="cart-panel">
+<header class="cart-hd">
+<h3>{{ section.settings.title }} <span class="cart-n" data-cart-count="">0</span></h3>
+<button aria-label="{{ section.settings.close_label }}" data-cart-close="" type="button">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24" width="16">
+<path d="M6 6l12 12M18 6L6 18"></path></svg>
+</button>
+</header>
+<div class="cart-ship" data-cart-ship="">
+<div class="cart-bar"><i data-cart-bar=""></i></div>
+<p data-cart-ship-msg="">{{ section.settings.ship_pre }}{% if section.settings.ship_amount != blank %} <b>{{ section.settings.ship_amount }}</b>{% endif %} {{ section.settings.ship_post }}</p>
+</div>
+<div class="cart-items" data-cart-items=""></div>
+<div class="cart-empty" data-cart-empty="">
+<p>{{ section.settings.empty_text }}</p>
+<a class="btn btn-dark" data-cart-close="" data-go="shop" href="{{ section.settings.empty_link | default: routes.all_products_collection_url }}">{{ section.settings.empty_btn }}</a>
+</div>
+<footer class="cart-ft">
+<div class="cart-row"><span>{{ section.settings.subtotal_label }}</span><b data-cart-total="">$0</b></div>
+<div class="cart-row muted"><span>{{ section.settings.shipping_label }}</span><span data-cart-shipline="">{{ section.settings.shipping_value }}</span></div>
+<button class="btn btn-dark cart-go" data-checkout="" disabled="">{{ section.settings.checkout_label }}</button>
+{%- if section.settings.note != blank -%}<p class="cart-note">{{ section.settings.note }}</p>{%- endif -%}
+</footer>
+</div>
+</aside>{% endif -%}
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Drawer"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Your bag"
+    },
+    {
+      "type": "text",
+      "id": "drawer_aria",
+      "label": "Drawer accessible name",
+      "default": "Your bag"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Close button accessible name",
+      "default": "Close bag"
+    },
+    {
+      "type": "header",
+      "content": "Live cart",
+      "info": "Auto uses the real Shopify cart as soon as the shop has products or the bag is not empty, and the original demo drawer before that."
+    },
+    {
+      "type": "select",
+      "id": "cart_mode",
+      "label": "Cart source",
+      "default": "auto",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto (real cart when the store has products)"
+        },
+        {
+          "value": "real",
+          "label": "Always the real Shopify cart"
+        },
+        {
+          "value": "demo",
+          "label": "Always the demo cart"
+        }
+      ]
+    },
+    {
+      "type": "url",
+      "id": "checkout_url",
+      "label": "Checkout link (blank = /checkout)"
+    },
+    {
+      "type": "header",
+      "content": "Free shipping bar"
+    },
+    {
+      "type": "number",
+      "id": "free_threshold",
+      "label": "Free shipping over",
+      "default": 125,
+      "info": "In your store currency, no symbol. Drives the progress bar and the message on the real cart."
+    },
+    {
+      "type": "text",
+      "id": "ship_pre",
+      "label": "Text before the amount",
+      "default": "Add"
+    },
+    {
+      "type": "text",
+      "id": "ship_amount",
+      "label": "Threshold shown on the demo drawer (bold)",
+      "default": "$125"
+    },
+    {
+      "type": "text",
+      "id": "ship_post",
+      "label": "Text after the amount",
+      "default": "more for free shipping"
+    },
+    {
+      "type": "text",
+      "id": "ship_unlocked",
+      "label": "Message once the threshold is met",
+      "default": "Free shipping unlocked"
+    },
+    {
+      "type": "header",
+      "content": "Line items"
+    },
+    {
+      "type": "text",
+      "id": "option_separator",
+      "label": "Separator between variant options",
+      "default": "/"
+    },
+    {
+      "type": "text",
+      "id": "qty_down_label",
+      "label": "Decrease quantity accessible name",
+      "default": "One fewer"
+    },
+    {
+      "type": "text",
+      "id": "qty_up_label",
+      "label": "Increase quantity accessible name",
+      "default": "One more"
+    },
+    {
+      "type": "text",
+      "id": "remove_label",
+      "label": "Remove link",
+      "default": "Remove"
+    },
+    {
+      "type": "header",
+      "content": "Empty state"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Copy",
+      "default": "Nothing in the bag yet."
+    },
+    {
+      "type": "text",
+      "id": "empty_btn",
+      "label": "Button",
+      "default": "Shop the drop"
+    },
+    {
+      "type": "url",
+      "id": "empty_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Totals"
+    },
+    {
+      "type": "text",
+      "id": "subtotal_label",
+      "label": "Subtotal label",
+      "default": "Subtotal"
+    },
+    {
+      "type": "text",
+      "id": "shipping_label",
+      "label": "Shipping label",
+      "default": "Shipping"
+    },
+    {
+      "type": "text",
+      "id": "shipping_value",
+      "label": "Shipping value",
+      "default": "Calculated at checkout"
+    },
+    {
+      "type": "text",
+      "id": "shipping_value_free",
+      "label": "Shipping value once free shipping is unlocked",
+      "default": "Free"
+    },
+    {
+      "type": "text",
+      "id": "checkout_label",
+      "label": "Checkout button",
+      "default": "Checkout"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Note",
+      "default": "Taxes and shipping calculated at checkout. Payment is handled by Shopify."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart drawer"
+    }
+  ]
+}
+{% endschema %}

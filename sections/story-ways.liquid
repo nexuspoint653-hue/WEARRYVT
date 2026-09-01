@@ -1,0 +1,252 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+<section class="st-ways wrap" data-ways="">
+  <div class="st-stage">
+    <div class="st-stack">
+      {%- for block in section.blocks -%}
+      <span class="ph{% if block.settings.tone != blank %} {{ block.settings.tone }}{% endif %} st-shot{% if forloop.first %} on{% endif %}"{% if block.settings.image != blank %} style="background-image:url({{ block.settings.image | image_url: width: 1600 }});background-size:cover;background-position:center"{% endif %} data-way-shot="{{ forloop.index }}"></span>
+      {%- endfor -%}
+      {%- assign way_total = section.blocks.size -%}
+      {%- if way_total < 10 -%}{%- assign way_total = way_total | prepend: '0' -%}{%- endif -%}
+      <span class="st-count"><b data-way-n="">01</b> / {{ way_total }}</span>
+    </div>
+  </div>
+  <div class="st-steps">
+    {%- for block in section.blocks -%}
+    <article class="st-step" data-way="{{ forloop.index }}"{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id }}"{% endif %} {{ block.shopify_attributes }}>
+      {%- if block.settings.num != blank -%}<span class="st-n">{{ block.settings.num }}</span>{%- endif -%}
+      <h2>{{ block.settings.heading }}</h2>
+      {%- if block.settings.body != blank -%}<p>{{ block.settings.body }}</p>{%- endif -%}
+      {%- if block.settings.note != blank -%}<p class="st-note">{{ block.settings.note }}</p>{%- endif -%}
+    </article>
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "One tee, four ways",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "way",
+      "name": "Way",
+      "settings": [
+        {
+          "type": "text",
+          "id": "num",
+          "label": "Number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Worn open"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body",
+          "default": "Straight out of the bag, nothing done to it. The collar is ribbed and double-stitched so it keeps its round after the first wash instead of going wavy at the back of the neck."
+        },
+        {
+          "type": "textarea",
+          "id": "note",
+          "label": "Note",
+          "default": "Shown in Bone, size L on a 6'1\" frame."
+        },
+        {
+          "type": "text",
+          "id": "anchor_id",
+          "label": "Anchor id (linked from the contents list)",
+          "default": "way-1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Shot"
+        },
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Placeholder tone (used when no image)",
+          "default": "",
+          "options": [
+            {
+              "value": "",
+              "label": "Light"
+            },
+            {
+              "value": "alt",
+              "label": "Mid"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "One tee, four ways",
+      "blocks": [
+        {
+          "type": "way",
+          "settings": {
+            "num": "01",
+            "heading": "Worn open",
+            "body": "Straight out of the bag, nothing done to it. The collar is ribbed and double-stitched so it keeps its round after the first wash instead of going wavy at the back of the neck.",
+            "note": "Shown in Bone, size L on a 6'1\" frame.",
+            "anchor_id": "way-1",
+            "tone": ""
+          }
+        },
+        {
+          "type": "way",
+          "settings": {
+            "num": "02",
+            "heading": "Layered",
+            "body": "Under a jacket the boxy cut matters: no sleeve bunching at the bicep, no hem riding up past the waistband when you reach. The shoulder seam sits where your shoulder ends.",
+            "note": "Shown in Washed Black under the Foundry overshirt.",
+            "anchor_id": "way-2",
+            "tone": "alt"
+          }
+        },
+        {
+          "type": "way",
+          "settings": {
+            "num": "03",
+            "heading": "Tucked",
+            "body": "Cut two inches longer than a standard body so a tuck holds through a full day rather than creeping out by lunch. The side seam is flat, so nothing bulks at the belt.",
+            "note": "Shown in Bone with the Standard-Issue cargo.",
+            "anchor_id": "way-3",
+            "tone": "dark"
+          }
+        },
+        {
+          "type": "way",
+          "settings": {
+            "num": "04",
+            "heading": "Oversized",
+            "body": "Size up once and the tee reads as outerwear without losing its shape at the hem. The heavier weight is what makes this work \u2014 a lighter knit would collapse.",
+            "note": "Shown in Chalk, size XXL on the same 6'1\" frame.",
+            "anchor_id": "way-4",
+            "tone": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

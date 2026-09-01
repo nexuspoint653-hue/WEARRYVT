@@ -1,0 +1,403 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+{%- comment -%}
+    Real products when the merchant has pointed this rail at a collection.
+    Nothing picked, or nothing in it, and the original JS-driven container is
+    rendered instead - untouched, data hook and all - so the demo rail still
+    paints itself exactly as it does today.
+{%- endcomment -%}
+{%- liquid
+  assign rail_coll = collections[section.settings.collection]
+  assign rail_products = rail_coll.products
+  assign rail_size = rail_products.size | plus: 0
+  assign rail_count = section.settings.count | default: 4 | plus: 0
+  assign has_products = false
+  if rail_size > 0 and rail_count > 0
+    assign has_products = true
+  endif
+  assign gcols = section.settings.columns | default: 'default'
+  assign gcols_n = gcols | plus: 0
+  assign gcols_m = gcols_n
+  if gcols_m > 3
+    assign gcols_m = 3
+  endif
+  assign gcols_s = gcols_n
+  if gcols_s > 2
+    assign gcols_s = 2
+  endif
+-%}
+<section class="sec wrap"{% if section.settings.tight %} style="padding-top:0"{% endif %}>
+  <div class="sec-h">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}<div class="lab">{{ section.settings.eyebrow }}</div>{%- endif -%}
+      {%- if section.settings.heading != blank -%}<h2 style="margin-top:8px">{{ section.settings.heading }}</h2>{%- endif -%}
+      {%- if section.settings.body != blank -%}<p>{{ section.settings.body }}</p>{%- endif -%}
+    </div>
+    {%- if section.settings.more_label != blank -%}
+    <a class="more" href="{{ section.settings.more_link | default: routes.all_products_collection_url }}">{{ section.settings.more_label }}</a>
+    {%- endif -%}
+  </div>
+{%- if has_products %}
+{%- if gcols != 'default' %}
+  <style>#shopify-section-{{ section.id }} .grid{grid-template-columns:repeat({{ gcols_n }},1fr)}@media(max-width:1000px){#shopify-section-{{ section.id }} .grid{grid-template-columns:repeat({{ gcols_m }},1fr)}}@media(max-width:749px){#shopify-section-{{ section.id }} .grid{grid-template-columns:repeat({{ gcols_s }},1fr)}}</style>
+{%- endif %}
+  <div class="grid">
+    {%- for card_product in rail_products limit: rail_count %}
+    {% render 'product-card', product: card_product, index: forloop.index, tone_index: forloop.index0, ratio: section.settings.card_ratio, hover: section.settings.card_hover, badge_mode: section.settings.card_badge, swatch_mode: section.settings.card_swatches, colour_mode: section.settings.card_colour %}
+    {%- endfor %}
+  </div>
+{%- else %}
+  <div class="grid" data-{{ section.settings.rail }}=""></div>
+{%- endif %}
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product rail",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Shop the look"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Straight off the line."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body",
+      "default": "Every card carries the same information in the same place: name, price, the colourways that actually exist."
+    },
+    {
+      "type": "text",
+      "id": "more_label",
+      "label": "Link label",
+      "default": "View all 8"
+    },
+    {
+      "type": "url",
+      "id": "more_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "paragraph",
+      "content": "Pick a collection and this grid is rendered from real products. Leave it empty - or empty the collection - and the storefront script keeps painting its own cards into the container below, exactly as it does today."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "count",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "label": "Products shown",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed (4)"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "paragraph",
+      "content": "Left on Theme default these follow Theme settings, Product cards."
+    },
+    {
+      "type": "select",
+      "id": "card_ratio",
+      "label": "Image shape",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "3/4",
+          "label": "Portrait 3:4 (as designed)"
+        },
+        {
+          "value": "4/5",
+          "label": "Portrait 4:5"
+        },
+        {
+          "value": "2/3",
+          "label": "Tall 2:3"
+        },
+        {
+          "value": "1/1",
+          "label": "Square"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_hover",
+      "label": "On hover",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "video",
+          "label": "Product video, else second image"
+        },
+        {
+          "value": "image",
+          "label": "Second image"
+        },
+        {
+          "value": "none",
+          "label": "Nothing"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_badge",
+      "label": "Badge",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "yes",
+          "label": "Show"
+        },
+        {
+          "value": "no",
+          "label": "Hide"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_swatches",
+      "label": "Colour swatches",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "yes",
+          "label": "Show"
+        },
+        {
+          "value": "no",
+          "label": "Hide"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "card_colour",
+      "label": "Colour name",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "yes",
+          "label": "Show"
+        },
+        {
+          "value": "no",
+          "label": "Hide"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Grid"
+    },
+    {
+      "type": "select",
+      "id": "rail",
+      "label": "Which rail",
+      "default": "rail",
+      "options": [
+        {
+          "value": "rail",
+          "label": "Primary rail"
+        },
+        {
+          "value": "rail2",
+          "label": "Secondary rail"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "tight",
+      "label": "Remove top padding",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product rail"
+    }
+  ]
+}
+{% endschema %}

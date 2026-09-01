@@ -2,9 +2,306 @@
   {
     "name": "theme_info",
     "theme_name": "RYVT",
-    "theme_version": "1.0.0",
+    "theme_version": "2.0.0",
     "theme_author": "RYVT",
     "theme_documentation_url": "https://github.com/nexuspoint653-hue/WEARRYVT",
     "theme_support_url": "https://github.com/nexuspoint653-hue/WEARRYVT"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      },
+      {
+        "type": "text",
+        "id": "brand_city",
+        "label": "City line",
+        "default": "Metro Detroit, Michigan"
+      },
+      {
+        "type": "text",
+        "id": "free_over",
+        "label": "Free shipping threshold",
+        "default": "$125"
+      }
+    ]
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Leave a swatch empty to keep the colour the design ships with."
+      },
+      {
+        "type": "color",
+        "id": "color_ink",
+        "label": "Ink (near-black)"
+      },
+      {
+        "type": "color",
+        "id": "color_paper",
+        "label": "Paper (page background)"
+      },
+      {
+        "type": "color",
+        "id": "color_white",
+        "label": "White"
+      },
+      {
+        "type": "color",
+        "id": "color_line",
+        "label": "Hairline / borders"
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Muted text"
+      },
+      {
+        "type": "color",
+        "id": "color_cream",
+        "label": "Cream (ghost button hover)"
+      },
+      {
+        "type": "color",
+        "id": "color_stock",
+        "label": "Low-stock amber"
+      },
+      {
+        "type": "color",
+        "id": "color_brass",
+        "label": "Accent"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The design ships with Inter and JetBrains Mono. Pick a font here only if you want to replace them."
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Sans (headings and body)",
+        "default": "assistant_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_mono",
+        "label": "Mono (labels and figures)",
+        "default": "assistant_n4"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "hero_height",
+        "min": 0,
+        "max": 120,
+        "step": 5,
+        "unit": "vh",
+        "label": "Hero height (0 = as designed)",
+        "default": 0
+      },
+      {
+        "type": "textarea",
+        "id": "custom_css",
+        "label": "Custom CSS",
+        "info": "Added last, so it wins over everything else."
+      }
+    ]
+  },
+  {
+    "name": "Motion",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "motion",
+        "label": "Animations and transitions",
+        "default": true,
+        "info": "Turn off to freeze every animation site-wide."
+      },
+      {
+        "type": "text",
+        "id": "easing",
+        "label": "Easing curve",
+        "info": "Blank keeps the design's cubic-bezier(.22,.61,.36,1)."
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Every product card on the site - grids, rails and pairs-with - is drawn from these. A section can override any of them."
+      },
+      {
+        "type": "header",
+        "content": "Media"
+      },
+      {
+        "type": "select",
+        "id": "card_ratio",
+        "label": "Image shape",
+        "default": "default",
+        "options": [
+          {
+            "value": "default",
+            "label": "As designed (3:4)"
+          },
+          {
+            "value": "4/5",
+            "label": "Portrait 4:5"
+          },
+          {
+            "value": "2/3",
+            "label": "Tall 2:3"
+          },
+          {
+            "value": "1/1",
+            "label": "Square"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "card_hover",
+        "label": "On hover",
+        "default": "video",
+        "options": [
+          {
+            "value": "video",
+            "label": "Product video, else second image"
+          },
+          {
+            "value": "image",
+            "label": "Second image"
+          },
+          {
+            "value": "none",
+            "label": "Nothing"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "card_image_width",
+        "min": 400,
+        "max": 1600,
+        "step": 100,
+        "unit": "px",
+        "label": "Image width served",
+        "default": 800
+      },
+      {
+        "type": "text",
+        "id": "card_image_sizes",
+        "label": "Image sizes attribute",
+        "default": "(max-width:700px) 50vw, 25vw",
+        "info": "Only change this if you have changed the number of columns everywhere."
+      },
+      {
+        "type": "header",
+        "content": "Badge"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_badge",
+        "label": "Show the badge",
+        "default": true,
+        "info": "A product's own badge comes from its custom.badge metafield."
+      },
+      {
+        "type": "checkbox",
+        "id": "card_badge_auto",
+        "label": "Fall back to an automatic badge",
+        "default": true,
+        "info": "Used when a product has no badge metafield of its own."
+      },
+      {
+        "type": "text",
+        "id": "card_badge_sale_text",
+        "label": "Reduced price badge",
+        "default": "Sale"
+      },
+      {
+        "type": "text",
+        "id": "card_badge_best_text",
+        "label": "Best seller badge",
+        "default": "Best seller",
+        "info": "Shown on products tagged Best seller."
+      },
+      {
+        "type": "text",
+        "id": "card_badge_new_text",
+        "label": "New badge",
+        "default": "New",
+        "info": "Shown on products tagged New."
+      },
+      {
+        "type": "checkbox",
+        "id": "card_badge_sold",
+        "label": "Badge sold-out products",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "card_badge_sold_text",
+        "label": "Sold out badge",
+        "default": "Sold out"
+      },
+      {
+        "type": "header",
+        "content": "Colours"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_swatches",
+        "label": "Show colour swatches",
+        "default": true,
+        "info": "Taken from the option named Colour or Color, using its native swatches."
+      },
+      {
+        "type": "range",
+        "id": "card_swatch_limit",
+        "min": 2,
+        "max": 8,
+        "step": 1,
+        "label": "Swatches before the +n overflow",
+        "default": 5
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_colour",
+        "label": "Show the colour name",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Price and controls"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_compare",
+        "label": "Strike through the compare-at price",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_fav",
+        "label": "Show the save button",
+        "default": true
+      }
+    ]
   }
 ]

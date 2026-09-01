@@ -1,12 +1,40 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "home-hero",
-      "settings": {}
+      "settings": {
+        "eyebrow": "Metro Detroit · Est. 2024",
+        "heading": "Detroit,\nOn Your Back.",
+        "body": "Heavyweight cotton cut for people who actually move. Made in small runs, finished by hand, and named for the streets it came from.",
+        "image": "shopify://shop_images/ryvt-shoot-hero.jpg",
+        "plate_style": "dark",
+        "btn1_label": "Shop the drop",
+        "btn1_link": "",
+        "btn2_label": "One tee, four ways",
+        "btn2_link": "",
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "stats": {
       "type": "home-stats",
-      "settings": {},
       "blocks": {
         "stats_b1": {
           "type": "stat",
@@ -46,11 +74,22 @@
         "stats_b2",
         "stats_b3",
         "stats_b4"
-      ]
+      ],
+      "settings": {
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "marquee": {
       "type": "home-marquee",
-      "settings": {},
       "blocks": {
         "marquee_b1": {
           "type": "word",
@@ -102,17 +141,30 @@
         "marquee_b4",
         "marquee_b5",
         "marquee_b6"
-      ]
+      ],
+      "settings": {
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "categories": {
       "type": "home-category-row",
-      "settings": {},
       "blocks": {
         "categories_b1": {
           "type": "category",
           "settings": {
             "title": "Heavyweight Tees",
             "count": "4 styles",
+            "link": "",
+            "image": "shopify://shop_images/original_27708f89-ea42-4538-bd88-8cfe09b26278.png",
             "tone": ""
           }
         },
@@ -121,6 +173,8 @@
           "settings": {
             "title": "Tank Tops",
             "count": "2 styles",
+            "link": "",
+            "image": "shopify://shop_images/original_d2499fbd-0f85-4298-b7cf-98a58afb6532.png",
             "tone": "alt"
           }
         },
@@ -129,6 +183,8 @@
           "settings": {
             "title": "Cargo & Shorts",
             "count": "2 styles",
+            "link": "",
+            "image": "shopify://shop_images/the-kinetic-cuffed-joggers-gry-02.jpg",
             "tone": "dark"
           }
         },
@@ -137,6 +193,8 @@
           "settings": {
             "title": "Shop All",
             "count": "8 styles",
+            "link": "",
+            "image": "shopify://shop_images/the-foundry-wash-heavyweight-tee-brown-05.jpg",
             "tone": "alt"
           }
         }
@@ -146,17 +204,57 @@
         "categories_b2",
         "categories_b3",
         "categories_b4"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Shop by category",
+        "heading": "Four categories, one fit standard.",
+        "body": "",
+        "more_label": "Shop all",
+        "more_link": "",
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "rail": {
       "type": "home-product-rail",
       "settings": {
-        "tight": true
+        "eyebrow": "Shop the look",
+        "heading": "Straight off the line.",
+        "body": "Every card carries the same information in the same place: name, price, the colourways that actually exist.",
+        "more_label": "View all 8",
+        "more_link": "",
+        "collection": "men",
+        "count": 4,
+        "columns": "default",
+        "card_ratio": "default",
+        "card_hover": "default",
+        "card_badge": "default",
+        "card_swatches": "default",
+        "card_colour": "default",
+        "rail": "rail",
+        "tight": true,
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
       }
     },
     "teaser": {
       "type": "home-story-teaser",
-      "settings": {},
       "blocks": {
         "teaser_b1": {
           "type": "tile",
@@ -192,11 +290,46 @@
         "teaser_b2",
         "teaser_b3",
         "teaser_b4"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Existing section — kept as built",
+        "heading": "The Renaissance Tee. One Tee, Four Ways.",
+        "body": "Your scroll storytelling block is untouched by this redesign. It keeps its own layout, copy and scroll behaviour; the new header and footer simply sit around it.",
+        "stamp": "Not modified",
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "split": {
       "type": "home-editorial-split",
-      "settings": {}
+      "settings": {
+        "image": "shopify://shop_images/the-foundry-wash-heavyweight-tee-black-04.jpg",
+        "caption": "Foundry wash — process",
+        "tone": "dark",
+        "eyebrow": "The Foundry Wash",
+        "heading": "Washed twice, so it never shrinks on you.",
+        "body": "Garment-dyed then washed again before it is cut. What you pull out of the dryer in month six is the same tee you opened in week one.",
+        "btn_label": "Shop the wash",
+        "btn_link": "",
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "rail2": {
       "type": "home-product-rail",
@@ -205,8 +338,27 @@
         "heading": "Restocked this week.",
         "body": "",
         "more_label": "Shop all",
+        "more_link": "",
+        "collection": "men",
+        "count": 4,
+        "columns": "default",
+        "card_ratio": "default",
+        "card_hover": "default",
+        "card_badge": "default",
+        "card_swatches": "default",
+        "card_colour": "default",
         "rail": "rail2",
-        "tight": false
+        "tight": false,
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
       }
     }
   },

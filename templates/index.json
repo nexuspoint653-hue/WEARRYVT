@@ -74,13 +74,13 @@
         "heading_size": 54,
         "body_size": 0,
         "tint_rgb": "11,11,12",
-        "tint_opacity": 30,
+        "tint_opacity": 38,
         "shade_rgb": "11,11,12",
-        "shade_opacity": 35,
-        "shade_height": 240,
+        "shade_opacity": 45,
+        "shade_height": 300,
         "fade_rgb": "0,0,0",
-        "fade_opacity": 92,
-        "fade_height": 620
+        "fade_opacity": 97,
+        "fade_height": 980
       }
     },
     "marquee": {

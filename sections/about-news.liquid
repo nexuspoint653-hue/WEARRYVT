@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <section class="br-news">
   {%- if section.settings.image != blank -%}
   <span class="br-news-plate" style="background-image:url({{ section.settings.image | image_url: width: 2400 }});background-size:cover;background-position:center"></span>
@@ -17,8 +17,7 @@
     </form>
   </div>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Brand newsletter",

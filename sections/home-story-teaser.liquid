@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <section class="keep">
   <div class="wrap keep-in">
     <div>
@@ -19,8 +19,7 @@
     </div>
   </div>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Story teaser",

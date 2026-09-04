@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <div class="doc-hd">
 <div class="wrap">
 {%- if section.settings.eyebrow != blank -%}<div class="lab">{{ section.settings.eyebrow }}</div>{%- endif -%}
@@ -17,8 +17,7 @@
 {%- endif -%}
 </div>
 </div>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "404 page",

@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <section class="wrap br-figs">
   <dl>
     {%- for block in section.blocks -%}
@@ -7,8 +7,7 @@
     {%- endfor -%}
   </dl>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Brand figures",

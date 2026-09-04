@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <section class="wrap br-source">
   <div class="br-source-txt">
     {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
@@ -18,8 +18,7 @@
     {%- if section.settings.small_caption != blank -%}<figcaption class="br-cap">{{ section.settings.small_caption }}</figcaption>{%- endif -%}
   </figure>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Brand sourcing",

@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 {%- comment -%}
     Real products when the merchant has pointed this rail at a collection.
     Nothing picked, or nothing in it, and the original JS-driven container is
@@ -87,8 +87,7 @@
 {%- endif -%}
 {%- endif %}
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Product rail",

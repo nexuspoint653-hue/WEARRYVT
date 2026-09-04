@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 {%- if section.settings.bleed -%}
 <style>
   #shopify-section-{{ section.id }}{position:relative;z-index:0}
@@ -26,8 +26,7 @@
     {%- endif -%}
   </div>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Hero",

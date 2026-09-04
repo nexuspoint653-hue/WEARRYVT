@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <section class="split">
   {%- if section.settings.image != blank -%}
   <span class="ph" style="background-image:url({{ section.settings.image | image_url: width: 1600 }});background-size:cover;background-position:center"><em>{{ section.settings.caption }}</em></span>
@@ -15,8 +15,7 @@
     {%- endif -%}
   </div>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Editorial split",

@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 {%- comment -%}
   Real Shopify data when there is any, the original JS-driven markup when there
   is not. shop_live is the single switch; see the header of gen_shop_live.py.
@@ -27,8 +27,7 @@
   {%- elsif section.settings.body != blank -%}<p>{{ section.settings.body }}</p>{%- endif -%}
 </div>
 {%- if section.settings.spa_view != blank -%}</div>{%- endif -%}
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Shop heading",

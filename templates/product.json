@@ -1,10 +1,11 @@
 {
   "sections": {
     "pdp": {
-      "type": "product-main",
+      "type": "pdp-main",
       "settings": {
         "spa_view": "",
-        "spa_open": true
+        "spa_open": true,
+        "visible": true
       },
       "blocks": {
         "pdp_b1": {
@@ -85,10 +86,11 @@
       ]
     },
     "pdp_related": {
-      "type": "product-related",
+      "type": "pdp-related",
       "settings": {
         "spa_view": "",
-        "spa_open": true
+        "spa_open": true,
+        "visible": true
       }
     }
   },

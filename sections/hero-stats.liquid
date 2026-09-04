@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 {%- liquid
   assign tint_a  = section.settings.tint_opacity  | divided_by: 100.0
   assign fade_a  = section.settings.fade_opacity  | divided_by: 100.0
@@ -46,7 +46,7 @@
 </section>
 {%- endif -%}
 </div>
-{%- endif -%}
+{%- endunless -%}
 {% schema %}
 {
   "name": "Hero + stat band",

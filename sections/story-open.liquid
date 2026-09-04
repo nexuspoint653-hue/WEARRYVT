@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <section class="st-open">
   {%- if section.settings.image != blank -%}
   <div class="st-open-plate" style="background-image:url({{ section.settings.image | image_url: width: 2400 }});background-size:cover;background-position:center"></div>
@@ -19,8 +19,7 @@
     {%- endif -%}
   </div>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Story opener",

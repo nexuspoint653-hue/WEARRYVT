@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 {%- comment -%}
   The strip animates to translateX(-50%), so the track has to hold two
   identical halves AND each half has to be wider than the viewport or a gap
@@ -19,8 +19,7 @@
     {%- endfor -%}
   </div>
 </div>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Marquee",

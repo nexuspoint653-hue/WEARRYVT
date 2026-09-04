@@ -502,7 +502,7 @@
 {%- endunless -%}
 {% schema %}
 {
-  "name": "Product detail",
+  "name": "Product page",
   "settings": [
     {
       "type": "header",
@@ -512,14 +512,14 @@
       "type": "text",
       "id": "spa_view",
       "label": "Runtime view name",
-      "default": "product",
+      "default": "",
       "info": "Leave as-is. The storefront script shows and hides this group by this name. On a real product page the group is always shown."
     },
     {
       "type": "checkbox",
       "id": "spa_open",
       "label": "Visible on page load",
-      "default": false
+      "default": true
     },
     {
       "type": "checkbox",
@@ -1200,7 +1200,7 @@
   "max_blocks": 16,
   "presets": [
     {
-      "name": "Product detail",
+      "name": "Product page",
       "blocks": [
         {
           "type": "trust",

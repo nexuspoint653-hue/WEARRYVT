@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <section class="st-detail">
   <div class="st-detail-media">
     {%- if section.settings.image_1 != blank -%}<span class="ph" style="background-image:url({{ section.settings.image_1 | image_url: width: 1600 }});background-size:cover;background-position:center"></span>{%- else -%}<span class="ph {{ section.settings.tone_1 }}"></span>{%- endif -%}
@@ -22,8 +22,7 @@
     {%- endif -%}
   </div>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Story construction detail",

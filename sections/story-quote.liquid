@@ -1,13 +1,12 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <section class="st-quote">
   <div class="wrap">
     {%- if section.settings.quote != blank -%}<blockquote>{{ section.settings.quote }}</blockquote>{%- endif -%}
     {%- if section.settings.byline != blank -%}<span class="st-by">{{ section.settings.byline }}</span>{%- endif -%}
   </div>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Story pull quote",

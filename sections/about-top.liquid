@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 <section class="wrap br-top">
   {%- if section.settings.heading != blank -%}<h1 class="br-title">{{ section.settings.heading }}</h1>{%- endif -%}
   <div class="br-lead">
@@ -12,8 +12,7 @@
     </div>
   </div>
 </section>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Brand intro",

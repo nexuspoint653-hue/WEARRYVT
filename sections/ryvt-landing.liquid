@@ -1,5 +1,5 @@
 {% render 'section-style', s: section %}
-{%- if section.settings.visible -%}
+{%- unless section.settings.visible == false -%}
 
 {%- if section.settings.poster != blank -%}{%- assign poster_url = section.settings.poster | image_url: width: 2400 -%}{%- else -%}{%- assign poster_url = 'ryvt-landing-29e16db41a.png' | asset_url -%}{%- endif -%}
 {%- if section.settings.logo != blank -%}{%- assign logo_url = section.settings.logo | image_url: width: 640 -%}{%- else -%}{%- assign logo_url = 'ryvt-landing-bc1a5b33d5.png' | asset_url -%}{%- endif -%}
@@ -254,8 +254,7 @@
 
 <script src="{{ 'ryvt-film.js' | asset_url }}" defer></script>
 <script src="{{ 'ryvt-landing.js' | asset_url }}" defer></script>
-{%- endif -%}
-
+{%- endunless -%}
 {% schema %}
 {
   "name": "Landing film",

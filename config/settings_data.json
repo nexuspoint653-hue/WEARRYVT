@@ -1,14 +1,14 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "current": {
-    "motion": true
+    "motion": true,
+    "hf_off": false,
+    "hf_tint_rgb": "11,11,12",
+    "hf_tint_opacity": 38,
+    "hf_shade_rgb": "11,11,12",
+    "hf_shade_opacity": 45,
+    "hf_shade_height": 300,
+    "hf_fade_rgb": "0,0,0",
+    "hf_fade_opacity": 97,
+    "hf_fade_height": 980
   }
 }

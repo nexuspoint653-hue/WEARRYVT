@@ -26,6 +26,38 @@
   {%- unless settings.motion -%}<style>*,*::before,*::after{animation:none!important;transition:none!important}</style>{%- endunless -%}
   {%- if settings.custom_css != blank -%}<style>{{ settings.custom_css }}</style>{%- endif -%}
 
+
+  {%- comment -%}
+    HERO FILTER — deliberately in the layout, not in the hero section.
+    Shopify has repeatedly served a cached copy of the hero section file; the
+    layout cannot go stale without the whole site going stale. Values come from
+    Theme settings > Hero filter.
+  {%- endcomment -%}
+  {%- liquid
+    assign hf_tint  = settings.hf_tint_opacity  | default: 38 | divided_by: 100.0
+    assign hf_shade = settings.hf_shade_opacity | default: 45 | divided_by: 100.0
+    assign hf_fade  = settings.hf_fade_opacity  | default: 97 | divided_by: 100.0
+    assign hf_trgb  = settings.hf_tint_rgb  | default: '11,11,12'
+    assign hf_srgb  = settings.hf_shade_rgb | default: '11,11,12'
+    assign hf_frgb  = settings.hf_fade_rgb  | default: '0,0,0'
+    assign hf_sh    = settings.hf_shade_height | default: 300
+    assign hf_fh    = settings.hf_fade_height  | default: 980
+  -%}
+  {%- unless settings.hf_off -%}
+  <style>
+    .hero-stack{position:relative}
+    .hero-stack::after{
+      content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+      background:
+        linear-gradient(to bottom,rgba({{ hf_srgb }},{{ hf_shade }}) 0px,rgba({{ hf_srgb }},0) {{ hf_sh }}px),
+        linear-gradient(to bottom,rgba({{ hf_frgb }},0) calc(100% - {{ hf_fh }}px),rgba({{ hf_frgb }},{{ hf_fade }}) 100%),
+        linear-gradient(rgba({{ hf_trgb }},{{ hf_tint }}),rgba({{ hf_trgb }},{{ hf_tint }}));
+    }
+    .hero-stack > .hero,
+    .hero-stack > .stats{position:relative;z-index:1}
+  </style>
+  {%- endunless -%}
+
   {{ content_for_header }}
 </head>
 <body class="template-{{ template.name }}{% if template.suffix %} suffix-{{ template.suffix }}{% endif %}">

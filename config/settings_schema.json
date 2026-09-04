@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "RYVT",
-    "theme_version": "2.4.0",
+    "theme_version": "3.0.0",
     "theme_author": "RYVT",
     "theme_documentation_url": "https://github.com/nexuspoint653-hue/WEARRYVT",
     "theme_support_url": "https://github.com/nexuspoint653-hue/WEARRYVT"
@@ -301,6 +301,89 @@
         "id": "card_show_fav",
         "label": "Show the save button",
         "default": true
+      }
+    ]
+  },
+  {
+    "name": "Hero filter",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Darkens the hero photo and fades it to black behind the stat cards. Lives here rather than on the section so it always applies."
+      },
+      {
+        "type": "checkbox",
+        "id": "hf_off",
+        "label": "Turn the filter off",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "hf_tint_rgb",
+        "label": "Tint colour (r,g,b)",
+        "default": "11,11,12"
+      },
+      {
+        "type": "range",
+        "id": "hf_tint_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 2,
+        "unit": "%",
+        "label": "Tint strength",
+        "default": 38
+      },
+      {
+        "type": "text",
+        "id": "hf_shade_rgb",
+        "label": "Top shade colour (r,g,b)",
+        "default": "11,11,12"
+      },
+      {
+        "type": "range",
+        "id": "hf_shade_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Top shade strength",
+        "default": 45
+      },
+      {
+        "type": "range",
+        "id": "hf_shade_height",
+        "min": 0,
+        "max": 600,
+        "step": 10,
+        "unit": "px",
+        "label": "Top shade height",
+        "default": 300
+      },
+      {
+        "type": "text",
+        "id": "hf_fade_rgb",
+        "label": "Bottom fade colour (r,g,b)",
+        "default": "0,0,0"
+      },
+      {
+        "type": "range",
+        "id": "hf_fade_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "Bottom fade strength",
+        "default": 97
+      },
+      {
+        "type": "range",
+        "id": "hf_fade_height",
+        "min": 100,
+        "max": 1600,
+        "step": 20,
+        "unit": "px",
+        "label": "Bottom fade height",
+        "default": 980
       }
     ]
   }

@@ -1,0 +1,420 @@
+{% render 'section-style', s: section %}
+{%- if section.settings.visible -%}
+{%- liquid
+  assign tint_a  = section.settings.tint_opacity  | divided_by: 100.0
+  assign fade_a  = section.settings.fade_opacity  | divided_by: 100.0
+  assign shade_a = section.settings.shade_opacity | divided_by: 100.0
+-%}
+<style>
+  #shopify-section-{{ section.id }} .hero-stack{position:relative;isolation:isolate}
+  #shopify-section-{{ section.id }} .hero-stack > .plate{position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(to bottom,rgba({{ section.settings.shade_rgb }},{{ shade_a }}) 0%,rgba({{ section.settings.shade_rgb }},0) {{ section.settings.shade_height }}px),
+      linear-gradient(to bottom,rgba({{ section.settings.fade_rgb }},0) calc(100% - {{ section.settings.fade_height }}px),rgba({{ section.settings.fade_rgb }},{{ fade_a }}) 100%),
+      linear-gradient(rgba({{ section.settings.tint_rgb }},{{ tint_a }}),rgba({{ section.settings.tint_rgb }},{{ tint_a }}))
+      {%- if section.settings.image != blank %},url({{ section.settings.image | image_url: width: 2400 }}){% endif -%};
+    background-size:auto,auto,auto{% if section.settings.image != blank %},cover{% endif %};
+    background-position:center,center,center{% if section.settings.image != blank %},{{ section.settings.focal }}{% endif %};
+    background-repeat:no-repeat;
+  }
+  #shopify-section-{{ section.id }} .hero{background:transparent;position:relative;z-index:1}
+  #shopify-section-{{ section.id }} .hero .plate{display:none}
+  {%- if section.settings.show_stats %}
+  #shopify-section-{{ section.id }} .stats{background:transparent;position:relative;z-index:1}
+  #shopify-section-{{ section.id }} .stats-in{position:relative;z-index:1}
+  {%- endif %}
+</style>
+<div class="hero-stack">
+  <span class="plate{% if section.settings.image == blank %} ph {{ section.settings.plate_style }}{% endif %}"></span>
+<section class="hero">
+  <div class="wrap hero-in">
+    {%- if section.settings.eyebrow != blank -%}<div class="lab">{{ section.settings.eyebrow }}</div>{%- endif -%}
+    <h1>{{ section.settings.heading | newline_to_br }}</h1>
+    {%- if section.settings.body != blank -%}<p>{{ section.settings.body }}</p>{%- endif -%}
+    {%- if section.settings.btn1_label != blank or section.settings.btn2_label != blank -%}
+    <div class="cta-row">
+      {%- if section.settings.btn1_label != blank -%}<a class="btn btn-solid" href="{{ section.settings.btn1_link | default: routes.all_products_collection_url }}">{{ section.settings.btn1_label }}</a>{%- endif -%}
+      {%- if section.settings.btn2_label != blank -%}<a class="btn btn-ghost" href="{{ section.settings.btn2_link | default: '/pages/the-renaissance-tee' }}">{{ section.settings.btn2_label }}</a>{%- endif -%}
+    </div>
+    {%- endif -%}
+  </div>
+</section>
+{%- if section.settings.show_stats -%}
+<section class="stats">
+  <div class="stats-in">
+    {%- for block in section.blocks -%}
+    <div class="stat" {{ block.shopify_attributes }}>
+      <span class="stat-n num">{{ block.settings.figure }}</span>
+      <span class="stat-l">{{ block.settings.label }}</span>
+      {%- if block.settings.note != blank -%}<span class="stat-s">{{ block.settings.note }}</span>{%- endif -%}
+    </div>
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}
+</div>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Hero + stat band",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Metro Detroit \u00b7 Est. 2024"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading (line breaks kept)",
+      "default": "Detroit,\nOn Your Back."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body",
+      "default": "Heavyweight cotton cut for people who actually move. Made in small runs, finished by hand, and named for the streets it came from."
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "plate_style",
+      "label": "Placeholder tone (used when no image)",
+      "default": "dark",
+      "options": [
+        {
+          "value": "",
+          "label": "Light"
+        },
+        {
+          "value": "alt",
+          "label": "Mid"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "btn1_label",
+      "label": "Primary label",
+      "default": "Shop the drop"
+    },
+    {
+      "type": "url",
+      "id": "btn1_link",
+      "label": "Primary link"
+    },
+    {
+      "type": "text",
+      "id": "btn2_label",
+      "label": "Secondary label",
+      "default": "One tee, four ways"
+    },
+    {
+      "type": "url",
+      "id": "btn2_link",
+      "label": "Secondary link"
+    },
+    {
+      "type": "header",
+      "content": "Image bleed"
+    },
+    {
+      "type": "select",
+      "id": "focal",
+      "label": "Image position",
+      "default": "center center",
+      "options": [
+        {
+          "value": "center top",
+          "label": "Top"
+        },
+        {
+          "value": "center center",
+          "label": "Centre"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Stat band"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Show the stat band",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Hero filter"
+    },
+    {
+      "type": "paragraph",
+      "content": "Three layers over the photo: an even tint, a shade under the header, and a fade that deepens to the bottom of the cards."
+    },
+    {
+      "type": "text",
+      "id": "tint_rgb",
+      "label": "Tint colour (r,g,b)",
+      "default": "11,11,12"
+    },
+    {
+      "type": "range",
+      "id": "tint_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Tint strength",
+      "default": 38
+    },
+    {
+      "type": "text",
+      "id": "shade_rgb",
+      "label": "Top shade colour (r,g,b)",
+      "default": "11,11,12"
+    },
+    {
+      "type": "range",
+      "id": "shade_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Top shade strength",
+      "default": 45
+    },
+    {
+      "type": "range",
+      "id": "shade_height",
+      "min": 0,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "label": "Top shade height",
+      "default": 300
+    },
+    {
+      "type": "text",
+      "id": "fade_rgb",
+      "label": "Bottom fade colour (r,g,b)",
+      "default": "0,0,0"
+    },
+    {
+      "type": "range",
+      "id": "fade_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Bottom fade strength",
+      "default": 97
+    },
+    {
+      "type": "range",
+      "id": "fade_height",
+      "min": 100,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "label": "Bottom fade height",
+      "default": 980
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "visible",
+      "label": "Show this section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pad_override",
+      "label": "Override spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Content width (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text alignment",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "As designed"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colour and type"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size (0 = theme default)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Body size (0 = theme default)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "figure",
+          "label": "Figure",
+          "default": "8.2 oz"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "The cloth"
+        },
+        {
+          "type": "textarea",
+          "id": "note",
+          "label": "Note",
+          "default": "Heavyweight cotton, garment-dyed, washed before it is cut."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Hero + stat band",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "figure": "8.2 oz",
+            "label": "The cloth",
+            "note": "Heavyweight cotton, garment-dyed, washed before it is cut."
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "figure": "48h",
+            "label": "Dispatch",
+            "note": "Orders leave Metro Detroit inside two days."
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "figure": "8",
+            "label": "Styles in the run",
+            "note": "Restocked rather than replaced when they sell out."
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "figure": "30 days",
+            "label": "To change your mind",
+            "note": "Unworn, tags on, shipping covered both ways."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

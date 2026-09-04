@@ -1,8 +1,18 @@
 {% render 'section-style', s: section %}
 {%- if section.settings.visible -%}
+{%- comment -%}
+  The strip animates to translateX(-50%), so the track has to hold two
+  identical halves AND each half has to be wider than the viewport or a gap
+  opens up mid-loop. Four copies gives two per half, which covers it at every
+  width the design supports.
+{%- endcomment -%}
+<style>
+  #shopify-section-{{ section.id }} .marq-in{animation-duration:{{ section.settings.speed }}s}
+  #shopify-section-{{ section.id }} .marq-in:hover{animation-play-state:{% if section.settings.pause_on_hover %}paused{% else %}running{% endif %}}
+</style>
 <div class="marq" aria-hidden="true">
   <div class="marq-in">
-    {%- for i in (1..2) -%}
+    {%- for i in (1..4) -%}
       {%- for block in section.blocks -%}
         <span{% if block.settings.dim %} class="dim"{% endif %} {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
       {%- endfor -%}
@@ -15,6 +25,27 @@
 {
   "name": "Marquee",
   "settings": [
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 10,
+      "max": 90,
+      "step": 2,
+      "unit": "s",
+      "label": "Loop time",
+      "default": 24,
+      "info": "Lower is faster. This is how long one full pass takes."
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": true
+    },
     {
       "type": "header",
       "content": "Layout"

@@ -47,7 +47,44 @@
     {%- endfor %}
   </div>
 {%- else %}
-  <div class="grid" data-{{ section.settings.rail }}=""></div>
+  {%- comment -%}
+  Three tiers: a real Shopify collection, then cards added by hand here, then
+  the shipped demo rail. The manual tier is what lets a card carry an image
+  before the catalogue exists.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+<div class="grid">
+  {%- for block in section.blocks -%}
+    {%- assign i = forloop.index -%}
+    {%- assign tone = '' -%}
+    {%- assign mod = i | modulo: 4 -%}
+    {%- if mod == 2 or mod == 0 -%}{%- assign tone = 'alt' -%}{%- endif -%}
+    {%- if mod == 3 -%}{%- assign tone = 'dark' -%}{%- endif -%}
+    <a class="card" href="{{ block.settings.link | default: routes.all_products_collection_url }}" data-i="{{ i | prepend: '0' | slice: -2, 2 }}" {{ block.shopify_attributes }}>
+      <div class="card-media">
+        {%- if block.settings.image != blank -%}
+          <img class="still" src="{{ block.settings.image | image_url: width: 800 }}" srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 800 }} 800w" sizes="(max-width:700px) 50vw, 25vw" alt="{{ block.settings.image.alt | default: block.settings.title | escape }}" width="800" height="1000" loading="lazy">
+        {%- else -%}
+          <span class="ph {{ tone }} still"></span>
+        {%- endif -%}
+        {%- if block.settings.hover_image != blank -%}
+          <img class="hover-img" src="{{ block.settings.hover_image | image_url: width: 800 }}" alt="" width="800" height="1000" loading="lazy">
+        {%- endif -%}
+        {%- if block.settings.badge != blank -%}<span class="card-badge">{{ block.settings.badge }}</span>{%- endif -%}
+        <button class="card-fav" type="button" aria-label="Save {{ block.settings.title | escape }}" onclick="event.preventDefault();event.stopPropagation();this.classList.toggle('on')">
+          <svg viewBox="0 0 24 24"><path d="M12 3.6l2.5 5.4 5.9.7-4.4 4 1.2 5.8L12 16.6 6.8 19.5 8 13.7 3.6 9.7l5.9-.7z"/></svg>
+        </button>
+      </div>
+      <div class="card-info"><span class="card-name">{{ block.settings.title }}</span><span class="card-price">{{ block.settings.price }}</span></div>
+      {%- if block.settings.colour != blank -%}
+      <div class="card-sub"><span class="sw"></span><span class="card-colour">{{ block.settings.colour }}</span></div>
+      {%- endif -%}
+    </a>
+  {%- endfor -%}
+</div>
+{%- else -%}
+<div class="grid" data-{{ section.settings.rail }}=""></div>
+{%- endif -%}
 {%- endif %}
 </section>
 {%- endif -%}
@@ -56,6 +93,10 @@
 {
   "name": "Product rail",
   "settings": [
+    {
+      "type": "paragraph",
+      "content": "Pick a collection to show real products. With no collection, any cards you add below are used instead \u2014 that is where you set images."
+    },
     {
       "type": "header",
       "content": "Heading"
@@ -398,6 +439,54 @@
     {
       "name": "Product rail"
     }
-  ]
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Product card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "hover_image",
+          "label": "Hover image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name",
+          "default": "The Detroit Renaissance Tee"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "$58"
+        },
+        {
+          "type": "text",
+          "id": "colour",
+          "label": "Colour name",
+          "default": "Bone"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "info": "Leave empty for no badge."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12
 }
 {% endschema %}

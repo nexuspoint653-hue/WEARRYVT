@@ -105,6 +105,16 @@
 {%- if section.settings.gallery_ratio != blank %}#shopify-section-{{ section.id }} .pdp-stage{aspect-ratio:{{ section.settings.gallery_ratio }}}{% endif %}
 {%- if section.settings.gallery_layout == 'stack' %}#shopify-section-{{ section.id }} .pdp-stage{aspect-ratio:auto;background:transparent;overflow:visible}#shopify-section-{{ section.id }} .shot{position:relative;inset:auto;opacity:1;background:var(--concrete);aspect-ratio:{{ section.settings.gallery_ratio | default: '4/5' }};overflow:hidden;margin-bottom:8px}#shopify-section-{{ section.id }} .mos{display:none}{% endif %}</style>
 {%- endif -%}
+{%- if section.settings.sticky_buy -%}
+<style>
+  @media(min-width:950px){
+    #shopify-section-{{ section.id }} .pdp > .side{position:sticky;top:{{ section.settings.sticky_top }}px;align-self:start}
+  }
+  @media(min-width:950px) and (max-height:760px){
+    #shopify-section-{{ section.id }} .pdp > .side{position:static}
+  }
+</style>
+{%- endif -%}
 <div class="wrap">
   <div class="crumbs">
     {%- if section.settings.crumb_home != blank -%}<a data-go="home" href="{{ section.settings.crumb_home_link | default: '/' }}">{{ section.settings.crumb_home }}</a>{{ ' / ' }}{%- endif -%}
@@ -506,13 +516,32 @@
   "settings": [
     {
       "type": "header",
+      "content": "Buy panel"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_buy",
+      "label": "Keep the buy panel in view while the gallery scrolls",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "sticky_top",
+      "min": 60,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Buy panel offset from the top",
+      "default": 96
+    },
+    {
+      "type": "header",
       "content": "Runtime"
     },
     {
       "type": "text",
       "id": "spa_view",
       "label": "Runtime view name",
-      "default": "",
       "info": "Leave as-is. The storefront script shows and hides this group by this name. On a real product page the group is always shown."
     },
     {
@@ -630,7 +659,7 @@
       "id": "chip_label_prefix",
       "label": "Mosaic button label prefix",
       "default": "View",
-      "info": "Read by screen readers as \u201cView \u2026\u201d plus the image's alt text."
+      "info": "Read by screen readers as “View …” plus the image's alt text."
     },
     {
       "type": "text",
@@ -676,7 +705,7 @@
       "type": "text",
       "id": "film_label",
       "label": "Plate label",
-      "default": "In motion \u2014 12s loop"
+      "default": "In motion — 12s loop"
     },
     {
       "type": "text",
@@ -764,7 +793,7 @@
       "type": "text",
       "id": "color_label",
       "label": "Colour label",
-      "default": "Colour \u2014",
+      "default": "Colour —",
       "info": "Swatches come from the option named Colour or Color, using each value's native swatch colour."
     },
     {
@@ -805,14 +834,14 @@
     {
       "type": "text",
       "id": "add_label",
-      "label": "Button \u2014 resting label",
+      "label": "Button — resting label",
       "default": "Select a size",
       "info": "Shown until a size is picked."
     },
     {
       "type": "text",
       "id": "add_label_ready",
-      "label": "Button \u2014 ready label",
+      "label": "Button — ready label",
       "default": "Add to bag"
     },
     {
@@ -824,13 +853,13 @@
     {
       "type": "text",
       "id": "sold_out_label",
-      "label": "Button \u2014 sold out",
+      "label": "Button — sold out",
       "default": "Sold out"
     },
     {
       "type": "text",
       "id": "unavailable_label",
-      "label": "Button \u2014 combination not made",
+      "label": "Button — combination not made",
       "default": "Unavailable"
     },
     {
@@ -859,7 +888,7 @@
       "type": "text",
       "id": "ship_mid",
       "label": "Between",
-      "default": "from Metro Detroit \u00b7 Free over"
+      "default": "from Metro Detroit · Free over"
     },
     {
       "type": "text",
@@ -1058,7 +1087,7 @@
     },
     {
       "type": "acc_details",
-      "name": "Accordion \u2014 Details",
+      "name": "Accordion — Details",
       "settings": [
         {
           "type": "text",
@@ -1076,7 +1105,6 @@
           "type": "textarea",
           "id": "items",
           "label": "Details, one per line",
-          "default": "",
           "info": "Used when the product has no custom.details metafield. With no product the list is written by the store script."
         },
         {
@@ -1089,7 +1117,7 @@
     },
     {
       "type": "acc_text",
-      "name": "Accordion \u2014 Text",
+      "name": "Accordion — Text",
       "settings": [
         {
           "type": "text",
@@ -1123,13 +1151,13 @@
           "type": "text",
           "id": "link_go",
           "label": "View hook (data-go)",
-          "info": "Leave blank for a normal link. Set to a view name (shipping, faq, contact\u2026) to keep the in-page navigation the store script does."
+          "info": "Leave blank for a normal link. Set to a view name (shipping, faq, contact…) to keep the in-page navigation the store script does."
         }
       ]
     },
     {
       "type": "acc_fabric",
-      "name": "Accordion \u2014 Fabric",
+      "name": "Accordion — Fabric",
       "settings": [
         {
           "type": "text",
@@ -1141,7 +1169,6 @@
           "type": "textarea",
           "id": "items",
           "label": "Fabric notes, one per line",
-          "default": "",
           "info": "Used when the product has no custom.fabric metafield. With no product the list is written by the store script."
         },
         {
@@ -1160,7 +1187,7 @@
     },
     {
       "type": "acc_size",
-      "name": "Accordion \u2014 Size guide",
+      "name": "Accordion — Size guide",
       "settings": [
         {
           "type": "text",
@@ -1171,14 +1198,14 @@
         {
           "type": "textarea",
           "id": "rows_top",
-          "label": "Table \u2014 tops",
+          "label": "Table — tops",
           "default": "Size, Chest, Length, Shoulder\nXS, 19, 26.5, 17\nS, 20.5, 28, 18\nM, 22, 29, 19\nL, 23.5, 30, 20\nXL, 25, 31, 21\nXXL, 26.5, 32, 22",
           "info": "One row per line, cells separated by commas. The first line is the header."
         },
         {
           "type": "textarea",
           "id": "rows_bottom",
-          "label": "Table \u2014 bottoms",
+          "label": "Table — bottoms",
           "default": "Size, Waist, Inseam, Leg opening\n28, 14, 30, 7.5\n30, 15, 30, 7.75\n32, 16, 30, 8\n34, 17, 30, 8.25\n36, 18, 30, 8.5\n38, 19, 30, 8.75",
           "info": "Used for the product type named in Size guide table above."
         },

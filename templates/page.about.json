@@ -11,15 +11,43 @@
   "sections": {
     "top": {
       "type": "about-top",
-      "settings": {}
+      "settings": {
+        "heading": "Our Brand",
+        "caption": "(Meet the founder)",
+        "body": "From a Detroit garage to a small workshop off Gratiot, a frustration with thinning cotton turned into a company. What began as one heavyweight tee, made properly for himself, became a run of eight pieces cut to a single block. Today RYVT is worn by people who wanted their clothes to outlast the season they bought them in.",
+        "image": "shopify://shop_images/ryvt-detroit-hero.jpg",
+        "tone": "",
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "based": {
       "type": "about-based",
-      "settings": {}
+      "settings": {
+        "label": "(Based)",
+        "place": "Metro Detroit",
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "source": {
       "type": "about-source",
-      "settings": {},
       "blocks": {
         "source_b1": {
           "type": "column",
@@ -37,11 +65,29 @@
       "block_order": [
         "source_b1",
         "source_b2"
-      ]
+      ],
+      "settings": {
+        "heading": "Made properly: heavyweight cotton, washed before it is ever cut.",
+        "tall_image": "shopify://shop_images/the-detroit-renaissance-heavyweight-tee-army-green-01.jpg",
+        "tall_tone": "",
+        "tall_caption": "(Cut and finished in Metro Detroit)",
+        "small_image": "shopify://shop_images/the-foundation-tee-pwb-03.jpg",
+        "small_tone": "alt",
+        "small_caption": "(8.2 oz cotton)",
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "figs": {
       "type": "about-figs",
-      "settings": {},
       "blocks": {
         "figs_b1": {
           "type": "figure",
@@ -85,11 +131,39 @@
         "figs_b3",
         "figs_b4",
         "figs_b5"
-      ]
+      ],
+      "settings": {
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     },
     "news": {
       "type": "about-news",
-      "settings": {}
+      "settings": {
+        "heading": "Get in on the news",
+        "field_label": "Subscribe to our newsletter",
+        "placeholder": "Your email",
+        "btn_label": "Join",
+        "plate_style": "dark",
+        "visible": true,
+        "pad_override": false,
+        "pad_top": 80,
+        "pad_bottom": 80,
+        "max_width": 0,
+        "align": "default",
+        "bg_color": "",
+        "text_color": "",
+        "heading_size": 0,
+        "body_size": 0
+      }
     }
   },
   "order": [

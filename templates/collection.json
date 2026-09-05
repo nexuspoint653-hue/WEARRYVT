@@ -103,7 +103,11 @@
     },
     "pdp": {
       "type": "product-main",
-      "settings": {},
+      "settings": {
+        "spa_view": "product",
+        "spa_open": false,
+        "visible": true
+      },
       "blocks": {
         "pdp_b1": {
           "type": "trust",
@@ -184,7 +188,11 @@
     },
     "pdp_related": {
       "type": "product-related",
-      "settings": {}
+      "settings": {
+        "spa_view": "product",
+        "spa_open": false,
+        "visible": true
+      }
     }
   },
   "order": [

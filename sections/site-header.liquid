@@ -40,15 +40,15 @@
 <span class="nfx"><i>Shop</i><i aria-hidden="true">Shop</i></span>
 </button>
 </div>
-<div><button class="navbtn" data-go="shop">
-<span class="nfx"><i>New Arrivals</i><i aria-hidden="true">New Arrivals</i></span>
-</button></div>
-<div><button class="navbtn" data-go="story">
-<span class="nfx"><i>The Renaissance Tee</i><i aria-hidden="true">The Renaissance Tee</i></span>
-</button></div>
-<div><button class="navbtn" data-go="about">
-<span class="nfx"><i>About</i><i aria-hidden="true">About</i></span>{{ nav_mark }}
-</button></div>
+<div><a class="navbtn" data-go="shop" href="{{ section.settings.nav_new_url | default: routes.all_products_collection_url }}">
+<span class="nfx"><i>{{ section.settings.nav_new_label | default: 'New Arrivals' }}</i><i aria-hidden="true">{{ section.settings.nav_new_label | default: 'New Arrivals' }}</i></span>
+</a></div>
+<div><a class="navbtn" data-go="story" href="{{ section.settings.nav_story_url | default: '/pages/the-renaissance-tee' }}">
+<span class="nfx"><i>{{ section.settings.nav_story_label | default: 'The Renaissance Tee' }}</i><i aria-hidden="true">{{ section.settings.nav_story_label | default: 'The Renaissance Tee' }}</i></span>
+</a></div>
+<div><a class="navbtn" data-go="about" href="{{ section.settings.nav_about_url | default: '/pages/about' }}">
+<span class="nfx"><i>{{ section.settings.nav_about_label | default: 'About' }}</i><i aria-hidden="true">{{ section.settings.nav_about_label | default: 'About' }}</i></span>{{ nav_mark }}
+</a></div>
 {%- endif -%}
 </nav>
 <div class="hd-r">
@@ -241,6 +241,39 @@
     {
       "type": "header",
       "content": "Navigation"
+    },
+    {
+      "type": "text",
+      "id": "nav_new_label",
+      "label": "Nav link 2 \u2014 label",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "url",
+      "id": "nav_new_url",
+      "label": "Nav link 2 \u2014 link"
+    },
+    {
+      "type": "text",
+      "id": "nav_story_label",
+      "label": "Nav link 3 \u2014 label",
+      "default": "The Renaissance Tee"
+    },
+    {
+      "type": "url",
+      "id": "nav_story_url",
+      "label": "Nav link 3 \u2014 link"
+    },
+    {
+      "type": "text",
+      "id": "nav_about_label",
+      "label": "Nav link 4 \u2014 label",
+      "default": "About"
+    },
+    {
+      "type": "url",
+      "id": "nav_about_url",
+      "label": "Nav link 4 \u2014 link"
     },
     {
       "type": "link_list",

@@ -856,7 +856,7 @@
     })();
   })();
 
-/* the landing links into the store by name: store.html?view=shop&filter=Tees */
+/* the landing links into the shop by name: /collections/all?filter=Tees */
   (function route(){
     var q = new URLSearchParams(location.search);
     var v = q.get('view'), f = q.get('filter');

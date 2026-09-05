@@ -43,7 +43,7 @@
 {%- endif %}
     </span>
 {%- if section.settings.promo_cta_label != blank %}
-    <a class="promo-cta" href="{{ section.settings.promo_cta_link | default: '/pages/store?view=shop' }}">{{ section.settings.promo_cta_label }}</a>
+    <a class="promo-cta" href="{{ section.settings.promo_cta_link | default: '/collections/all' }}">{{ section.settings.promo_cta_label }}</a>
 {%- endif %}
     <button class="promo-x" type="button" data-promo-close aria-label="Dismiss">
       <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -62,14 +62,14 @@
     <nav class="menu" aria-label="Main">
 {%- if nav_blocks.size > 0 %}
 {%- for block in nav_blocks %}
-      <a href="{{ block.settings.link | default: '/pages/store?view=shop' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+      <a href="{{ block.settings.link | default: '/collections/all' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
 {%- endfor %}
 {%- else %}
-      <a href="/pages/store?view=shop">Shop</a>
-      <a href="/pages/store?view=shop">New Arrivals</a>
-      <a href="/pages/store?view=story">The Renaissance Tee</a>
-      <a href="/pages/store?view=about">Detroit</a>
-      <a href="/pages/store?view=contact">Contact</a>
+      <a href="/collections/all">Shop</a>
+      <a href="/collections/all">New Arrivals</a>
+      <a href="/pages/the-renaissance-tee">The Renaissance Tee</a>
+      <a href="/pages/about">Detroit</a>
+      <a href="/pages/contact">Contact</a>
 {%- endif %}
     </nav>
   </div>
@@ -108,7 +108,7 @@
   </div>
 
   <div class="hud hud-br">
-    <a class="buy" href="{{ section.settings.buy_link | default: '/pages/store?view=shop' }}">
+    <a class="buy" href="{{ section.settings.buy_link | default: '/collections/all' }}">
       <span class="buy-m" aria-hidden="true" data-slides>
 {%- if slide_blocks.size > 0 %}
 {%- for block in slide_blocks %}{%- assign still = forloop.index0 | modulo: 4 %}
@@ -127,7 +127,7 @@
       </span>
       <span class="buy-go" aria-hidden="true">&rarr;</span>
     </a>
-    <a class="ship" href="{{ section.settings.ship_link | default: '/pages/store?view=shipping' }}">
+    <a class="ship" href="{{ section.settings.ship_link | default: '/pages/shipping' }}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
         <path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5 12 12l9-4.5M12 12v9"/></svg>
       {{ section.settings.ship_text }} <b>{{ section.settings.ship_amount }}</b>
@@ -136,11 +136,11 @@
 </div>
 
 <div class="bar" data-bar>
-  <a class="bar-mark" href="{{ section.settings.bar_logo_link | default: '/pages/store' }}"><img src="{{ bar_logo_url }}" alt="{{ section.settings.logo_alt }}"></a>
+  <a class="bar-mark" href="{{ section.settings.bar_logo_link | default: '/collections/all' }}"><img src="{{ bar_logo_url }}" alt="{{ section.settings.logo_alt }}"></a>
   <nav class="bar-nav">
-    {% if bar_blocks.size > 0 %}{% for block in bar_blocks %}<a href="{{ block.settings.link | default: '/pages/store?view=shop' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>{% endfor %}{% else %}<a href="/pages/store?view=shop">Shop</a><a href="/pages/store?view=shop">New Arrivals</a><a href="/pages/store?view=story">The Renaissance Tee</a><a href="/pages/store?view=about">Detroit</a>{% endif %}
+    {% if bar_blocks.size > 0 %}{% for block in bar_blocks %}<a href="{{ block.settings.link | default: '/collections/all' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>{% endfor %}{% else %}<a href="/collections/all">Shop</a><a href="/collections/all">New Arrivals</a><a href="/pages/the-renaissance-tee">The Renaissance Tee</a><a href="/pages/about">Detroit</a>{% endif %}
   </nav>
-  <a class="bar-cart" href="{{ section.settings.cart_link | default: '/pages/store?view=shop' }}">
+  <a class="bar-cart" href="{{ section.settings.cart_link | default: '/collections/all' }}">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
       <path d="M4 7h16l-1.2 13H5.2z"/><path d="M8.6 9V6.4a3.4 3.4 0 0 1 6.8 0V9"/></svg>
     {{ section.settings.cart_label }}
@@ -173,16 +173,16 @@
         <h4>{{ block.settings.heading }}</h4>
         <ul>
 {%- if block.settings.l1_label != blank %}
-          <li><a href="{{ block.settings.l1_link | default: '/pages/store' }}">{{ block.settings.l1_label }}</a></li>
+          <li><a href="{{ block.settings.l1_link | default: '/collections/all' }}">{{ block.settings.l1_label }}</a></li>
 {%- endif %}
 {%- if block.settings.l2_label != blank %}
-          <li><a href="{{ block.settings.l2_link | default: '/pages/store' }}">{{ block.settings.l2_label }}</a></li>
+          <li><a href="{{ block.settings.l2_link | default: '/collections/all' }}">{{ block.settings.l2_label }}</a></li>
 {%- endif %}
 {%- if block.settings.l3_label != blank %}
-          <li><a href="{{ block.settings.l3_link | default: '/pages/store' }}">{{ block.settings.l3_label }}</a></li>
+          <li><a href="{{ block.settings.l3_link | default: '/collections/all' }}">{{ block.settings.l3_label }}</a></li>
 {%- endif %}
 {%- if block.settings.l4_label != blank %}
-          <li><a href="{{ block.settings.l4_link | default: '/pages/store' }}">{{ block.settings.l4_label }}</a></li>
+          <li><a href="{{ block.settings.l4_link | default: '/collections/all' }}">{{ block.settings.l4_label }}</a></li>
 {%- endif %}
         </ul>
       </div>
@@ -191,37 +191,37 @@
       <div>
         <h4>Customer care</h4>
         <ul>
-          <li><a href="/pages/store?view=contact">Account</a></li>
-          <li><a href="/pages/store?view=about">Our store</a></li>
-          <li><a href="/pages/store?view=faq">FAQ</a></li>
-          <li><a href="/pages/store?view=shipping">Shipping &amp; returns</a></li>
+          <li><a href="/pages/contact">Account</a></li>
+          <li><a href="/pages/about">Our store</a></li>
+          <li><a href="/pages/faq">FAQ</a></li>
+          <li><a href="/pages/shipping">Shipping &amp; returns</a></li>
         </ul>
       </div>
       <div>
         <h4>Shop</h4>
         <ul>
-          <li><a href="/pages/store?view=shop">All styles</a></li>
-          <li><a href="/pages/store?view=shop&amp;filter=Tees">Heavyweight tees</a></li>
-          <li><a href="/pages/store?view=shop&amp;filter=Tanks">Tank tops</a></li>
-          <li><a href="/pages/store?view=shop&amp;filter=Bottoms">Cargo &amp; shorts</a></li>
+          <li><a href="/collections/all">All styles</a></li>
+          <li><a href="/collections/all?filter=Tees">Heavyweight tees</a></li>
+          <li><a href="/collections/all?filter=Tanks">Tank tops</a></li>
+          <li><a href="/collections/all?filter=Bottoms">Cargo &amp; shorts</a></li>
         </ul>
       </div>
       <div>
         <h4>Brand</h4>
         <ul>
-          <li><a href="/pages/store?view=about">About RYVT</a></li>
-          <li><a href="/pages/store?view=story">The Renaissance Tee</a></li>
-          <li><a href="/pages/store?view=about">Made in Detroit</a></li>
-          <li><a href="/pages/store?view=contact">Wholesale</a></li>
+          <li><a href="/pages/about">About RYVT</a></li>
+          <li><a href="/pages/the-renaissance-tee">The Renaissance Tee</a></li>
+          <li><a href="/pages/about">Made in Detroit</a></li>
+          <li><a href="/pages/contact">Wholesale</a></li>
         </ul>
       </div>
       <div>
         <h4>Journal</h4>
         <ul>
-          <li><a href="/pages/store?view=story">One tee, four ways</a></li>
-          <li><a href="/pages/store?view=faq">Why we wash first</a></li>
-          <li><a href="/pages/store?view=faq">The fourth-year test</a></li>
-          <li><a href="/pages/store?view=contact">Press</a></li>
+          <li><a href="/pages/the-renaissance-tee">One tee, four ways</a></li>
+          <li><a href="/pages/faq">Why we wash first</a></li>
+          <li><a href="/pages/faq">The fourth-year test</a></li>
+          <li><a href="/pages/contact">Press</a></li>
         </ul>
       </div>
 {%- endif %}
@@ -235,12 +235,12 @@
     <nav>
 {%- if legal_blocks.size > 0 %}
 {%- for block in legal_blocks %}
-      <a href="{{ block.settings.link | default: '/pages/store' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+      <a href="{{ block.settings.link | default: '/collections/all' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
 {%- endfor %}
 {%- else %}
-      <a href="/pages/store?view=terms">Terms</a>
-      <a href="/pages/store?view=privacy">Privacy</a>
-      <a href="/pages/store?view=social">Social media disclaimer</a>
+      <a href="/pages/terms-conditions">Terms</a>
+      <a href="/pages/privacy-policy">Privacy</a>
+      <a href="/pages/social-media-disclaimer">Social media disclaimer</a>
 {%- endif %}
     </nav>
 {%- if section.settings.socials != blank %}
@@ -744,63 +744,63 @@
           "type": "nav_link",
           "settings": {
             "label": "Shop",
-            "link": "/pages/store?view=shop"
+            "link": "/collections/all"
           }
         },
         {
           "type": "nav_link",
           "settings": {
             "label": "New Arrivals",
-            "link": "/pages/store?view=shop"
+            "link": "/collections/all"
           }
         },
         {
           "type": "nav_link",
           "settings": {
             "label": "The Renaissance Tee",
-            "link": "/pages/store?view=story"
+            "link": "/pages/the-renaissance-tee"
           }
         },
         {
           "type": "nav_link",
           "settings": {
             "label": "Detroit",
-            "link": "/pages/store?view=about"
+            "link": "/pages/about"
           }
         },
         {
           "type": "nav_link",
           "settings": {
             "label": "Contact",
-            "link": "/pages/store?view=contact"
+            "link": "/pages/contact"
           }
         },
         {
           "type": "bar_link",
           "settings": {
             "label": "Shop",
-            "link": "/pages/store?view=shop"
+            "link": "/collections/all"
           }
         },
         {
           "type": "bar_link",
           "settings": {
             "label": "New Arrivals",
-            "link": "/pages/store?view=shop"
+            "link": "/collections/all"
           }
         },
         {
           "type": "bar_link",
           "settings": {
             "label": "The Renaissance Tee",
-            "link": "/pages/store?view=story"
+            "link": "/pages/the-renaissance-tee"
           }
         },
         {
           "type": "bar_link",
           "settings": {
             "label": "Detroit",
-            "link": "/pages/store?view=about"
+            "link": "/pages/about"
           }
         },
         {
@@ -824,13 +824,13 @@
           "settings": {
             "heading": "Customer care",
             "l1_label": "Account",
-            "l1_link": "/pages/store?view=contact",
+            "l1_link": "/pages/contact",
             "l2_label": "Our store",
-            "l2_link": "/pages/store?view=about",
+            "l2_link": "/pages/about",
             "l3_label": "FAQ",
-            "l3_link": "/pages/store?view=faq",
+            "l3_link": "/pages/faq",
             "l4_label": "Shipping &amp; returns",
-            "l4_link": "/pages/store?view=shipping"
+            "l4_link": "/pages/shipping"
           }
         },
         {
@@ -838,13 +838,13 @@
           "settings": {
             "heading": "Shop",
             "l1_label": "All styles",
-            "l1_link": "/pages/store?view=shop",
+            "l1_link": "/collections/all",
             "l2_label": "Heavyweight tees",
-            "l2_link": "/pages/store?view=shop&amp;filter=Tees",
+            "l2_link": "/collections/all?filter=Tees",
             "l3_label": "Tank tops",
-            "l3_link": "/pages/store?view=shop&amp;filter=Tanks",
+            "l3_link": "/collections/all?filter=Tanks",
             "l4_label": "Cargo &amp; shorts",
-            "l4_link": "/pages/store?view=shop&amp;filter=Bottoms"
+            "l4_link": "/collections/all?filter=Bottoms"
           }
         },
         {
@@ -852,13 +852,13 @@
           "settings": {
             "heading": "Brand",
             "l1_label": "About RYVT",
-            "l1_link": "/pages/store?view=about",
+            "l1_link": "/pages/about",
             "l2_label": "The Renaissance Tee",
-            "l2_link": "/pages/store?view=story",
+            "l2_link": "/pages/the-renaissance-tee",
             "l3_label": "Made in Detroit",
-            "l3_link": "/pages/store?view=about",
+            "l3_link": "/pages/about",
             "l4_label": "Wholesale",
-            "l4_link": "/pages/store?view=contact"
+            "l4_link": "/pages/contact"
           }
         },
         {
@@ -866,34 +866,34 @@
           "settings": {
             "heading": "Journal",
             "l1_label": "One tee, four ways",
-            "l1_link": "/pages/store?view=story",
+            "l1_link": "/pages/the-renaissance-tee",
             "l2_label": "Why we wash first",
-            "l2_link": "/pages/store?view=faq",
+            "l2_link": "/pages/faq",
             "l3_label": "The fourth-year test",
-            "l3_link": "/pages/store?view=faq",
+            "l3_link": "/pages/faq",
             "l4_label": "Press",
-            "l4_link": "/pages/store?view=contact"
+            "l4_link": "/pages/contact"
           }
         },
         {
           "type": "legal_link",
           "settings": {
             "label": "Terms",
-            "link": "/pages/store?view=terms"
+            "link": "/pages/terms-conditions"
           }
         },
         {
           "type": "legal_link",
           "settings": {
             "label": "Privacy",
-            "link": "/pages/store?view=privacy"
+            "link": "/pages/privacy-policy"
           }
         },
         {
           "type": "legal_link",
           "settings": {
             "label": "Social media disclaimer",
-            "link": "/pages/store?view=social"
+            "link": "/pages/social-media-disclaimer"
           }
         }
       ]
